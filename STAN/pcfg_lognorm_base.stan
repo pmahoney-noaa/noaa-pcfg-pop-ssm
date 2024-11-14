@@ -6,24 +6,24 @@
 // Oct '24
 
 data {
-  int<lower=0> n_dat_yrs;         // number of abundance estimates to model
-  int<lower=0> n_proj_yrs;        // number of projection years
+  int<lower=0> n_dat_yrs;            // number of abundance estimates to model
+  int<lower=0> n_proj_yrs;           // number of projection years
   vector[n_dat_yrs] mu_logN_hat;     // mean of abundance estimates in log-space
   vector[n_dat_yrs] sigma_logN_hat;  // sd of abundance estimates in log-space
-  vector[n_proj_yrs] N_harvest;   // number of known harvested animals during projected years
+  vector[n_proj_yrs] N_harvest;      // number of known harvested animals during projected years
 }
 
 parameters {  // --------------------------------------------------------------------
   real<lower = 0> logN_init;
-  vector[n_dat_yrs] logLambda;
+  vector[n_dat_yrs - 1] logLambda;
   real mu_logLambda;
   real<lower = 0> sigma_logLambda;
 }
 
 transformed parameters{  // ----------------------------------------------------
   //vector<lower = 0>[n_dat_yrs] logN;
-  vector[n_dat_yrs] logN; //removed the constraint on logN due to model fitting errors.
-  logN[1] = logN_init;  // Initial abundance treated as parameter (but fit to data in model block)
+  vector[n_dat_yrs] logN;  //removed the constraint on logN due to model fitting errors.
+  logN[1] = logN_init;     // Initial abundance treated as parameter (but fit to data in model block)
   for(t in 2:(n_dat_yrs)){
     logN[t] = logN[t - 1] + logLambda[t - 1];
   }
@@ -31,7 +31,8 @@ transformed parameters{  // ----------------------------------------------------
 
 model {  // --------------------------------------------------------------------
   // Priors
-  mu_logLambda ~ normal(0, 1);      // hyper-prior for mean lambda
+  //logN_init ~ normal(5, 1);
+  mu_logLambda ~ normal(0, 1);        // hyper-prior for mean lambda
   sigma_logLambda ~ lognormal(1, 2);  // have not run sensitivity to hyper-prior values (just placeholder strawdogs to get preliminary fits)
   
   // Process error (lambda subsumes births, deaths, immigration, and emmigration)
@@ -42,7 +43,7 @@ model {  // --------------------------------------------------------------------
 }
 
 generated quantities{  // ------------------------------------------------------
- vector[n_dat_yrs] log_lik;  // save pointwise log-likelihood
+ vector[n_dat_yrs] log_lik;     // save pointwise log-likelihood
  vector[n_proj_yrs] logN_proj;  // projected N in log-space some years into the future
  
  // following could be set up as an array, but stuck with vectors for simplicity in aggregating across sims.
