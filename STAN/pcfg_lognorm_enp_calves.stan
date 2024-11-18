@@ -39,7 +39,7 @@ transformed parameters{  // ----------------------------------------------------
 model {  // --------------------------------------------------------------------
   // Priors
   mu_logLambda ~ normal(0, 1);        // hyper-prior for mean lambda
-  sigma_logLambda ~ lognormal(1, 2);  // have not run sensitivity to hyper-prior values (just placeholder strawdogs to get preliminary fits)
+  sigma_logLambda ~ lognormal(0, 1);  // have not run sensitivity to hyper-prior values (just placeholder strawdogs to get preliminary fits)
   beta ~ normal(0, 2);                // similarly, have not investigated sensitivity to prior, nor whether hyper-priors would be warranted
   
   // Process error (lambda subsumes births, deaths, immigration, and emmigration)

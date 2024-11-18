@@ -50,7 +50,7 @@ x_lambda[,1] = scale(x_lambda[,1])
 # Input data -------------------------------------------------------------------
 init_pcfg_data = list(
   n_dat_yrs = nrow(Ndata_input),  
-  n_proj_yrs = 2,                      # number of years to project into the future
+  n_proj_yrs = 3,                      # number of years to project into the future
   n_betas = ncol(x_lambda),            # number of coefficients on lambda
   mu_logN_hat = Ndata_input$mean_log,  # estimated pop abundance, log space
   sigma_logN_hat = Ndata_input$sd_log,
@@ -60,15 +60,15 @@ init_pcfg_data = list(
   sigma_logC_proj = Cdata_input %>% slice(-c(1:nrow(Ndata_input))) %>% pull(sd_log),
   x_lambda_dat = as.matrix(x_lambda %>% slice(1:nrow(Ndata_input))),
   x_lambda_proj = as.matrix(x_lambda %>% slice(-c(1:nrow(Ndata_input)))),
-  N_harvest = c(0,0) #,0)
+  N_harvest = c(0,0,0)
 )
 # init_pcfg_data  # Check
 
 # STAN model definitions -------------------------------------------------------
 f_pcfg_lognorm <- f_pcfg_base <- here::here('STAN', 'pcfg_lognorm_base.stan')
-# f_pcfg_lognorm <- f_pcfg_base <- here::here('STAN', 'pcfg_lognorm_ar1_v1.stan')
-# f_pcfg_lognorm <- f_pcfg_base <- here::here('STAN', 'pcfg_lognorm_ar1_v2.stan')
-# f_pcfg_lognorm <- f_pcfg_base <- here::here('STAN', 'pcfg_lognorm_ar1_v1_delta.stan')
+# f_pcfg_lognorm <- f_pcfg_ar1v1 <- here::here('STAN', 'pcfg_lognorm_ar1_v1.stan')
+# f_pcfg_lognorm <- f_pcfg_ar1v2 <- here::here('STAN', 'pcfg_lognorm_ar1_v2.stan')
+# f_pcfg_lognorm <- f_pcfg_ar1v1d <- here::here('STAN', 'pcfg_lognorm_ar1_v1_delta.stan')
 # f_pcfg_lognorm <- f_pcfg_enp <- here::here('STAN', 'pcfg_lognorm_enp_calves.stan')
 # f_pcfg_lognorm <- f_pcfg_covs <- here::here('STAN', 'pcfg_lognorm_covs.stan')
 
@@ -80,13 +80,12 @@ mcmc_pcfg = init_mod_cmdstanr$sample(data = init_pcfg_data,
                                seed = 42,
                                chains = 3,
                                parallel_chains = 3,
-                               #iter_warmup = 3000, iter_sampling = 6000,
+                               #iter_warmup = 6000, iter_sampling = 9000,
                                adapt_delta = 0.99)
 
 ##
-## Model/chain performance ------------------------------------------------------------
+## Model/chain performance -----------------------------------------------------
 ##
-
 mcmc_pcfg$diagnostic_summary()
 # mcmc_pcfg$summary()
 # bayesplot::mcmc_trace(tidy_mcmc, pars = c("logN_init", "mu0_logLambda", "sigma_logLambda"), 
@@ -97,7 +96,9 @@ mcmc_pcfg$diagnostic_summary()
 # In order to use this method you must compute and save the pointwise log-likelihood 
 #   in your Stan code:
 # https://mc-stan.org/loo/articles/loo2-with-rstan.html
-loo_pcfg = mcmc_pcfg$loo(cores = 4)
+(loo_pcfg = mcmc_pcfg$loo(cores = 4))
+plot(loo_pcfg)
+
 
 # Wrangle Posterior ------------------------------------------------------------
 # Tidy draws

@@ -47,6 +47,55 @@ calc_log_ci = function(mu, sd, zz = 1.96){
 # calc_log_ci(mu = 100, sd = 10)
 
 # Abundance plots --------------------------------------------------------------
+tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names, threshold_N, threshold_Nmin, ncols = 1){
+  N_out = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
+                            spread_draws(logN[year]) %>% 
+                            select(year, logN) %>% 
+                            ungroup() %>% 
+                            mutate(
+                              model = model_names[.y],
+                              year = year + Ndata_input$year[1] - 1))
+  
+  N_proj_out = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
+                            spread_draws(logN_proj[year]) %>% 
+                            select(year, logN = logN_proj) %>% 
+                            ungroup() %>% 
+                            mutate(
+                              model = model_names[.y],
+                              year = year + max(Ndata_input$year)))
+  
+  N_out_table = N_out %>% 
+    bind_rows(N_proj_out) %>% 
+    group_by(model, year) %>% 
+    summarize(mean = mean(logN),
+              median = median(logN),
+              lo_ci = quantile(logN, 0.025),
+              hi_ci = quantile(logN, 0.975),
+              percentile_20 = quantile(logN, 0.2),
+              percentile_80 = quantile(logN, 0.8)) %>% 
+    ungroup() %>% 
+    mutate(across(.cols = c(-model, -year), .fns = exp)) %>%
+    arrange(model, year)
+  
+  pl <- input_data %>% 
+    ggplot(aes(x = year, y = N)) +  
+    geom_ribbon(data = N_out_table, aes(y = mean, ymin = percentile_20, ymax = percentile_80), alpha = 0.2) +
+    geom_ribbon(data = N_out_table, aes(y = mean, ymin = lo_ci, ymax = hi_ci), alpha = 0.2) +
+    geom_line(data = N_out_table, aes(y = mean)) +
+    geom_point(size = 3, color = "white", fill = "black", shape = 21) +
+    ylim(c(0, 350)) +
+    geom_hline(yintercept = threshold_N) + 
+    geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
+    geom_errorbar(aes(ymin = low_95CI, ymax = high_95CI)) +  
+    geom_errorbar(aes(ymin = low_60CI, ymax = N), linewidth = 0) +
+    geom_point(aes(y = low_60CI), shape = 23, fill = "red", size = 2) +
+    theme_bw(base_size = 16) +
+    facet_wrap(~ model, ncol = ncols) +
+    labs(x = "Year", y = "PCFG Abundance")
+  
+  return(print(pl))
+}
+
 tidy_plot_traj = function(input_data, tidy_mcmc, threshold_N, threshold_Nmin){
   N_out = tidy_mcmc %>% 
     spread_draws(logN[year]) %>% 
@@ -85,12 +134,12 @@ tidy_plot_traj = function(input_data, tidy_mcmc, threshold_N, threshold_Nmin){
     geom_errorbar(aes(ymin = low_60CI, ymax = N), linewidth = 0) +
     geom_point(aes(y = low_60CI), shape = 23, fill = "red", size = 2) +
     theme_bw(base_size = 16) +
-    labs(x = "Year", y = "PCFG")
+    labs(x = "Year", y = "PCFG Abundance")
   
   return(print(pl))
 }
 
-# Prediction plots --------------------------------------------------------------
+# Prediction plots -------------------------------------------------------------
 tidy_plot_propBelowThresh = function(N_eval_table){
   N_eval_table <- N_eval_table %>%
     mutate(
@@ -125,23 +174,69 @@ tidy_plot_retroPred = function(N_eval_table){
     )
   
   width <- 0.5
-  pl <- N_eval_table %>% 
-    ggplot(aes(x = year, y = abundEst, group = proj_set, color = proj_set)) + 
+  
+  if("model" %in% names(N_eval_table)) {
+    pl <- N_eval_table %>% 
+      ggplot(aes(x = year, y = abundEst, group = model, color = model)) +
+      facet_wrap(~ proj_set, ncol = 1)
+  } else {
+    pl <- N_eval_table %>% 
+      ggplot(aes(x = year, y = abundEst, group = proj_set, color = proj_set))
+  }
+  
+  pl <- pl + 
     geom_errorbar(aes(ymin = loN_ci, ymax = hiN_ci), linetype = 2, width = width, position = position_dodge(width = width)) + 
     geom_errorbar(aes(ymin = percentile_20, ymax = percentile_80), width = width, position = position_dodge(width = width)) +
     geom_point(aes(x = year, y = meanN), position = position_dodge(width = width)) +
     geom_point(size = 2, color = "black", fill = "black", shape = 23) +
-    #viridis::scale_color_viridis(discrete = T, option = "D") +
-    scale_color_brewer(palette = "Reds") +
+    viridis::scale_color_viridis(discrete = T, option = "B") +
+    #scale_color_brewer(palette = "Reds") +
     ylim(c(0, 350)) +
     labs(x = "Year", y = "PCFG Abundance") +
-    guides(color = guide_legend(title = NULL, position = "top", direction = "horizontal")) +
+    scale_x_continuous(limits = c(min(N_eval_table$year) - 1.5, max(N_eval_table$year)) + 1, 
+                       breaks = seq(min(N_eval_table$year), max(N_eval_table$year), 1),
+                       expand = c(0,0)) +
+    guides(color = guide_legend(title = NULL, position = "top", direction = "horizontal", nrow = 1)) +
     theme_bw()
   
   return(print(pl))
 }
 
 # Prediction summary table -----------------------------------------------------
+pred_summary_tbl_multimodel = function(Ndata_input, tidy_mcmc, model_names, threshold_N, threshold_Nmin){
+  tbl = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
+                          gather_draws(logN_pyear1[year], logN_pyear2[year]) %>% #, logN_pyear3[year]) %>%
+                          select(year, proj_set = .variable, N = .value) %>% 
+                          mutate(
+                            year = year + Ndata_input$year[1] - 1,
+                            proj_set = gsub("logN_", "", proj_set),
+                            N = exp(N),
+                            year = ifelse(proj_set == "pyear1", year + 1, 
+                                          ifelse(proj_set == "pyear2", year + 2, year + 3)) 
+                          ) %>%
+                          filter(year <= max(Ndata_input$year)) %>%
+                          left_join(Ndata_input %>% dplyr::select(year, abundEstN = N), by = "year") %>%
+                          #group_by(proj_set, year) %>% 
+                          summarize(
+                            model = model_names[.y],
+                            abundEst = mean(abundEstN),
+                            meanN = mean(N),
+                            medianN = median(N),
+                            loN_ci = quantile(N, 0.025),
+                            hiN_ci = quantile(N, 0.975),
+                            percentile_20 = quantile(N, 0.2),
+                            percentile_80 = quantile(N, 0.8),
+                            rss = sum((N - abundEst)^2),
+                            closure = meanN < threshold_N | percentile_20 < threshold_Nmin,
+                            percentile_abundEstN = ecdf(N)(abundEst),
+                            prop_below_threshold = mean(N < threshold_N),
+                            prop_below_minThreshold = mean(N < threshold_Nmin)
+                          ) %>% 
+                          ungroup()
+                        )
+  return(tbl)
+}
+
 pred_summary_tbl = function(Ndata_input, tidy_mcmc, threshold_N, threshold_Nmin){
   tbl <- tidy_mcmc %>% 
     gather_draws(logN_pyear1[year], logN_pyear2[year]) %>% #, logN_pyear3[year]) %>%

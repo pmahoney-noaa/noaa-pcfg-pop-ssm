@@ -50,3 +50,6 @@ rsconnect/
 
 # Model output directory
 out/
+
+# Compiled models
+STAN/*.exe
