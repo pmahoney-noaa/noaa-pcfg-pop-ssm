@@ -1,7 +1,10 @@
 ---
 title: "Projecting PCFG Gray Whale Abundance"
 subtitle: "Model selection and evaluation"
-format: gfm
+format: 
+  gfm:
+    preview-mode: raw
+prefer-html: true
 ---
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
@@ -211,13 +214,14 @@ tab_loo <- purrr::map_dfr(loo_pcfg, \(x) t(x$estimates)[1, ]) %>%
 #   DT::formatRound(2:5, 2)
 
 # For GFM-based readme
-knitr::kable(
-  tab_loo,
-  digits = 2,
-  align = c("l", rep("c", 4)),
-  booktabs = T
-) %>%
-  kable_classic(full_width = F, html_font = "Cambria")
+# knitr::kable(
+#   tab_loo,
+#   digits = 2,
+#   align = c("l", rep("c", 4)),
+#   format = "simple",
+#   #booktabs = T
+# ) #%>%
+#   #kable_classic(full_width = F, html_font = "Cambria")
 ```
 
 ## Retrospective analysis
@@ -269,18 +273,19 @@ N_eval_summary_proj2yr <- N_eval_table %>%
 #   DT::formatRound(2, 1)
 
 # For GFM-based readme
-knitr::kable(
-  N_eval_summary_proj1yr, 
-  row.names = F,
-  col.names = c("Model", "Mean RSS", "Mean Percentile (N)", 
-                           "Prop Below Threshold (N)", 
-                           "Prop Below Threshold (Nmin)",
-                           "Number of Closures"),
-  digits = 3,
-  align = c("l", rep("c", 5)),
-  booktabs = T
-) %>%
-  kable_classic(full_width = F, html_font = "Cambria")
+# knitr::kable(
+#   N_eval_summary_proj1yr, 
+#   row.names = F,
+#   col.names = c("Model", "Mean RSS", "Mean Percentile (N)", 
+#                            "Prop Below Threshold (N)", 
+#                            "Prop Below Threshold (Nmin)",
+#                            "Number of Closures"),
+#   digits = 3,
+#   align = c("l", rep("c", 5)),
+#   format = "simple",
+#   #booktabs = T
+# ) #%>%
+#   #kable_classic(full_width = F, html_font = "Cambria")
 ```
 
 ```{r retro2, echo = F, warning = F, message = F}
@@ -302,18 +307,19 @@ knitr::kable(
 #   DT::formatRound(2, 1)
 
 # For GFM-based readme
-knitr::kable(
-  N_eval_summary_proj2yr, 
-  row.names = F,
-  col.names = c("Model", "Mean RSS", "Mean Percentile (N)", 
-                           "Prop Below Threshold (N)", 
-                           "Prop Below Threshold (Nmin)",
-                           "Number of Closures"),
-  digits = 3,
-  align = c("l", rep("c", 5)),
-  booktabs = T
-) %>%
-  kable_classic(full_width = F, html_font = "Cambria")
+# knitr::kable(
+#   N_eval_summary_proj2yr, 
+#   row.names = F,
+#   col.names = c("Model", "Mean RSS", "Mean Percentile (N)", 
+#                            "Prop Below Threshold (N)", 
+#                            "Prop Below Threshold (Nmin)",
+#                            "Number of Closures"),
+#   digits = 3,
+#   align = c("l", rep("c", 5)),
+#   format = "simple",
+#   #booktabs = T
+# ) #%>%
+#   #kable_classic(full_width = F, html_font = "Cambria")
 ```
 
 ```{r retroFig, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
