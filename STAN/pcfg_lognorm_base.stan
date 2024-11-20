@@ -33,7 +33,7 @@ model {  // --------------------------------------------------------------------
   // Priors
   //logN_init ~ normal(5, 1);
   mu_logLambda ~ normal(0, 1);        // hyper-prior for mean lambda
-  sigma_logLambda ~ lognormal(0, 1);  // have not run sensitivity to hyper-prior values (just placeholder strawdogs to get preliminary fits)
+  sigma_logLambda ~ lognormal(0, 1);  // hyper-prior for sigma
   
   // Process error (lambda subsumes births, deaths, immigration, and emmigration)
   logLambda ~ normal(mu_logLambda, sigma_logLambda);
