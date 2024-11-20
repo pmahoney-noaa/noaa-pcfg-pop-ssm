@@ -34,12 +34,12 @@ transformed parameters{  // ----------------------------------------------------
 model {  // --------------------------------------------------------------------
   // Priors
   //logN_init ~ normal(5, 1);
-  //mu0_logLambda ~ normal(0, 1);     // hyper-prior on the mean for lambda in year 1 
+  mu0_logLambda ~ normal(0, 1);     // hyper-prior on the mean for lambda in year 1 
   sigma_logLambda ~ lognormal(0, 1);  // have not run sensitivity to hyper-prior values (just placeholder strawdogs to get preliminary fits)
   
   // Process error (lambda subsumes births, deaths, immigration, and emmigration)
-  //logLambda[1] ~ normal(mu0_logLambda, sigma_logLambda);
-  logLambda[1] ~ normal(0, 1);
+  logLambda[1] ~ normal(mu0_logLambda, sigma_logLambda);
+  //logLambda[1] ~ normal(0, 1);
   for(t in 2:n_dat_yrs){
     logLambda[t] ~ normal(logLambda[t - 1], sigma_logLambda); // model assumes no autocorrelation in sigma
   }
