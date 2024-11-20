@@ -17,7 +17,7 @@ data {
 parameters {  // --------------------------------------------------------------------
   //real<lower = 0> logN_init;
   real logN_init;
-  //real mu0_logLambda;
+  real mu0_logLambda;
   //real<lower = 0> sigma0_logLambda;
   real mu_logLambda;
   real<lower = 0> sigma_logLambda;
@@ -38,15 +38,15 @@ transformed parameters{  // ----------------------------------------------------
 model {  // --------------------------------------------------------------------
   // Priors
   //logN_init ~ normal(5, 1);
-  //mu0_logLambda ~ normal(0, 1);     // hyper-prior on the mean for lambda in year 1 
+  mu0_logLambda ~ normal(0, 1);     // hyper-prior on the mean for lambda in year 1 
   //sigma0_logLambda ~ lognormal(1, 2);  // have not run sensitivity to hyper-prior values (just placeholder strawdogs to get preliminary fits)
   mu_logLambda ~ normal(0, 1);     // hyper-prior on the mean for lambda in year 1 
   sigma_logLambda ~ lognormal(0, 1);  //
   beta ~ normal(0, 1);             // needs further exploring, also consider hyper-parameters
   
   // Process error (lambda subsumes births, deaths, immigration, and emmigration)
-  //logLambda[1] ~ normal(mu0_logLambda, sigma0_logLambda);
-  logLambda[1] ~ normal(0, 1);
+  logLambda[1] ~ normal(mu0_logLambda, sigma_logLambda);
+  //logLambda[1] ~ normal(0, 1);
   for(t in 2:n_dat_yrs){
     logLambda[t] ~ normal(mu_logLambda + logLambda[t - 1] * beta, sigma_logLambda); // model assumes no autocorrelation in sigma
   }
