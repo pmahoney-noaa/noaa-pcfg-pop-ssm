@@ -189,8 +189,8 @@ knitr::kable(
   align = c("l", rep("c", 4)),
   format = "simple",
   booktabs = T
-) #%>%
-  #kable_classic(full_width = F, html_font = "Cambria")
+) %>%
+kable_classic(full_width = F, html_font = "Cambria")
 ```
 
 ## Leave-one-out Cross Validation (LOO)
