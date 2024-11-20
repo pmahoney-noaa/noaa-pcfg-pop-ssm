@@ -9,7 +9,7 @@ format: gfm
 # Load required packages -------------------------------------------------------
 
 library(pacman)
-p_load(cmdstanr, tidyverse, here, tidybayes, brms, bayesplot)
+p_load(cmdstanr, tidyverse, here, tidybayes, brms, bayesplot, knitr, kableExtra)
 #set_cmdstan_path("~/cmdstan")  # your `cmdstan` path may be different
 
 # Initialize -------------------------------------------------------------------
@@ -202,13 +202,22 @@ tab_loo <- purrr::map_dfr(loo_pcfg, \(x) t(x$estimates)[1, ]) %>%
   )
 
 # HTML table output
-DT::datatable(tab_loo, 
-              rownames = F,
-          options = list(
-            dom = 't',
-            columnDefs = list(list(className = 'dt-center', targets = 1:4))
-            )) %>%
-  DT::formatRound(2:5, 2)
+# DT::datatable(tab_loo, 
+#               rownames = F,
+#           options = list(
+#             dom = 't',
+#             columnDefs = list(list(className = 'dt-center', targets = 1:4))
+#             )) %>%
+#   DT::formatRound(2:5, 2)
+
+# For GFM-based readme
+knitr::kable(
+  tab_loo,
+  digits = 2,
+  align = c("l", rep("c", 4)),
+  booktabs = T
+) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
 ```
 
 ## Retrospective analysis
@@ -246,35 +255,65 @@ N_eval_summary_proj2yr <- N_eval_table %>%
   arrange(mnRSS)
 
 # HTML table output
-DT::datatable(N_eval_summary_proj1yr, 
-              rownames = F,
-              colnames = c("Model", "Mean RSS", "Mean Percentile (N)", 
+# DT::datatable(N_eval_summary_proj1yr, 
+#               rownames = F,
+#               colnames = c("Model", "Mean RSS", "Mean Percentile (N)", 
+#                            "Prop Below Threshold (N)", 
+#                            "Prop Below Threshold (Nmin)",
+#                            "Number of Closures"),
+#           options = list(
+#             dom = 't',
+#             columnDefs = list(list(className = 'dt-center', targets = 1:5))
+#             )) %>%
+#   DT::formatRound(3:5, 3) %>%
+#   DT::formatRound(2, 1)
+
+# For GFM-based readme
+knitr::kable(
+  N_eval_summary_proj1yr, 
+  row.names = F,
+  col.names = c("Model", "Mean RSS", "Mean Percentile (N)", 
                            "Prop Below Threshold (N)", 
                            "Prop Below Threshold (Nmin)",
                            "Number of Closures"),
-          options = list(
-            dom = 't',
-            columnDefs = list(list(className = 'dt-center', targets = 1:5))
-            )) %>%
-  DT::formatRound(3:5, 3) %>%
-  DT::formatRound(2, 1)
+  digits = 3,
+  align = c("l", rep("c", 5)),
+  booktabs = T
+) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
 ```
 
 ```{r retro2, echo = F, warning = F, message = F}
 #| label: tbl-retro2
 #| tbl-cap: "Model fit statistics for predicting two years forward for all years from 2002 through 2021. RSS is the residual sum of squares."
-DT::datatable(N_eval_summary_proj2yr, 
-              rownames = F,
-              colnames = c("Model", "Mean RSS", "Mean Percentile (N)", 
+
+# HTML table output
+# DT::datatable(N_eval_summary_proj2yr, 
+#               rownames = F,
+#               colnames = c("Model", "Mean RSS", "Mean Percentile (N)", 
+#                            "Prop Below Threshold (N)", 
+#                            "Prop Below Threshold (Nmin)",
+#                            "Number of Closures"),
+#           options = list(
+#             dom = 't',
+#             columnDefs = list(list(className = 'dt-center', targets = 1:5))
+#             )) %>%
+#   DT::formatRound(3:5, 3) %>%
+#   DT::formatRound(2, 1)
+
+# For GFM-based readme
+knitr::kable(
+  N_eval_summary_proj2yr, 
+  row.names = F,
+  col.names = c("Model", "Mean RSS", "Mean Percentile (N)", 
                            "Prop Below Threshold (N)", 
                            "Prop Below Threshold (Nmin)",
                            "Number of Closures"),
-          options = list(
-            dom = 't',
-            columnDefs = list(list(className = 'dt-center', targets = 1:5))
-            )) %>%
-  DT::formatRound(3:5, 3) %>%
-  DT::formatRound(2, 1)
+  digits = 3,
+  align = c("l", rep("c", 5)),
+  booktabs = T
+) %>%
+  kable_classic(full_width = F, html_font = "Cambria")
 ```
 
 ```{r retroFig, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
