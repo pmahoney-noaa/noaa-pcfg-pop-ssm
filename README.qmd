@@ -188,7 +188,7 @@ knitr::kable(
   row.names = F,
   align = c("l", rep("c", 4)),
   format = "simple",
-  #booktabs = T
+  booktabs = T
 ) #%>%
   #kable_classic(full_width = F, html_font = "Cambria")
 ```
