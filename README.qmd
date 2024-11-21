@@ -124,8 +124,10 @@ f_pcfg_ar1v1 <- here::here('STAN', 'pcfg_lognorm_ar1_v1.stan')
 f_pcfg_ar1v2 <- here::here('STAN', 'pcfg_lognorm_ar1_v2.stan')
 f_pcfg_enp <- here::here('STAN', 'pcfg_lognorm_enp_calves.stan')
 f_pcfg_covs <- here::here('STAN', 'pcfg_lognorm_covs.stan')
-model_names <- factor(c("Base", "AR1v1", "AR1v2", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"), 
-                        levels = c("Base", "AR1v1", "AR1v2", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"),
+model_names <- factor(c("Base", "AR1v1", "AR1v2", "ENP Calves", 
+                        "Calves only", "Strandings only", "Calves/Strandings"), 
+                        levels = c("Base", "AR1v1", "AR1v2", "ENP Calves", 
+                                   "Calves only", "Strandings only", "Calves/Strandings"),
                         labels = c("Base", "AR1v1", "AR1v2", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
 
 # Model file pointers
@@ -134,8 +136,9 @@ models <- list(f_pcfg_base, f_pcfg_ar1v1, f_pcfg_ar1v2, f_pcfg_enp,
 
 # Specify input data
 init_data <- list(init_pcfg_data_3yr, init_pcfg_data_3yr, init_pcfg_data_3yr,
-                  init_pcfg_data_2yr, init_pcfg_data_2yr, 
-                  init_pcfg_data_2yr_calves, init_pcfg_data_2yr_strands)
+                  init_pcfg_data_2yr, 
+                  init_pcfg_data_2yr_calves, init_pcfg_data_2yr_strands,
+                  init_pcfg_data_2yr)
 
 # Compile models ---------------------------------------------------------------
 cmodels <- purrr::map(models, cmdstanr::cmdstan_model, .progress = T)
@@ -268,7 +271,11 @@ knitr::kable(
 
 ## Coefficient estimates
 
-...
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+
+
+
+```
 
 ## Leave-one-out Cross Validation (LOO)
 

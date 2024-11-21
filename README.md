@@ -6,7 +6,7 @@
 The abundance of gray whales within the Pacific Coast Feeding Group
 (PCFG) - a subset of the broader Eastern North Pacific (ENP)
 population - is estimated within a Jolly-Seber modeling framework using
-data derived from yearly mark-resight surveys (Harris et al. ????). Due
+data derived from yearly mark-resight surveys (Harris et al. 2024). Due
 to the time required to match individuals from many hundreds of
 sightings each year to an extensive photographic catalog, the most
 recent abundance estimates often lag behind the current calendar year by
@@ -116,23 +116,21 @@ estimated Bayesian fraction of missing information (ebfmi) greater than
 | ENP Calves                   |   1   |       0       |         0         | 0.65  |
 | ENP Calves                   |   2   |       0       |         0         | 0.59  |
 | ENP Calves                   |   3   |       0       |         0         | 0.68  |
-| PCFG Calves only             |   1   |       0       |         0         | 0.33  |
-| PCFG Calves only             |   2   |       0       |         0         | 0.38  |
-| PCFG Calves only             |   3   |       0       |         0         | 0.46  |
-| ENP Strandings only          |   1   |       0       |         0         | 0.48  |
-| ENP Strandings only          |   2   |       0       |         0         | 0.50  |
-| ENP Strandings only          |   3   |       0       |         0         | 0.52  |
-| PCFG Calves + ENP Strandings |   1   |       1       |         0         | 0.35  |
-| PCFG Calves + ENP Strandings |   2   |       0       |         0         | 0.35  |
-| PCFG Calves + ENP Strandings |   3   |       0       |         0         | 0.38  |
+| PCFG Calves only             |   1   |       0       |         0         | 0.48  |
+| PCFG Calves only             |   2   |       0       |         0         | 0.50  |
+| PCFG Calves only             |   3   |       0       |         0         | 0.52  |
+| ENP Strandings only          |   1   |       1       |         0         | 0.35  |
+| ENP Strandings only          |   2   |       0       |         0         | 0.35  |
+| ENP Strandings only          |   3   |       0       |         0         | 0.38  |
+| PCFG Calves + ENP Strandings |   1   |       0       |         0         | 0.33  |
+| PCFG Calves + ENP Strandings |   2   |       0       |         0         | 0.38  |
+| PCFG Calves + ENP Strandings |   3   |       0       |         0         | 0.46  |
 
 </div>
 
 # Model results
 
 ## Coefficient estimates
-
-…
 
 ## Leave-one-out Cross Validation (LOO)
 
@@ -141,9 +139,9 @@ estimated Bayesian fraction of missing information (ebfmi) greater than
 | Model                        | elpd_loo | p_loo | looic  | deltaLooic |
 |:-----------------------------|:--------:|:-----:|:------:|:----------:|
 | AR1v1                        |  25.55   | 2.37  | -51.11 |    0.00    |
-| ENP Strandings only          |  24.78   | 2.84  | -49.56 |    1.54    |
-| PCFG Calves + ENP Strandings |  24.44   | 2.88  | -48.89 |    2.22    |
-| PCFG Calves only             |  24.32   | 3.09  | -48.65 |    2.46    |
+| PCFG Calves only             |  24.78   | 2.84  | -49.56 |    1.54    |
+| ENP Strandings only          |  24.44   | 2.88  | -48.89 |    2.22    |
+| PCFG Calves + ENP Strandings |  24.32   | 3.09  | -48.65 |    2.46    |
 | Base                         |  24.22   | 3.11  | -48.44 |    2.66    |
 | ENP Calves                   |  23.86   | 3.37  | -47.71 |    3.39    |
 | AR1v2                        |  23.34   | 3.73  | -46.69 |    4.42    |
@@ -157,10 +155,10 @@ estimated Bayesian fraction of missing information (ebfmi) greater than
 | Model                        | Mean RSS | Mean Percentile (N) | Median Percentile (N) | Lower 95% CI for Percentile (N) | Upper 95% CI for Percentile (N) | Prop Below Threshold (N) | Prop Below Threshold (Nmin) | Number of Closures |
 |:-----------------------------|:--------:|:-------------------:|:---------------------:|:-------------------------------:|:-------------------------------:|:------------------------:|:---------------------------:|:------------------:|
 | AR1v1                        | 1333782  |        0.519        |         0.583         |              0.308              |              0.744              |          0.123           |            0.017            |         0          |
-| PCFG Calves + ENP Strandings | 1377657  |        0.518        |         0.569         |              0.186              |              0.775              |          0.122           |            0.016            |         0          |
+| ENP Strandings only          | 1377657  |        0.518        |         0.569         |              0.186              |              0.775              |          0.122           |            0.016            |         0          |
 | Base                         | 1413790  |        0.513        |         0.530         |              0.246              |              0.803              |          0.110           |            0.013            |         0          |
-| ENP Strandings only          | 1435932  |        0.522        |         0.528         |              0.218              |              0.743              |          0.138           |            0.017            |         0          |
-| PCFG Calves only             | 1469416  |        0.521        |         0.571         |              0.192              |              0.722              |          0.145           |            0.021            |         0          |
+| PCFG Calves only             | 1435932  |        0.522        |         0.528         |              0.218              |              0.743              |          0.138           |            0.017            |         0          |
+| PCFG Calves + ENP Strandings | 1469416  |        0.521        |         0.571         |              0.192              |              0.722              |          0.145           |            0.021            |         0          |
 | AR1v2                        | 1608977  |        0.514        |         0.526         |              0.268              |              0.775              |          0.121           |            0.017            |         0          |
 | ENP Calves                   | 1610132  |        0.527        |         0.542         |              0.279              |              0.801              |          0.126           |            0.017            |         0          |
 
@@ -170,10 +168,10 @@ estimated Bayesian fraction of missing information (ebfmi) greater than
 
 | Model                        | Mean RSS | Mean Percentile (N) | Median Percentile (N) | Lower 95% CI for Percentile (N) | Upper 95% CI for Percentile (N) | Prop Below Threshold (N) | Prop Below Threshold (Nmin) | Number of Closures |
 |:-----------------------------|:--------:|:-------------------:|:---------------------:|:-------------------------------:|:-------------------------------:|:------------------------:|:---------------------------:|:------------------:|
-| PCFG Calves + ENP Strandings | 2479358  |        0.509        |         0.576         |              0.153              |              0.817              |          0.154           |            0.036            |         0          |
+| ENP Strandings only          | 2479358  |        0.509        |         0.576         |              0.153              |              0.817              |          0.154           |            0.036            |         0          |
 | Base                         | 2623142  |        0.504        |         0.465         |              0.173              |              0.854              |          0.147           |            0.030            |         0          |
-| ENP Strandings only          | 2690216  |        0.509        |         0.519         |              0.173              |              0.776              |          0.185           |            0.042            |         0          |
-| PCFG Calves only             | 2761271  |        0.509        |         0.512         |              0.151              |              0.725              |          0.188           |            0.048            |         0          |
+| PCFG Calves only             | 2690216  |        0.509        |         0.519         |              0.173              |              0.776              |          0.185           |            0.042            |         0          |
+| PCFG Calves + ENP Strandings | 2761271  |        0.509        |         0.512         |              0.151              |              0.725              |          0.188           |            0.048            |         0          |
 | AR1v2                        | 2923377  |        0.509        |         0.469         |              0.228              |              0.826              |          0.163           |            0.039            |         0          |
 | ENP Calves                   | 3037646  |        0.512        |         0.459         |              0.209              |              0.846              |          0.165           |            0.040            |         0          |
 | AR1v1                        | 4039921  |        0.500        |         0.512         |              0.365              |              0.604              |          0.203           |            0.071            |         0          |
