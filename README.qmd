@@ -288,7 +288,7 @@ coefs_tab <- do.call('rbind', coefs) %>%
     )
 
 kable(coefs_tab,
-  digits = c(rep(0, 2), rep(2, 7)),
+  digits = c(rep(0, 2), rep(3, 6), 1),
   row.names = F,
   align = c("l", rep("c", 8)),
   format = "simple",

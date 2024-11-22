@@ -149,14 +149,14 @@ efficiency. Here,
 ![ess](https://latex.codecogs.com/png.image?%5Cbg_black&space;ess "ess")
 values greater than 300 indicate sufficient sampling has been achieved.
 
-| model                        |                                                               variable                                                                | mean  | median |  sd  | lo_ci | hi_ci | rhat | ess_bulk |
-|:-----------------------------|:-------------------------------------------------------------------------------------------------------------------------------------:|:-----:|:------:|:----:|:-----:|:-----:|:----:|:--------:|
-| AR1v2                        | ![\beta\_{ln(\lambda)}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7Bln%28%5Clambda%29%7D "\beta_{ln(\lambda)}") | -0.17 | -0.17  | 0.38 | -0.78 | 0.46  |  1   |  758.15  |
-| ENP Calves                   |           ![\beta\_{Calves}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7BCalves%7D "\beta_{Calves}")            | 0.00  |  0.00  | 0.04 | -0.06 | 0.06  |  1   | 1447.57  |
-| PCFG Calves only             |           ![\beta\_{Calves}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7BCalves%7D "\beta_{Calves}")            | 0.02  |  0.02  | 0.02 | -0.01 | 0.05  |  1   | 2793.58  |
-| ENP Strandings only          |     ![\beta\_{Strandings}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7BStrandings%7D "\beta_{Strandings}")      | 0.00  |  0.00  | 0.00 | 0.00  | 0.00  |  1   | 2198.93  |
-| PCFG Calves + ENP Strandings |           ![\beta\_{Calves}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7BCalves%7D "\beta_{Calves}")            | 0.02  |  0.02  | 0.02 | -0.02 | 0.05  |  1   | 2694.29  |
-| PCFG Calves + ENP Strandings |     ![\beta\_{Strandings}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7BStrandings%7D "\beta_{Strandings}")      | 0.00  |  0.00  | 0.00 | 0.00  | 0.00  |  1   | 1998.74  |
+| model                        |                                                               variable                                                                |  mean  | median |  sd   | lo_ci  | hi_ci | rhat  | ess_bulk |
+|:-----------------------------|:-------------------------------------------------------------------------------------------------------------------------------------:|:------:|:------:|:-----:|:------:|:-----:|:-----:|:--------:|
+| AR1v2                        | ![\beta\_{ln(\lambda)}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7Bln%28%5Clambda%29%7D "\beta_{ln(\lambda)}") | -0.167 | -0.170 | 0.382 | -0.784 | 0.463 | 1.004 |  758.2   |
+| ENP Calves                   |           ![\beta\_{Calves}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7BCalves%7D "\beta_{Calves}")            | -0.004 | -0.004 | 0.036 | -0.064 | 0.055 | 1.000 |  1447.6  |
+| PCFG Calves only             |           ![\beta\_{Calves}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7BCalves%7D "\beta_{Calves}")            | 0.020  | 0.019  | 0.019 | -0.010 | 0.051 | 1.001 |  2793.6  |
+| ENP Strandings only          |     ![\beta\_{Strandings}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7BStrandings%7D "\beta_{Strandings}")      | -0.002 | -0.002 | 0.001 | -0.004 | 0.001 | 1.000 |  2198.9  |
+| PCFG Calves + ENP Strandings |           ![\beta\_{Calves}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7BCalves%7D "\beta_{Calves}")            | 0.017  | 0.016  | 0.020 | -0.016 | 0.050 | 1.004 |  2694.3  |
+| PCFG Calves + ENP Strandings |     ![\beta\_{Strandings}](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5Cbeta_%7BStrandings%7D "\beta_{Strandings}")      | -0.001 | -0.001 | 0.002 | -0.004 | 0.001 | 1.002 |  1998.7  |
 
 ## Leave-one-out Cross Validation (LOO)
 
