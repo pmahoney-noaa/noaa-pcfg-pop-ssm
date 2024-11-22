@@ -271,10 +271,28 @@ knitr::kable(
 
 ## Coefficient estimates
 
+$\beta$ coefficient estimates for models where coefficients on $\lambda$ were estimated. $lo\_ci$ and $hi\_ci$ correspond to the lower and upper 95% credible intervals. $Rhat$ values less than 1.01 indicate effective mixing within and across chains, producing reliable and consistent estimates for the parameters. $ess$ is the effective sample size and is an indicator of chain sampling efficiency. Here, $ess$ values greater than 300 indicate sufficient sampling has been achieved.
+
 ```{r, echo = FALSE, warning = FALSE, message = FALSE}
 
+#coefs <- tidy_coefs(mfit, model_names)
 
+coefs <- purrr::imap(mfit, ~ .x$summary() %>%
+                     mutate(model = model_names[.y]) %>%
+                     filter(grepl("beta", variable)))
 
+coefs_tab <- do.call('rbind', coefs) %>%
+    dplyr::select(model, variable, mean, median, sd, lo_ci = q5, hi_ci = q95, rhat, ess_bulk) %>%
+    mutate(
+      variable = c('$\\beta_{ln(\\lambda)}$', '$\\beta_{Calves}$', '$\\beta_{Calves}$', '$\\beta_{Strandings}$', '$\\beta_{Calves}$', '$\\beta_{Strandings}$')
+    )
+
+kable(coefs_tab,
+  digits = c(rep(0, 2), rep(2, 7)),
+  row.names = F,
+  align = c("l", rep("c", 8)),
+  format = "simple",
+  booktabs = T)
 ```
 
 ## Leave-one-out Cross Validation (LOO)

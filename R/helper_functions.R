@@ -46,6 +46,20 @@ calc_log_ci = function(mu, sd, zz = 1.96){
 }
 # calc_log_ci(mu = 100, sd = 10)
 
+# Coefficient estimates --------------------------------------------------------
+tidy_coefs = function(mfit, model_names){
+  
+  o <- purrr::imap(mfit, ~ .x$summary() %>%
+                     mutate(model = model_names[.y]) %>%
+                     filter(grepl("beta", variable)))
+  
+  do.call('rbind', o) %>%
+    dplyr::select(model, variable, mean, median, sd, lo_ci = q5, hi_ci = q95, rhat, ess_bulk) %>%
+    mutate(
+      variable = '$\\beta$'
+    )
+}
+
 # Abundance plots --------------------------------------------------------------
 tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names, threshold_N, threshold_Nmin, ncols = 1){
   N_out = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
