@@ -3,9 +3,7 @@ title: "Projecting PCFG Gray Whale Abundance"
 subtitle: "Model selection and evaluation"
 format: 
    gfm:
-     html-math-method: 
-       method: webtex
-       url: https://latex.codecogs.com/png.image?%5Cbg_black&space;
+     html-math-method: webtex
 ---
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
