@@ -134,6 +134,17 @@ estimated Bayesian fraction of missing information (ebfmi) greater than
 
 ## Leave-one-out Cross Validation (LOO)
 
+Derived estimates of model fit using an information criterion based on
+leave-one-out cross validation (looic). Models with the lowest
+![looic](https://latex.codecogs.com/png.image?%5Cbg_black&space;looic "looic")
+value are considered the best fitting model given the time series of
+abundance data used to fit the model.
+![\Delta looic](https://latex.codecogs.com/png.image?%5Cbg_black&space;%5CDelta%20looic "\Delta looic")
+represents the difference in
+![looic](https://latex.codecogs.com/png.image?%5Cbg_black&space;looic "looic")
+relative to the model with the lowest
+![looic](https://latex.codecogs.com/png.image?%5Cbg_black&space;looic "looic").
+
 <div class="cell-output-display">
 
 | Model                        | elpd_loo | p_loo | looic  | deltaLooic |
@@ -150,6 +161,9 @@ estimated Bayesian fraction of missing information (ebfmi) greater than
 
 ## Predictive accuracy with retrospection
 
+Model fit statistics for predicting one year forward for all data years
+from 2002 through 2021. RSS is the residual sum of squares.
+
 <div class="cell-output-display">
 
 | Model                        | Mean RSS | Mean Percentile (N) | Median Percentile (N) | Lower 95% CI for Percentile (N) | Upper 95% CI for Percentile (N) | Prop Below Threshold (N) | Prop Below Threshold (Nmin) | Number of Closures |
@@ -163,6 +177,9 @@ estimated Bayesian fraction of missing information (ebfmi) greater than
 | ENP Calves                   | 1610132  |        0.527        |         0.542         |              0.279              |              0.801              |          0.126           |            0.017            |         0          |
 
 </div>
+
+Model fit statistics for predicting two years forward for all data years
+from 2002 through 2021. RSS is the residual sum of squares.
 
 <div class="cell-output-display">
 

@@ -279,6 +279,8 @@ knitr::kable(
 
 ## Leave-one-out Cross Validation (LOO)
 
+Derived estimates of model fit using an information criterion based on leave-one-out cross validation (looic). Models with the lowest $looic$ value are considered the best fitting model given the time series of abundance data used to fit the model. $\Delta looic$ represents the difference in $looic$ relative to the model with the lowest $looic$.
+
 ```{r loo, echo = FALSE, warning = FALSE, message = FALSE}
 #| label: tbl-loo
 #| tbl-cap: "Derived estimates of model fit using an information criterion based on leave-one-out cross validation (looic)."
@@ -318,9 +320,11 @@ knitr::kable(
 
 ## Predictive accuracy with retrospection
 
+Model fit statistics for predicting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
+
 ```{r retro1, echo = F, warning = F, message = F}
 #| label: tbl-retro1
-#| tbl-cap: "Model fit statistics for predicting one year forward for all years from 2002 through 2021. RSS is the residual sum of squares."
+#| tbl-cap: "Model fit statistics for predicting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares."
 
 # Retrospective prediction -----------------------------------------------------
 N_eval_table <- pred_summary_tbl_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold_Nmin)
@@ -389,6 +393,8 @@ knitr::kable(
 #kable_classic(full_width = F, html_font = "Cambria")
 ```
 
+Model fit statistics for predicting two years forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
+
 ```{r retro2, echo = F, warning = F, message = F}
 #| label: tbl-retro2
 #| tbl-cap: "Model fit statistics for predicting two years forward for all years from 2002 through 2021. RSS is the residual sum of squares."
@@ -428,11 +434,6 @@ knitr::kable(
 
 ```{r retroFig, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
 # Figure
-N_eval_table <- N_eval_table %>%
-  mutate(model = factor(model, 
-                        levels = c("Base", "AR1v1", "AR1v2", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"),
-                        labels = c("Base", "AR1v1", "AR1v2", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings")))
-
 tidy_plot_retroPred(N_eval_table)
 ```
 
@@ -455,10 +456,7 @@ tidy_plot_traj_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold
 #lastYr <- paste0("logN[", nrow(Ndata_input), "]")
 lastYr <- "logN_proj[2]"
 postLastYr <- purrr::imap(tfit, ~.x[lastYr] %>% add_column(Model = model_names[.y]))
-postLastYr <- do.call(rbind, postLastYr) %>%
-  mutate(Model = factor(Model, 
-                              levels = c("Base", "AR1v1", "AR1v2", "Calves/Strandings", 
-                                         "Calves only", "Strandings only", "ENP Calves")))
+postLastYr <- do.call(rbind, postLastYr)
            
 
 postLastYr_mns <- postLastYr %>%
