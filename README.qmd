@@ -304,7 +304,12 @@ Derived estimates of model fit using an information criterion based on leave-one
 loo_pcfg <- purrr::map(mfit, \(x) x$loo(cores = 4))
 #purrr::map(loo_pcfg, plot)
 
-tab_loo <- purrr::map_dfr(loo_pcfg, \(x) t(x$estimates)[1, ]) %>%
+tab_loo <- purrr::map_dfr(loo_pcfg, \(x) 
+                          data.frame(
+                            elpd_loo = x$elpd_loo, elpd_loo_se = x$se_elpd_loo,
+                            p_loo = x$p_loo, p_loo_se = x$se_p_loo,
+                            looic = x$looic, looic_se = x$se_looic
+                          )) %>%
   add_column(
     Model = model_names,
     .before = 1
@@ -327,7 +332,7 @@ tab_loo <- purrr::map_dfr(loo_pcfg, \(x) t(x$estimates)[1, ]) %>%
 knitr::kable(
   tab_loo,
   digits = 2,
-  align = c("l", rep("c", 4)),
+  align = c("l", rep("c", 7)),
   format = "simple",
   booktabs = T
 ) #%>%
@@ -336,21 +341,79 @@ knitr::kable(
 
 ## Predictive accuracy with retrospection
 
-Model fit statistics for predicting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
+Model predictions when projecting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
 
-```{r retro1, echo = F, warning = F, message = F}
+```{r, echo = F, warning = F, message = F}
 #| label: tbl-retro1
-#| tbl-cap: "Model fit statistics for predicting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares."
+#| tbl-cap: "Model predictions when projecting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares."
 
 # Retrospective prediction -----------------------------------------------------
 N_eval_table <- pred_summary_tbl_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold_Nmin)
 
 # Summary stats
+N_eval_tab_proj1yr <- N_eval_table %>%
+  filter(proj_set == "pyear1") %>%
+  arrange(year, model) %>% 
+  dplyr::select(-proj_set, -percentile_80, -rss)
+
+knitr::kable(
+  N_eval_tab_proj1yr,
+  row.names = F,
+  col.names = c("Year", "Model", "Abundance Estimate",
+                "Mean N", "Median N", 
+                "Lower 95% CI (N)", "Upper 95% CI (N)",
+                "Nmin",
+                "Closure",
+                "Percentile for Abundance Estimate",
+                "Prop Below Threshold (N)",
+                "Prop Below Threshold (Nmin)"),
+  digits = 3,
+  align = c(rep("l", 2), rep("c", 10)),
+  #format = "simple",
+  booktabs = T
+)
+```
+
+Model predictions when projecting two years forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
+
+```{r, echo = F, warning = F, message = F}
+#| label: tbl-retro2
+#| tbl-cap: "Model predictions when projecting two years forward for all data years from 2002 through 2021. RSS is the residual sum of squares."
+#| 
+N_eval_tab_proj2yr <- N_eval_table %>%
+  filter(proj_set == "pyear2") %>%
+  arrange(year, model) %>% 
+  dplyr::select(-proj_set, -percentile_80, -rss)
+
+knitr::kable(
+  N_eval_tab_proj1yr,
+  row.names = F,
+  col.names = c("Year", "Model", "Abundance Estimate",
+                "Mean N", "Median N", 
+                "Lower 95% CI (N)", "Upper 95% CI (N)",
+                "Nmin",
+                "Closure",
+                "Percentile for Abundance Estimate",
+                "Prop Below Threshold (N)",
+                "Prop Below Threshold (Nmin)"),
+  digits = 3,
+  align = c(rep("l", 2), rep("c", 10)),
+  #format = "simple",
+  booktabs = T
+)
+```
+
+Model fit statistics for predicting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
+
+```{r retro1, echo = F, warning = F, message = F}
+#| label: tbl-retro1summ
+#| tbl-cap: "Model fit statistics for predicting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares."
+
 N_eval_summary_proj1yr <- N_eval_table %>%
   filter(proj_set == "pyear1") %>%
   group_by(model) %>%
   summarize(
-    mnRSS = mean(rss),
+    RSS = sum(rss), #mean(rss),
     mean = mean(percentile_abundEstN),
     median = median(percentile_abundEstN),
     lo_ci = quantile(percentile_abundEstN, 0.025),
@@ -359,22 +422,7 @@ N_eval_summary_proj1yr <- N_eval_table %>%
     mnProp_below_minThreshold = mean(prop_below_minThreshold),
     Nclosures = sum(closure)
   ) %>%
-  arrange(mnRSS)
-
-N_eval_summary_proj2yr <- N_eval_table %>%
-  filter(proj_set == "pyear2") %>%
-  group_by(model) %>%
-  summarize(
-    mnRSS = mean(rss),
-    mean = mean(percentile_abundEstN),
-    median = median(percentile_abundEstN),
-    lo_ci = quantile(percentile_abundEstN, 0.025),
-    hi_ci = quantile(percentile_abundEstN, 0.975),
-    mnProp_below_threshold = mean(prop_below_threshold),
-    mnProp_below_minThreshold = mean(prop_below_minThreshold),
-    Nclosures = sum(closure)
-  ) %>%
-  arrange(mnRSS)
+  arrange(RSS)
 
 # HTML table output
 # DT::datatable(N_eval_summary_proj1yr, 
@@ -394,12 +442,12 @@ N_eval_summary_proj2yr <- N_eval_table %>%
 knitr::kable(
   N_eval_summary_proj1yr,
   row.names = F,
-  col.names = c("Model", "Mean RSS", "Mean Percentile (N)",
+  col.names = c("Model", "RSS", "Mean Percentile (N)",
                 "Median Percentile (N)",
                 "Lower 95% CI for Percentile (N)",
                 "Upper 95% CI for Percentile (N)",
-                "Prop Below Threshold (N)",
-                "Prop Below Threshold (Nmin)",
+                "Mean Prop Below Threshold (N)",
+                "Mean Prop Below Threshold (Nmin)",
                 "Number of Closures"),
   digits = 3,
   align = c("l", rep("c", 8)),
@@ -412,8 +460,23 @@ knitr::kable(
 Model fit statistics for predicting two years forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
 
 ```{r retro2, echo = F, warning = F, message = F}
-#| label: tbl-retro2
+#| label: tbl-retro2summ
 #| tbl-cap: "Model fit statistics for predicting two years forward for all years from 2002 through 2021. RSS is the residual sum of squares."
+
+N_eval_summary_proj2yr <- N_eval_table %>%
+  filter(proj_set == "pyear2") %>%
+  group_by(model) %>%
+  summarize(
+    RSS = sum(rss), #mean(rss),
+    mean = mean(percentile_abundEstN),
+    median = median(percentile_abundEstN),
+    lo_ci = quantile(percentile_abundEstN, 0.025),
+    hi_ci = quantile(percentile_abundEstN, 0.975),
+    mnProp_below_threshold = mean(prop_below_threshold),
+    mnProp_below_minThreshold = mean(prop_below_minThreshold),
+    Nclosures = sum(closure)
+  ) %>%
+  arrange(RSS)
 
 # HTML table output
 # DT::datatable(N_eval_summary_proj2yr, 
@@ -433,12 +496,12 @@ Model fit statistics for predicting two years forward for all data years from 20
 knitr::kable(
   N_eval_summary_proj2yr,
   row.names = F,
-  col.names = c("Model", "Mean RSS", "Mean Percentile (N)",
+  col.names = c("Model", "RSS", "Mean Percentile (N)",
                 "Median Percentile (N)",
                 "Lower 95% CI for Percentile (N)",
                 "Upper 95% CI for Percentile (N)",
-                "Prop Below Threshold (N)",
-                "Prop Below Threshold (Nmin)",
+                "Mean Prop Below Threshold (N)",
+                "Mean Prop Below Threshold (Nmin)",
                 "Number of Closures"),
   digits = 3,
   align = c("l", rep("c", 8)),
