@@ -367,7 +367,7 @@ knitr::kable(
                 "Percentile for Abundance Estimate",
                 "Prop Below Threshold (N)",
                 "Prop Below Threshold (Nmin)"),
-  digits = 3,
+  digits = c(rep(1, 9), rep(3, 3)),
   align = c(rep("l", 2), rep("c", 10)),
   #format = "simple",
   booktabs = T
@@ -396,7 +396,7 @@ knitr::kable(
                 "Percentile for Abundance Estimate",
                 "Prop Below Threshold (N)",
                 "Prop Below Threshold (Nmin)"),
-  digits = 3,
+  digits = c(rep(1, 9), rep(3, 3)),
   align = c(rep("l", 2), rep("c", 10)),
   #format = "simple",
   booktabs = T
@@ -449,7 +449,7 @@ knitr::kable(
                 "Mean Prop Below Threshold (N)",
                 "Mean Prop Below Threshold (Nmin)",
                 "Number of Closures"),
-  digits = 3,
+  digits = c(rep(1, 2), rep(3, 7)),
   align = c("l", rep("c", 8)),
   #format = "simple",
   booktabs = T
@@ -503,7 +503,7 @@ knitr::kable(
                 "Mean Prop Below Threshold (N)",
                 "Mean Prop Below Threshold (Nmin)",
                 "Number of Closures"),
-  digits = 3,
+  digits = c(rep(1, 2), rep(3, 7)),
   align = c("l", rep("c", 8)),
   #format = "simple",
   booktabs = T
