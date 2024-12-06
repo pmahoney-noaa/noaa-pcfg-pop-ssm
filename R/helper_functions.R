@@ -148,7 +148,9 @@ tidy_plot_traj = function(input_data, tidy_mcmc, threshold_N, threshold_Nmin){
     geom_errorbar(aes(ymin = low_60CI, ymax = N), linewidth = 0) +
     geom_point(aes(y = low_60CI), shape = 23, fill = "red", size = 2) +
     theme_bw(base_size = 16) +
-    labs(x = "Year", y = "PCFG Abundance")
+    labs(x = "Year", y = "PCFG Abundance") +
+    scale_x_continuous(breaks = 1990:2100, minor_breaks = NULL) +
+    NULL
   
   return(print(pl))
 }
