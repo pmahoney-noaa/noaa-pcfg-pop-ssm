@@ -162,7 +162,9 @@ tidy_plot_traj = function(input_data, tidy_mcmc, threshold_N, threshold_Nmin){
     geom_errorbar(aes(ymin = low_60CI, ymax = N), linewidth = 0) +
     geom_point(aes(y = low_60CI), shape = 23, fill = "red", size = 2) +
     theme_bw(base_size = 16) +
-    labs(x = "Year", y = "PCFG Abundance")
+    labs(x = "Year", y = "PCFG Abundance") +
+    scale_x_continuous(breaks = 1990:2100, minor_breaks = NULL) +
+    NULL
   
   return(print(pl))
 }
@@ -181,7 +183,9 @@ tidy_plot_propBelowThresh = function(N_eval_table){
     scale_color_brewer(palette = "Reds") +
     labs(x = "Year", y = "Prop. of sims (< N threshold)") +
     guides(color = guide_legend(title = NULL, position = "top", direction = "horizontal")) +
-    theme_bw(base_size = 16)
+    theme_bw(base_size = 16) +
+    scale_x_continuous(breaks = 1990:2100, minor_breaks = NULL) +
+    NULL
   
   p2 <- N_eval_table %>% 
     ggplot(aes(x = year, y = prop_below_minThreshold, group = proj_set, color = proj_set)) + 
@@ -190,7 +194,9 @@ tidy_plot_propBelowThresh = function(N_eval_table){
     scale_color_brewer(palette = "Reds") +
     labs(x = "Year", y = "Prop. of sims (< Nmin threshold)") +
     guides(color = "none") +
-    theme_bw(base_size = 16)
+    theme_bw(base_size = 16) +
+    scale_x_continuous(breaks = 1990:2100, minor_breaks = NULL) +
+    NULL
   
   return(cowplot::plot_grid(p1, p2, ncol = 1, align = "hv"))
 }
@@ -225,9 +231,15 @@ tidy_plot_retroPred = function(N_eval_table, ylims = c(0, 350), truncated_retro 
     geom_errorbar(aes(ymin = percentile_20, ymax = percentile_80), width = width, position = position_dodge(width = width)) +
     geom_point(aes(x = year, y = meanN), position = position_dodge(width = width)) +
     geom_point(size = 2, color = "black", fill = "black", shape = 23) +
+<<<<<<< HEAD
     viridis::scale_color_viridis(discrete = T, option = "B") +
     #scale_color_brewer(palette = "Reds") +
     scale_y_continuous(limits = ylims, oob = scales::squish) +
+=======
+    # viridis::scale_color_viridis(discrete = T, option = "B") +
+    scale_color_brewer(palette = "Reds") +
+    ylim(c(0, 350)) +
+>>>>>>> 75322ec7783709e2b120f2b432791a89ab7b593b
     labs(x = "Year", y = "PCFG Abundance") +
     scale_x_continuous(limits = c(min(N_eval_table$year) - 1.5, max(N_eval_table$year)) + 1, 
                        breaks = seq(min(N_eval_table$year), max(N_eval_table$year), 1),
