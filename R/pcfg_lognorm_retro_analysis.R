@@ -177,7 +177,8 @@ N_eval_retro_summ <- purrr::map_df(N_eval_retro, function (x) x$summary)
     mdPercentile_abundEstN = median(percentile_abundEstN),
     mnProp_below_threshold = mean(prop_below_threshold),
     mdProp_below_threshold = median(prop_below_threshold),
-    Nclosures = sum(closure)
+    Nclosures = sum(closure),
+    closure_years = paste(cur_data()$year[closure == T], collapse = ",")
   ) %>%
   arrange(mdRSS))
 
@@ -191,7 +192,8 @@ N_eval_retro_summ <- purrr::map_df(N_eval_retro, function (x) x$summary)
     mdPercentile_abundEstN = median(percentile_abundEstN),
     mnProp_below_threshold = mean(prop_below_threshold),
     mdProp_below_threshold = median(prop_below_threshold),
-    Nclosures = sum(closure)
+    Nclosures = sum(closure),
+    closure_years = paste(cur_data()$year[closure == T], collapse = ",")
   ) %>%
   arrange(mdRSS))
 
