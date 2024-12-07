@@ -108,7 +108,7 @@ init_pcfg_data_2yr_strands = list(
   sigma_logC_hat = Cdata_input %>% slice(1:nrow(Ndata_input)) %>% pull(sd_log),
   mu_logC_proj = Cdata_input %>% slice(-c(1:nrow(Ndata_input))) %>% pull(mean_log),  # estimated contemporary ENP calf abundance, log space
   sigma_logC_proj = Cdata_input %>% slice(-c(1:nrow(Ndata_input))) %>% pull(sd_log),
-  x_lambda_dat = as.matrix(x_lambda %>% dplyr::select(N_strandings) %>% dplyr::slice(1:nrow(Ndata_input))),
+  x_lambda_dat = as.matrix(x_lambda %>% dplyr::select(N_strandings) %>% slice(1:nrow(Ndata_input))),
   x_lambda_proj = as.matrix(x_lambda %>% dplyr::select(N_strandings) %>% slice(-c(1:nrow(Ndata_input)))),
   N_harvest = N_harvest[1:2]
 )

@@ -76,7 +76,7 @@ purrr::map(Y_retro, function(y) {
   Ndata_input_y <- Ndata_input %>% filter(year <= y)
   
   # Input data set
-  init_pcfg_data = list(
+  init_pcfg_data_calves <- init_pcfg_data_strandings <- init_pcfg_data <- list(
     n_dat_yrs = nrow(Ndata_input_y),  
     n_proj_yrs = 2,                      # number of years to project into the future
     n_betas = ncol(x_lambda),            # number of coefficients on lambda
@@ -91,12 +91,25 @@ purrr::map(Y_retro, function(y) {
     N_harvest = N_harvest[1:2]
   )
   
+  # Subset full dataset for models with single covariates
+  init_pcfg_data_calves$n_betas <- 1
+  init_pcfg_data_calves$x_lambda_dat <- as.matrix(x_lambda %>% dplyr::select(N_pcfg_calves) %>% slice(1:nrow(Ndata_input_y)))
+  init_pcfg_data_calves$x_lambda_proj <- as.matrix(x_lambda %>% dplyr::select(N_pcfg_calves) %>% slice(-c(1:nrow(Ndata_input_y))) %>% slice(1:2))
+  init_pcfg_data_strandings$n_betas <- 1
+  init_pcfg_data_strandings$x_lambda_dat <- as.matrix(x_lambda %>% dplyr::select(N_strandings) %>% slice(1:nrow(Ndata_input_y)))
+  init_pcfg_data_strandings$x_lambda_proj <- as.matrix(x_lambda %>% dplyr::select(N_strandings) %>% slice(-c(1:nrow(Ndata_input_y))) %>% slice(1:2))
+  
+  init_data <- list(
+    init_pcfg_data, init_pcfg_data, init_pcfg_data, init_pcfg_data, init_pcfg_data,
+    init_pcfg_data_calves, init_pcfg_data_strandings
+  )
+  
   # Compile models (if they haven't been)
   cmodels <- purrr::map(models, cmdstanr::cmdstan_model, .progress = T)
   
   # MCMC 
-  mfit <- purrr::map(cmodels, \(x) x$sample(
-    data = init_pcfg_data,
+  mfit <- purrr::map2(cmodels, init_data, \(x, i) x$sample(
+    data = i,
     output_dir = here("out"),
     seed = 42,
     chains = 3,
@@ -169,6 +182,7 @@ N_eval_retro_summ <- purrr::map_df(N_eval_retro, function (x) x$summary)
 
 (N_eval_summary_proj1yr <- N_eval_retro_summ %>%
   filter(proj_set == "1 yr") %>%
+  filter(year >= 2014) %>%
   group_by(model) %>%
   summarize(
     mnRSS = mean(rss),
@@ -180,10 +194,11 @@ N_eval_retro_summ <- purrr::map_df(N_eval_retro, function (x) x$summary)
     Nclosures = sum(closure),
     closure_years = paste(cur_data()$year[closure == T], collapse = ",")
   ) %>%
-  arrange(mdRSS))
+  arrange(mnRSS))
 
 (N_eval_summary_proj2yr <- N_eval_retro_summ %>%
   filter(proj_set == "2 yr") %>%
+  filter(year >= 2014) %>%
   group_by(model) %>%
   summarize(
     mnRSS = mean(rss),
@@ -195,7 +210,7 @@ N_eval_retro_summ <- purrr::map_df(N_eval_retro, function (x) x$summary)
     Nclosures = sum(closure),
     closure_years = paste(cur_data()$year[closure == T], collapse = ",")
   ) %>%
-  arrange(mdRSS))
+  arrange(mnRSS))
 
 
 # Figure
