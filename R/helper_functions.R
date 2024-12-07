@@ -61,22 +61,36 @@ tidy_coefs = function(mfit, model_names){
 }
 
 # Abundance plots --------------------------------------------------------------
-tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names, threshold_N, threshold_Nmin, ncols = 1){
+tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names, 
+                                     threshold_N, threshold_Nmin, ncols = 1,
+                                     ylims = c(0, 350), 
+                                     truncated_retro = F) { # arg. to specify a truncated retrospective analysis
+  
   N_out = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
                             spread_draws(logN[year]) %>% 
                             select(year, logN) %>% 
                             ungroup() %>% 
                             mutate(
                               model = model_names[.y],
-                              year = year + Ndata_input$year[1] - 1))
+                              year = year + input_data$year[1] - 1))
   
-  N_proj_out = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
-                            spread_draws(logN_proj[year]) %>% 
-                            select(year, logN = logN_proj) %>% 
-                            ungroup() %>% 
-                            mutate(
-                              model = model_names[.y],
-                              year = year + max(Ndata_input$year)))
+  if (truncated_retro) {
+    N_proj_out = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
+                                   spread_draws(logN_proj[year]) %>% 
+                                   select(year, logN = logN_proj) %>% 
+                                   ungroup() %>% 
+                                   mutate(
+                                     model = model_names[.y],
+                                     year = year + max(input_data$year) - 2))
+  } else {
+    N_proj_out = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
+                                   spread_draws(logN_proj[year]) %>% 
+                                   select(year, logN = logN_proj) %>% 
+                                   ungroup() %>% 
+                                   mutate(
+                                     model = model_names[.y],
+                                     year = year + max(input_data$year) - 2))
+  }
   
   N_out_table = N_out %>% 
     bind_rows(N_proj_out) %>% 
@@ -97,7 +111,7 @@ tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names, thresho
     geom_ribbon(data = N_out_table, aes(y = mean, ymin = lo_ci, ymax = hi_ci), alpha = 0.2) +
     geom_line(data = N_out_table, aes(y = mean)) +
     geom_point(size = 3, color = "white", fill = "black", shape = 21) +
-    ylim(c(0, 350)) +
+    scale_y_continuous(limits = ylims, oob = scales::squish) +
     geom_hline(yintercept = threshold_N) + 
     geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
     geom_errorbar(aes(ymin = low_95CI, ymax = high_95CI)) +  
@@ -181,11 +195,19 @@ tidy_plot_propBelowThresh = function(N_eval_table){
   return(cowplot::plot_grid(p1, p2, ncol = 1, align = "hv"))
 }
 
-tidy_plot_retroPred = function(N_eval_table){
-  N_eval_table <- N_eval_table %>%
-    mutate(
-      proj_set = factor(proj_set, levels = rep(paste0("pyear", 1:3)), labels = rep(paste("Projected year", 1:3)))
-    )
+tidy_plot_retroPred = function(N_eval_table, ylims = c(0, 350), truncated_retro = F){
+  
+  if(truncated_retro) {
+    N_eval_table <- N_eval_table %>%
+      mutate(
+        proj_set = factor(proj_set, levels = c("1 yr", "2 yr"), labels = rep(paste("Projected year", 1:2)))
+      )
+  } else {
+    N_eval_table <- N_eval_table %>%
+      mutate(
+        proj_set = factor(proj_set, levels = rep(paste0("pyear", 1:3)), labels = rep(paste("Projected year", 1:3)))
+      )
+  }
   
   width <- 0.5
   
@@ -205,7 +227,7 @@ tidy_plot_retroPred = function(N_eval_table){
     geom_point(size = 2, color = "black", fill = "black", shape = 23) +
     viridis::scale_color_viridis(discrete = T, option = "B") +
     #scale_color_brewer(palette = "Reds") +
-    ylim(c(0, 350)) +
+    scale_y_continuous(limits = ylims, oob = scales::squish) +
     labs(x = "Year", y = "PCFG Abundance") +
     scale_x_continuous(limits = c(min(N_eval_table$year) - 1.5, max(N_eval_table$year)) + 1, 
                        breaks = seq(min(N_eval_table$year), max(N_eval_table$year), 1),
@@ -217,19 +239,20 @@ tidy_plot_retroPred = function(N_eval_table){
 }
 
 # Prediction summary table -----------------------------------------------------
-pred_summary_tbl_multimodel = function(Ndata_input, tidy_mcmc, model_names, threshold_N, threshold_Nmin){
+pred_summary_tbl_multimodel = function(input_data, tidy_mcmc, model_names, 
+                                       threshold_N, threshold_Nmin){
   tbl = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
                           gather_draws(logN_pyear1[year], logN_pyear2[year]) %>% #, logN_pyear3[year]) %>%
                           select(year, proj_set = .variable, N = .value) %>% 
                           mutate(
-                            year = year + Ndata_input$year[1] - 1,
+                            year = year + input_data$year[1] - 1,
                             proj_set = gsub("logN_", "", proj_set),
                             N = exp(N),
                             year = ifelse(proj_set == "pyear1", year + 1, 
                                           ifelse(proj_set == "pyear2", year + 2, year + 3)) 
                           ) %>%
-                          filter(year <= max(Ndata_input$year)) %>%
-                          left_join(Ndata_input %>% dplyr::select(year, abundEstN = N), by = "year") %>%
+                          filter(year <= max(input_data$year)) %>%
+                          left_join(input_data %>% dplyr::select(year, abundEstN = N), by = "year") %>%
                           #group_by(proj_set, year) %>% 
                           summarize(
                             model = model_names[.y],
@@ -251,19 +274,19 @@ pred_summary_tbl_multimodel = function(Ndata_input, tidy_mcmc, model_names, thre
   return(tbl)
 }
 
-pred_summary_tbl = function(Ndata_input, tidy_mcmc, threshold_N, threshold_Nmin){
+pred_summary_tbl = function(input_data, tidy_mcmc, threshold_N, threshold_Nmin){
   tbl <- tidy_mcmc %>% 
     gather_draws(logN_pyear1[year], logN_pyear2[year]) %>% #, logN_pyear3[year]) %>%
     select(year, proj_set = .variable, N = .value) %>% 
     mutate(
-      year = year + Ndata_input$year[1] - 1,
+      year = year + input_data$year[1] - 1,
       proj_set = gsub("logN_", "", proj_set),
       N = exp(N),
       year = ifelse(proj_set == "pyear1", year + 1, 
                     ifelse(proj_set == "pyear2", year + 2, year + 3)) 
     ) %>%
-    filter(year <= max(Ndata_input$year)) %>%
-    left_join(Ndata_input %>% dplyr::select(year, abundEstN = N), by = "year") %>%
+    filter(year <= max(input_data$year)) %>%
+    left_join(input_data %>% dplyr::select(year, abundEstN = N), by = "year") %>%
     #group_by(proj_set, year) %>% 
     summarize(abundEst = mean(abundEstN),
               meanN = mean(N),
