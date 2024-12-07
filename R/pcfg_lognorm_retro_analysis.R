@@ -139,13 +139,18 @@ N_eval_retro <- purrr::map(Y_retro, function(y) {
   tfit = purrr::map(mfit, tidy_draws, .progress = T)
   
   # Build tables
-  input_data <- Ndata_input %>% filter(year <= (y + 2))
+  if (y == max(Y_retro)) {
+    input_data <- Ndata_input %>% filter(year <= (y + 1))
+  } else{
+    input_data <- Ndata_input %>% filter(year <= (y + 2))
+  }
+  
   N_eval_table <- purrr::imap_dfr(tfit, ~ .x %>% 
                                     gather_draws(logN_proj[year]) %>% #, logN_pyear3[year]) %>%
                                     select(year, N = .value) %>% 
                                     mutate(
                                       proj_set = paste0(year, " yr"),
-                                      year = year + max(input_data$year) - 2,
+                                      year = year + y,
                                       N = exp(N) 
                                     ) %>%
                                     left_join(input_data %>% dplyr::select(year, abundEstN = N), by = "year") %>% 
@@ -168,8 +173,8 @@ N_eval_retro <- purrr::map(Y_retro, function(y) {
                                     ungroup())
   
   # Build population trajectories
-  pl <- tidy_plot_traj_multimodel(Ndata_input %>% 
-                              filter(year <= (y + 2)), tfit, model_names, 
+  # At present, doesn't plot the last projected year in data year + 1 (e.g., 2023 if last abundance estimate in 2022)
+  pl <- tidy_plot_traj_multimodel(input_data, tfit, model_names, 
                             threshold_N, threshold_Nmin, ncols = 1,
                             ylims = c(0, 350), truncated_retro = T)
   
@@ -181,7 +186,7 @@ N_eval_retro <- purrr::map(Y_retro, function(y) {
 N_eval_retro_summ <- purrr::map_df(N_eval_retro, function (x) x$summary)
 
 (N_eval_summary_proj1yr <- N_eval_retro_summ %>%
-  filter(proj_set == "1 yr") %>%
+  filter(proj_set == "1 yr" & year != 2023) %>%
   filter(year >= 2014) %>%
   group_by(model) %>%
   summarize(
@@ -197,7 +202,7 @@ N_eval_retro_summ <- purrr::map_df(N_eval_retro, function (x) x$summary)
   arrange(mnRSS))
 
 (N_eval_summary_proj2yr <- N_eval_retro_summ %>%
-  filter(proj_set == "2 yr") %>%
+  filter(proj_set == "2 yr" & year != 2023) %>%
   filter(year >= 2014) %>%
   group_by(model) %>%
   summarize(
