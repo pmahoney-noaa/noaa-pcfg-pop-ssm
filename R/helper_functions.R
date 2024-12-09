@@ -54,7 +54,8 @@ tidy_coefs = function(mfit, model_names){
                      filter(grepl("beta", variable)))
   
   do.call('rbind', o) %>%
-    dplyr::select(model, variable, mean, median, sd, lo_ci = q5, hi_ci = q95, rhat, ess_bulk) %>%
+    dplyr::select(model, variable, mean, median, sd, 
+                  lo_ci = q5, hi_ci = q95, rhat, ess_bulk) %>%
     mutate(
       variable = '$\\beta$'
     )
@@ -206,12 +207,14 @@ tidy_plot_retroPred = function(N_eval_table, ylims = c(0, 350), truncated_retro 
   if(truncated_retro) {
     N_eval_table <- N_eval_table %>%
       mutate(
-        proj_set = factor(proj_set, levels = c("1 yr", "2 yr"), labels = rep(paste("Projected year", 1:2)))
+        proj_set = factor(proj_set, levels = c("1 yr", "2 yr"), 
+                          labels = rep(paste("Projected year", 1:2)))
       )
   } else {
     N_eval_table <- N_eval_table %>%
       mutate(
-        proj_set = factor(proj_set, levels = rep(paste0("pyear", 1:3)), labels = rep(paste("Projected year", 1:3)))
+        proj_set = factor(proj_set, levels = rep(paste0("pyear", 1:3)), 
+                          labels = rep(paste("Projected year", 1:3)))
       )
   }
   
@@ -227,8 +230,10 @@ tidy_plot_retroPred = function(N_eval_table, ylims = c(0, 350), truncated_retro 
   }
   
   pl <- pl + 
-    geom_errorbar(aes(ymin = loN_ci, ymax = hiN_ci), linetype = 2, width = width, position = position_dodge(width = width)) + 
-    geom_errorbar(aes(ymin = percentile_20, ymax = percentile_80), width = width, position = position_dodge(width = width)) +
+    geom_errorbar(aes(ymin = loN_ci, ymax = hiN_ci), linetype = 2, width = width, 
+                  position = position_dodge(width = width)) + 
+    geom_errorbar(aes(ymin = percentile_20, ymax = percentile_80), width = width, 
+                  position = position_dodge(width = width)) +
     geom_point(aes(x = year, y = meanN), position = position_dodge(width = width)) +
     geom_point(size = 2, color = "black", fill = "black", shape = 23) +
     #viridis::scale_color_viridis(discrete = T, option = "B") +

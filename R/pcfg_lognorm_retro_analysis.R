@@ -183,7 +183,7 @@ N_eval_retro <- purrr::map(Y_retro, function(y) {
 })
 
 # Summary stats
-N_eval_retro_summ <- purrr::map_df(N_eval_retro, function (x) x$summary)
+N_eval_retro_summ <- purrr::imap_dfr(N_eval_retro, ~ .x$summary %>% mutate(start_year = .y))
 
 (N_eval_summary_proj1yr <- N_eval_retro_summ %>%
   filter(proj_set == "1 yr" & year != 2023) %>%
@@ -224,6 +224,59 @@ N_eval_table <- N_eval_retro_summ %>%
                         levels = c("Base", "AR1v1", "AR1v2", "Calves/Strandings", 
                                    "Calves only", "Strandings only", "ENP Calves")))
 tidy_plot_retroPred(N_eval_table, ylims = c(0, 500), truncated_retro = T)
+
+
+# Relative model performance x time series length
+
+(N_eval_summary_startYear <- N_eval_retro_summ %>%
+    filter(proj_set == "1 yr" & year != 2023 & start_year > 1) %>%
+    group_by(model, start_year) %>%
+    summarize(
+      mnRSS = mean(rss),
+      #mdRSS = median(rss),
+      mnPercentile_abundEstN = mean(percentile_abundEstN),
+      mdPercentile_abundEstN = median(percentile_abundEstN),
+      mnProp_below_threshold = mean(prop_below_threshold),
+      mdProp_below_threshold = median(prop_below_threshold),
+      Nclosures = sum(closure),
+      closure_years = paste(cur_data()$year[closure == T], collapse = ",")
+    ))
+
+Retro_eval <- N_eval_summary_startYear %>%
+  mutate(
+    scRSS = (mnRSS - mean(mnRSS)) / sd(mnRSS)
+  )
+
+ggplot(Retro_eval, aes(x = start_year, y = scRSS, group = model, color = model)) +
+  geom_point() +
+  geom_line() +
+  #scale_y_continuous(limits = c(-0.7, 2), oob = scales::squish) +
+  theme_bw()
+
+(N_eval_summary_startYear <- N_eval_retro_summ %>%
+    filter(proj_set == "2 yr" & year != 2023 & start_year > 1) %>%
+    group_by(model, start_year) %>%
+    summarize(
+      mnRSS = mean(rss),
+      #mdRSS = median(rss),
+      mnPercentile_abundEstN = mean(percentile_abundEstN),
+      mdPercentile_abundEstN = median(percentile_abundEstN),
+      mnProp_below_threshold = mean(prop_below_threshold),
+      mdProp_below_threshold = median(prop_below_threshold),
+      Nclosures = sum(closure),
+      closure_years = paste(cur_data()$year[closure == T], collapse = ",")
+    ))
+
+Retro_eval <- N_eval_summary_startYear %>%
+  mutate(
+    scRSS = (mnRSS - mean(mnRSS)) / sd(mnRSS)
+  )
+
+ggplot(Retro_eval, aes(x = start_year, y = scRSS, group = model, color = model)) +
+  geom_point() +
+  geom_line() +
+  #scale_y_continuous(limits = c(-0.4, 0), oob = scales::squish) +
+  theme_bw()
 
 # Diagnostic summary -----------------------------------------------------------
 
