@@ -162,6 +162,18 @@ np <- purrr::map(mfit, nuts_params, .progress = T)
 # Specify tresholds ------------------------------------------------------------
 threshold_N = 192    # Threshold on abundance below which a hunt is closed
 threshold_Nmin = 171 # Threshold on minimum abundance below which a hunt is closed
+
+# Load truncated retrospective results
+# See pcfg_lognorm_retro_analysis.R for details
+load(here("out", "TruncatedRetroSummary.dat"))
+
+N_eval_retro_summ <- N_eval_retro_summ %>%
+  mutate(
+    model = factor(model, 
+                        levels = c("Base", "AR1v1", "AR1v2", "ENP Calves", 
+                                   "Calves only", "Strandings only", "Calves/Strandings"),
+                        labels = c("Base", "AR1v1", "AR1v2", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
+    )
 ```
 
 # Description of model set
@@ -295,7 +307,7 @@ kable(coefs_tab,
 
 ## Leave-one-out Cross Validation (LOO)
 
-Derived estimates of model fit using an information criterion based on leave-one-out cross validation (looic). Models with the lowest $looic$ value are considered the best fitting model given the time series of abundance data used to fit the model. $\Delta looic$ represents the difference in $looic$ relative to the model with the lowest $looic$.
+The following table provides estimates of model fit using an information criterion (leave-one-out information criterion; *looic*) based on leave-one-out cross validation. Models with the lowest $looic$ value are considered the best fitting model given the time series of abundance data used to fit the model. $\Delta looic$ represents the difference in $looic$ relative to the model with the lowest $looic$.
 
 ```{r loo, echo = FALSE, warning = FALSE, message = FALSE}
 #| label: tbl-loo
@@ -341,88 +353,201 @@ knitr::kable(
 
 ## Predictive accuracy with retrospection
 
-Model predictions when projecting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
+Given the primary objective of this exercise was prediction, we evaluated each models ability to retrospectively predict a future, known population abundance using the PCFG abundance time series from Harris et al. 2024. Predicting future states or "forecasting" is notoriously challenging, particularly as we project further into the future. However, within this system, data gaps of one or two years represent the most plausible scenarios managers are likely to encounter, providing the basis for our evaluation. In addition, we anticipated relative performance within model sets was likely to vary as we project further into the future. Thus, we evaluated model performance when projected one or two years separately. Finally, we evaluated model predictive performance using models fitted to both truncated and complete abundance time series. The latter provides the best available knowledge of the system for model fitting, but might bias retrospective evaluations of predictive performance due to information "spillover" from future population states. The former can become data limited and select for overly simplistic models.
 
-```{r, echo = F, warning = F, message = F}
-#| label: tbl-retro1
-#| tbl-cap: "Model predictions when projecting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares."
+All time series used in model fitting started with estimates from 2002, but varied in their end point. In the case of the truncated times series, we fit each of the seven models specified above to multiple time series with varying end points from 2006 through 2021, providing projected abundance estimates for years 2007 through 2022. Notably, 2006 was used as the earliest end point to provide at least some information for models to converge. In the case of the complete time series, we fit all seven models to a single time series representing abundance data from 2002 through 2022. Model parameters were then used to retrospectively project abundance forward one or two years from 2002 through 2021, providing projected abundance estimates for years 2003 through 2022.
+
+In all cases, projected estimates were then compared to "observed" abundance in the same year using residual sum of squares (RSS), 60% and 95% credible intervals, and whether an estimate dropped below threshold resulting in a presumed hunt closure. Predictive fits were summarized by one or two year projection lengths.
+
+### *Model fits derived from truncated time series*
+
+The following tables show predictive performance statistics by model specification when predicting one or two years forward (respectively) from all data years between 2006 and 2021. RSS is the residual sum of squares.
+
+```{r tRetro1summ, echo = F, warning = F, message = F}
+#| label: tbl-tRetro1summ
+#| tbl-cap: "Model prediction statistics for one year projections using data years 2006 through 2021 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
+N_eval_summary_proj1yr <- N_eval_retro_summ %>%
+  filter(proj_set == "1 yr" & year != 2023) %>%
+  filter(year > 2006) %>%
+  group_by(model) %>%
+  summarize(
+    mnRSS = mean(rss),
+    #mdRSS = median(rss),
+    mnPercentile_abundEstN = mean(percentile_abundEstN),
+    mdPercentile_abundEstN = median(percentile_abundEstN),
+    mnProp_below_threshold = mean(prop_below_threshold),
+    mdProp_below_threshold = median(prop_below_threshold),
+    Nclosures = sum(closure),
+    closure_years = paste(cur_data()$year[closure == T], collapse = ",")
+  ) %>%
+  arrange(mnRSS)
+
+# For GFM-based readme
+knitr::kable(
+  N_eval_summary_proj1yr,
+  row.names = F,
+  col.names = c("Model", "Mean RSS", #"Median RSS", 
+                "Mean Percentile (N)",
+                "Median Percentile (N)",
+                "Mean Prop Below Threshold (N)",
+                "Median Prop Below Threshold (N)",
+                "Number of Closures", "Closure Years"),
+  digits = c(rep(1, 3), rep(3, 4), rep(0, 2)),
+  align = c("l", rep("c", 8)),
+  #format = "simple",
+  booktabs = T
+) #%>%
+#kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r tRetro2summ, echo = F, warning = F, message = F}
+#| label: tbl-tRetro2summ
+#| tbl-cap: "Model prediction statistics for two year projections using data years 2006 through 2021 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
+N_eval_summary_proj2yr <- N_eval_retro_summ %>%
+  filter(proj_set == "2 yr" & year != 2023) %>%
+  filter(year > 2006) %>%
+  group_by(model) %>%
+  summarize(
+    mnRSS = mean(rss),
+    #mdRSS = median(rss),
+    mnPercentile_abundEstN = mean(percentile_abundEstN),
+    mdPercentile_abundEstN = median(percentile_abundEstN),
+    mnProp_below_threshold = mean(prop_below_threshold),
+    mdProp_below_threshold = median(prop_below_threshold),
+    Nclosures = sum(closure),
+    closure_years = paste(cur_data()$year[closure == T], collapse = ",")
+  ) %>%
+  arrange(mnRSS)
+
+# For GFM-based readme
+knitr::kable(
+  N_eval_summary_proj2yr,
+  row.names = F,
+  col.names = c("Model", "Mean RSS", #"Median RSS", 
+                "Mean Percentile (N)",
+                "Median Percentile (N)",
+                "Mean Prop Below Threshold (N)",
+                "Median Prop Below Threshold (N)",
+                "Number of Closures", "Closure Years"),
+  digits = c(rep(1, 3), rep(3, 4), rep(0, 2)),
+  align = c("l", rep("c", 8)),
+  #format = "simple",
+  booktabs = T
+) #%>%
+#kable_classic(full_width = F, html_font = "Cambria")
+```
+
+The following figure depicts the predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2007 through 2022 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars .
+
+```{r truncRetroFig, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
+N_eval_table_trunc <- N_eval_retro_summ %>%
+  filter(year > 2006 & year != 2023) %>%
+  mutate(model = factor(model, 
+                        levels = c("Base", "AR1v1", "AR1v2", "Calves/Strandings", 
+                                   "Calves only", "Strandings only", "ENP Calves")))
+tidy_plot_retroPred(N_eval_table_trunc, ylims = c(0, 500), truncated_retro = T)
+```
+
+However, as is evident in the figure above, the reduced confidence in predictions prior to 2014 is likely - at least in part - being driven by data limitations due the shorter time series used in model fitting. Therefore, the two summary tables for model predictive performance are provided again for all data years between 2013 and 2021.
+
+```{r tRetro1summ_subset, echo = F, warning = F, message = F}
+#| label: tbl-tRetro1summ_subset
+#| tbl-cap: "Model prediction statistics for one year projections using data years 2013 through 2021 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
+N_eval_summary_proj1yr <- N_eval_retro_summ %>%
+  filter(proj_set == "1 yr" & year != 2023) %>%
+  filter(year > 2013) %>%
+  group_by(model) %>%
+  summarize(
+    mnRSS = mean(rss),
+    #mdRSS = median(rss),
+    mnPercentile_abundEstN = mean(percentile_abundEstN),
+    mdPercentile_abundEstN = median(percentile_abundEstN),
+    mnProp_below_threshold = mean(prop_below_threshold),
+    mdProp_below_threshold = median(prop_below_threshold),
+    Nclosures = sum(closure),
+    closure_years = paste(cur_data()$year[closure == T], collapse = ",")
+  ) %>%
+  arrange(mnRSS)
+
+# For GFM-based readme
+knitr::kable(
+  N_eval_summary_proj1yr,
+  row.names = F,
+  col.names = c("Model", "Mean RSS", #"Median RSS", 
+                "Mean Percentile (N)",
+                "Median Percentile (N)",
+                "Mean Prop Below Threshold (N)",
+                "Median Prop Below Threshold (N)",
+                "Number of Closures", "Closure Years"),
+  digits = c(rep(1, 3), rep(3, 4), rep(0, 2)),
+  align = c("l", rep("c", 8)),
+  #format = "simple",
+  booktabs = T
+) #%>%
+#kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r tRetro2summ_subset, echo = F, warning = F, message = F}
+#| label: tbl-tRetro2summ_subset
+#| tbl-cap: "Model prediction statistics for two year projections using data years 2013 through 2021 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
+N_eval_summary_proj2yr <- N_eval_retro_summ %>%
+  filter(proj_set == "2 yr" & year != 2023) %>%
+  filter(year > 2013) %>%
+  group_by(model) %>%
+  summarize(
+    mnRSS = mean(rss),
+    #mdRSS = median(rss),
+    mnPercentile_abundEstN = mean(percentile_abundEstN),
+    mdPercentile_abundEstN = median(percentile_abundEstN),
+    mnProp_below_threshold = mean(prop_below_threshold),
+    mdProp_below_threshold = median(prop_below_threshold),
+    Nclosures = sum(closure),
+    closure_years = paste(cur_data()$year[closure == T], collapse = ",")
+  ) %>%
+  arrange(mnRSS)
+
+# For GFM-based readme
+knitr::kable(
+  N_eval_summary_proj2yr,
+  row.names = F,
+  col.names = c("Model", "Mean RSS", #"Median RSS", 
+                "Mean Percentile (N)",
+                "Median Percentile (N)",
+                "Mean Prop Below Threshold (N)",
+                "Median Prop Below Threshold (N)",
+                "Number of Closures", "Closure Years"),
+  digits = c(rep(1, 3), rep(3, 4), rep(0, 2)),
+  align = c("l", rep("c", 8)),
+  #format = "simple",
+  booktabs = T
+) #%>%
+#kable_classic(full_width = F, html_font = "Cambria")
+```
+
+### *Model fits derived from full time series*
+
+The following tables show predictive performance statistics by model specification when predicting one or two years forward (respectively) for all data years from 2002 through 2021. RSS is the residual sum of squares.
+
+```{r retro1summ, echo = F, warning = F, message = F}
+#| label: tbl-retro1summ
+#| tbl-cap: "Model prediction statistics for one year projections using data years 2002 through 2021 as starting points. Models were fitted using the full time series. RSS is the residual sum of squares."
 
 # Retrospective prediction -----------------------------------------------------
 N_eval_table <- pred_summary_tbl_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold_Nmin)
-
-# Summary stats
-N_eval_tab_proj1yr <- N_eval_table %>%
-  filter(proj_set == "pyear1") %>%
-  arrange(year, model) %>% 
-  dplyr::select(-proj_set, -percentile_80, -rss)
-
-knitr::kable(
-  N_eval_tab_proj1yr,
-  row.names = F,
-  col.names = c("Year", "Model", "Abundance Estimate",
-                "Mean N", "Median N", 
-                "Lower 95% CI (N)", "Upper 95% CI (N)",
-                "Nmin",
-                "Closure",
-                "Percentile for Abundance Estimate",
-                "Prop Below Threshold (N)",
-                "Prop Below Threshold (Nmin)"),
-  digits = c(rep(1, 9), rep(3, 3)),
-  align = c(rep("l", 2), rep("c", 10)),
-  #format = "simple",
-  booktabs = T
-)
-```
-
-Model predictions when projecting two years forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
-
-```{r, echo = F, warning = F, message = F}
-#| label: tbl-retro2
-#| tbl-cap: "Model predictions when projecting two years forward for all data years from 2002 through 2021. RSS is the residual sum of squares."
-#| 
-N_eval_tab_proj2yr <- N_eval_table %>%
-  filter(proj_set == "pyear2") %>%
-  arrange(year, model) %>% 
-  dplyr::select(-proj_set, -percentile_80, -rss)
-
-knitr::kable(
-  N_eval_tab_proj1yr,
-  row.names = F,
-  col.names = c("Year", "Model", "Abundance Estimate",
-                "Mean N", "Median N", 
-                "Lower 95% CI (N)", "Upper 95% CI (N)",
-                "Nmin",
-                "Closure",
-                "Percentile for Abundance Estimate",
-                "Prop Below Threshold (N)",
-                "Prop Below Threshold (Nmin)"),
-  digits = c(rep(1, 9), rep(3, 3)),
-  align = c(rep("l", 2), rep("c", 10)),
-  #format = "simple",
-  booktabs = T
-)
-```
-
-Model fit statistics for predicting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
-
-```{r retro1, echo = F, warning = F, message = F}
-#| label: tbl-retro1summ
-#| tbl-cap: "Model fit statistics for predicting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares."
 
 N_eval_summary_proj1yr <- N_eval_table %>%
   filter(proj_set == "pyear1") %>%
   group_by(model) %>%
   summarize(
-    RSS = sum(rss), #mean(rss),
-    mean = mean(percentile_abundEstN),
-    median = median(percentile_abundEstN),
-    lo_ci = quantile(percentile_abundEstN, 0.025),
-    hi_ci = quantile(percentile_abundEstN, 0.975),
+    mnRSS = mean(rss), 
+    mnPercentile_abundEstN = mean(percentile_abundEstN),
+    mdPercentile_abundEstN = median(percentile_abundEstN),
     mnProp_below_threshold = mean(prop_below_threshold),
-    mnProp_below_minThreshold = mean(prop_below_minThreshold),
-    Nclosures = sum(closure)
+    mdProp_below_threshold = median(prop_below_threshold),
+    Nclosures = sum(closure),
+    closure_years = paste(cur_data()$year[closure == T], collapse = ",")
   ) %>%
-  arrange(RSS)
+  arrange(mnRSS)
 
 # HTML table output
 # DT::datatable(N_eval_summary_proj1yr, 
@@ -442,13 +567,12 @@ N_eval_summary_proj1yr <- N_eval_table %>%
 knitr::kable(
   N_eval_summary_proj1yr,
   row.names = F,
-  col.names = c("Model", "RSS", "Mean Percentile (N)",
+  col.names = c("Model", "Mean RSS", #"Median RSS", 
+                "Mean Percentile (N)",
                 "Median Percentile (N)",
-                "Lower 95% CI for Percentile (N)",
-                "Upper 95% CI for Percentile (N)",
                 "Mean Prop Below Threshold (N)",
-                "Mean Prop Below Threshold (Nmin)",
-                "Number of Closures"),
+                "Median Prop Below Threshold (N)",
+                "Number of Closures", "Closure Years"),
   digits = c(rep(1, 2), rep(3, 7)),
   align = c("l", rep("c", 8)),
   #format = "simple",
@@ -457,26 +581,23 @@ knitr::kable(
 #kable_classic(full_width = F, html_font = "Cambria")
 ```
 
-Model fit statistics for predicting two years forward for all data years from 2002 through 2021. RSS is the residual sum of squares.
-
-```{r retro2, echo = F, warning = F, message = F}
+```{r retro2summ, echo = F, warning = F, message = F}
 #| label: tbl-retro2summ
-#| tbl-cap: "Model fit statistics for predicting two years forward for all years from 2002 through 2021. RSS is the residual sum of squares."
+#| tbl-cap: "Model prediction statistics for two year projections using data years 2002 through 2021 as starting points. Models were fitted using the full time series. RSS is the residual sum of squares."
 
 N_eval_summary_proj2yr <- N_eval_table %>%
   filter(proj_set == "pyear2") %>%
   group_by(model) %>%
   summarize(
-    RSS = sum(rss), #mean(rss),
-    mean = mean(percentile_abundEstN),
-    median = median(percentile_abundEstN),
-    lo_ci = quantile(percentile_abundEstN, 0.025),
-    hi_ci = quantile(percentile_abundEstN, 0.975),
+    mnRSS = mean(rss), 
+    mnPercentile_abundEstN = mean(percentile_abundEstN),
+    mdPercentile_abundEstN = median(percentile_abundEstN),
     mnProp_below_threshold = mean(prop_below_threshold),
-    mnProp_below_minThreshold = mean(prop_below_minThreshold),
-    Nclosures = sum(closure)
+    mdProp_below_threshold = median(prop_below_threshold),
+    Nclosures = sum(closure),
+    closure_years = paste(cur_data()$year[closure == T], collapse = ",")
   ) %>%
-  arrange(RSS)
+  arrange(mnRSS)
 
 # HTML table output
 # DT::datatable(N_eval_summary_proj2yr, 
@@ -496,13 +617,12 @@ N_eval_summary_proj2yr <- N_eval_table %>%
 knitr::kable(
   N_eval_summary_proj2yr,
   row.names = F,
-  col.names = c("Model", "RSS", "Mean Percentile (N)",
+  col.names = c("Model", "Mean RSS", #"Median RSS", 
+                "Mean Percentile (N)",
                 "Median Percentile (N)",
-                "Lower 95% CI for Percentile (N)",
-                "Upper 95% CI for Percentile (N)",
                 "Mean Prop Below Threshold (N)",
-                "Mean Prop Below Threshold (Nmin)",
-                "Number of Closures"),
+                "Median Prop Below Threshold (N)",
+                "Number of Closures", "Closure Years"),
   digits = c(rep(1, 2), rep(3, 7)),
   align = c("l", rep("c", 8)),
   #format = "simple",
@@ -511,6 +631,8 @@ knitr::kable(
 #kable_classic(full_width = F, html_font = "Cambria")
 ```
 
+The following figure depicts the predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications. Observed abundance estimates for years 2003 through 2022 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars .
+
 ```{r retroFig, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
 # Figure
 tidy_plot_retroPred(N_eval_table)
@@ -518,7 +640,7 @@ tidy_plot_retroPred(N_eval_table)
 
 ## Model-specific trends and projections
 
-Note, the number of PCFG calves used in projected years (models Calves/Strandings and Calves only) are not accurate and likely represent underestimates of reality.
+Note, the number of PCFG calves used in projected years (models calves/strandings and calves only) are not accurate and likely represent underestimates of reality.
 
 ```{r trendFig, echo = F, warning = F, message = F, fig.height = 18, fig.width = 8, dpi = 300}
 # Population trajectories ------------------------------------------------------
@@ -559,4 +681,65 @@ ggplot(postLastYr, aes(group = Model, fill = Model, color = Model)) +
          fill = guide_legend(title = NULL, position = "top", direction = "horizontal", nrow = 1)) +
   labs(x = "Projected N (Year 2024)", y = "Density") +
   theme_bw()
+```
+
+## Supplementary tables
+
+Model predictions when projecting one year forward for all data years from 2002 through 2021 using models fit to the full time series. RSS is the residual sum of squares.
+
+```{r, echo = F, warning = F, message = F}
+#| label: tbl-retro1
+#| tbl-cap: "Model predictions when projecting one year forward for all data years from 2002 through 2021. RSS is the residual sum of squares."
+
+# Summary stats
+N_eval_tab_proj1yr <- N_eval_table %>%
+  filter(proj_set == "pyear1") %>%
+  arrange(year, model) %>% 
+  dplyr::select(-proj_set, -percentile_80, -rss)
+
+knitr::kable(
+  N_eval_tab_proj1yr,
+  row.names = F,
+  col.names = c("Year", "Model", "Abundance Estimate",
+                "Mean N", "Median N", 
+                "Lower 95% CI (N)", "Upper 95% CI (N)",
+                "Nmin",
+                "Closure",
+                "Percentile for Abundance Estimate",
+                "Prop Below Threshold (N)",
+                "Prop Below Threshold (Nmin)"),
+  digits = c(rep(1, 9), rep(3, 3)),
+  align = c(rep("l", 2), rep("c", 10)),
+  #format = "simple",
+  booktabs = T
+)
+```
+
+Model predictions when projecting two years forward for all data years from 2002 through 2021 using models fit to the full time series. RSS is the residual sum of squares.
+
+```{r, echo = F, warning = F, message = F}
+#| label: tbl-retro2
+#| tbl-cap: "Model predictions when projecting two years forward for all data years from 2002 through 2021. RSS is the residual sum of squares."
+
+N_eval_tab_proj2yr <- N_eval_table %>%
+  filter(proj_set == "pyear2") %>%
+  arrange(year, model) %>% 
+  dplyr::select(-proj_set, -percentile_80, -rss)
+
+knitr::kable(
+  N_eval_tab_proj1yr,
+  row.names = F,
+  col.names = c("Year", "Model", "Abundance Estimate",
+                "Mean N", "Median N", 
+                "Lower 95% CI (N)", "Upper 95% CI (N)",
+                "Nmin",
+                "Closure",
+                "Percentile for Abundance Estimate",
+                "Prop Below Threshold (N)",
+                "Prop Below Threshold (Nmin)"),
+  digits = c(rep(1, 9), rep(3, 3)),
+  align = c(rep("l", 2), rep("c", 10)),
+  #format = "simple",
+  booktabs = T
+)
 ```

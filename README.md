@@ -156,8 +156,9 @@ than 300 indicate sufficient sampling has been achieved.
 
 ## Leave-one-out Cross Validation (LOO)
 
-Derived estimates of model fit using an information criterion based on
-leave-one-out cross validation (looic). Models with the lowest
+The following table provides estimates of model fit using an information
+criterion (leave-one-out information criterion; *looic*) based on
+leave-one-out cross validation. Models with the lowest
 ![looic](https://latex.codecogs.com/svg.latex?looic "looic") value are
 considered the best fitting model given the time series of abundance
 data used to fit the model.
@@ -183,8 +184,184 @@ the model with the lowest
 
 ## Predictive accuracy with retrospection
 
+Given the primary objective of this exercise was prediction, we
+evaluated each models ability to retrospectively predict a future, known
+population abundance using the PCFG abundance time series from Harris et
+al. 2024. Predicting future states or “forecasting” is notoriously
+challenging, particularly as we project further into the future.
+However, within this system, data gaps of one or two years represent the
+most plausible scenarios managers are likely to encounter, providing the
+basis for our evaluation. In addition, we anticipated relative
+performance within model sets was likely to vary as we project further
+into the future. Thus, we evaluated model performance when projected one
+or two years separately. Finally, we evaluated model predictive
+performance using models fitted to both truncated and complete abundance
+time series. The latter provides the best available knowledge of the
+system for model fitting, but might bias retrospective evaluations of
+predictive performance due to information “spillover” from future
+population states. The former can become data limited and select for
+overly simplistic models.
+
+All time series used in model fitting started with estimates from 2002,
+but varied in their end point. In the case of the truncated times
+series, we fit each of the seven models specified above to multiple time
+series with varying end points from 2006 through 2021, providing
+projected abundance estimates for years 2007 through 2022. Notably, 2006
+was used as the earliest end point to provide at least some information
+for models to converge. In the case of the complete time series, we fit
+all seven models to a single time series representing abundance data
+from 2002 through 2022. Model parameters were then used to
+retrospectively project abundance forward one or two years from 2002
+through 2021, providing projected abundance estimates for years 2003
+through 2022.
+
+In all cases, projected estimates were then compared to “observed”
+abundance in the same year using residual sum of squares (RSS), 60% and
+95% credible intervals, and whether an estimate dropped below threshold
+resulting in a presumed hunt closure. Predictive fits were summarized by
+one or two year projection lengths.
+
+### *Model fits derived from truncated time series*
+
+The following tables show predictive performance statistics by model
+specification when predicting one or two years forward (respectively)
+from all data years between 2006 and 2021. RSS is the residual sum of
+squares.
+
+<div class="cell-output-display">
+
+| Model                        |   Mean RSS   | Mean Percentile (N) | Median Percentile (N) | Mean Prop Below Threshold (N) | Median Prop Below Threshold (N) | Number of Closures |         Closure Years         |
+|:-----------------------------|:------------:|:-------------------:|:---------------------:|:-----------------------------:|:-------------------------------:|:------------------:|:-----------------------------:|
+| Base                         |    281.7     |         0.4         |         0.455         |             0.148             |              0.106              |         2          |           2007,2008           |
+| AR1v1                        |    314.6     |         0.5         |         0.513         |             0.268             |              0.320              |         4          |      2007,2008,2009,2011      |
+| ENP Calves                   |    323.0     |         0.4         |         0.428         |             0.158             |              0.134              |         2          |           2007,2008           |
+| ENP Strandings only          |    445.2     |         0.6         |         0.601         |             0.284             |              0.271              |         4          |      2007,2008,2019,2020      |
+| PCFG Calves + ENP Strandings |    780.5     |         0.5         |         0.516         |             0.311             |              0.309              |         6          | 2007,2008,2011,2012,2019,2020 |
+| PCFG Calves only             |    835.6     |         0.4         |         0.401         |             0.180             |              0.172              |         2          |           2007,2008           |
+| AR1v2                        | 4080217316.5 |         0.5         |         0.496         |             0.189             |              0.159              |         3          |        2007,2008,2009         |
+
+</div>
+
+<div class="cell-output-display">
+
+| Model                        |   Mean RSS   | Mean Percentile (N) | Median Percentile (N) | Mean Prop Below Threshold (N) | Median Prop Below Threshold (N) | Number of Closures |                     Closure Years                      |
+|:-----------------------------|:------------:|:-------------------:|:---------------------:|:-----------------------------:|:-------------------------------:|:------------------:|:------------------------------------------------------:|
+| Base                         | 4.526700e+03 |         0.4         |         0.433         |             0.187             |              0.152              |         3          |                     2007,2008,2009                     |
+| ENP Calves                   | 6.076200e+03 |         0.4         |         0.396         |             0.198             |              0.195              |         4          |                  2007,2008,2009,2010                   |
+| PCFG Calves only             | 7.563180e+04 |         0.4         |         0.380         |             0.220             |              0.220              |         5          |                2007,2008,2009,2012,2013                |
+| ENP Strandings only          | 6.271720e+05 |         0.6         |         0.578         |             0.363             |              0.345              |         8          |        2007,2008,2009,2010,2019,2020,2021,2022         |
+| AR1v1                        | 2.375914e+07 |         0.5         |         0.491         |             0.336             |              0.398              |         10         |   2007,2008,2009,2010,2011,2012,2013,2020,2021,2022    |
+| PCFG Calves + ENP Strandings | 2.197542e+13 |         0.5         |         0.486         |             0.388             |              0.379              |         11         | 2007,2008,2009,2010,2011,2012,2013,2019,2020,2021,2022 |
+| AR1v2                        | 4.718225e+91 |         0.4         |         0.476         |             0.232             |              0.200              |         6          |             2007,2008,2009,2010,2011,2012              |
+
+</div>
+
+The following figure depicts the predictive fits when abundance was
+projected forward one (top panel) or two years (bottom panel) for all
+model specifications in a truncated time series context. Observed
+abundance estimates for years 2007 through 2022 are represented as back
+diamonds, median model predictions are represented by points, 60%
+credible intervals are depicted as solid error bars, and the 95%
+credible intervals are depicted as dashed error bars .
+
+![](README_files/figure-commonmark/truncRetroFig-1.png)
+
+However, as is evident in the figure above, the reduced confidence in
+predictions prior to 2014 is likely - at least in part - being driven by
+data limitations due the shorter time series used in model fitting.
+Therefore, the two summary tables for model predictive performance are
+provided again for all data years between 2013 and 2021.
+
+<div class="cell-output-display">
+
+| Model                        | Mean RSS | Mean Percentile (N) | Median Percentile (N) | Mean Prop Below Threshold (N) | Median Prop Below Threshold (N) | Number of Closures | Closure Years |
+|:-----------------------------|:--------:|:-------------------:|:---------------------:|:-----------------------------:|:-------------------------------:|:------------------:|:-------------:|
+| AR1v1                        |  273.9   |         0.4         |         0.464         |             0.195             |              0.143              |         0          |               |
+| PCFG Calves only             |  320.1   |         0.3         |         0.374         |             0.078             |              0.030              |         0          |               |
+| AR1v2                        |  341.9   |         0.4         |         0.320         |             0.073             |              0.063              |         0          |               |
+| Base                         |  355.5   |         0.3         |         0.297         |             0.053             |              0.022              |         0          |               |
+| ENP Calves                   |  396.6   |         0.3         |         0.280         |             0.064             |              0.037              |         0          |               |
+| PCFG Calves + ENP Strandings |  501.2   |         0.5         |         0.524         |             0.285             |              0.068              |         2          |   2019,2020   |
+| ENP Strandings only          |  657.8   |         0.6         |         0.639         |             0.283             |              0.048              |         2          |   2019,2020   |
+
+</div>
+
+<div class="cell-output-display">
+
+| Model                        |  Mean RSS   | Mean Percentile (N) | Median Percentile (N) | Mean Prop Below Threshold (N) | Median Prop Below Threshold (N) | Number of Closures |    Closure Years    |
+|:-----------------------------|:-----------:|:-------------------:|:---------------------:|:-----------------------------:|:-------------------------------:|:------------------:|:-------------------:|
+| PCFG Calves only             | 8.04600e+02 |         0.3         |         0.361         |             0.104             |              0.058              |         0          |                     |
+| Base                         | 8.35500e+02 |         0.3         |         0.295         |             0.071             |              0.053              |         0          |                     |
+| PCFG Calves + ENP Strandings | 9.47500e+02 |         0.6         |         0.492         |             0.369             |              0.203              |         4          | 2019,2020,2021,2022 |
+| ENP Calves                   | 9.58600e+02 |         0.3         |         0.284         |             0.093             |              0.085              |         0          |                     |
+| AR1v1                        | 1.16260e+03 |         0.4         |         0.417         |             0.259             |              0.255              |         3          |   2020,2021,2022    |
+| ENP Strandings only          | 1.26780e+03 |         0.7         |         0.704         |             0.372             |              0.162              |         4          | 2019,2020,2021,2022 |
+| AR1v2                        | 7.86467e+10 |         0.4         |         0.342         |             0.099             |              0.077              |         0          |                     |
+
+</div>
+
+### *Model fits derived from full time series*
+
+The following tables show predictive performance statistics by model
+specification when predicting one or two years forward (respectively)
+for all data years from 2002 through 2021. RSS is the residual sum of
+squares.
+
+<div class="cell-output-display">
+
+| Model                        | Mean RSS | Mean Percentile (N) | Median Percentile (N) | Mean Prop Below Threshold (N) | Median Prop Below Threshold (N) | Number of Closures | Closure Years |
+|:-----------------------------|:--------:|:-------------------:|:---------------------:|:-----------------------------:|:-------------------------------:|:------------------:|:-------------:|
+| AR1v1                        |   40.8   |        0.519        |         0.583         |             0.123             |              0.145              |         0          |               |
+| PCFG Calves only             |   66.7   |        0.522        |         0.528         |             0.138             |              0.165              |         0          |               |
+| PCFG Calves + ENP Strandings |   67.4   |        0.521        |         0.571         |             0.145             |              0.158              |         0          |               |
+| AR1v2                        |   84.9   |        0.514        |         0.526         |             0.121             |              0.137              |         0          |               |
+| ENP Strandings only          |   89.5   |        0.518        |         0.569         |             0.122             |              0.113              |         0          |               |
+| Base                         |   93.0   |        0.513        |         0.530         |             0.110             |              0.130              |         0          |               |
+| ENP Calves                   |   93.8   |        0.527        |         0.542         |             0.126             |              0.148              |         0          |               |
+
+</div>
+
+<div class="cell-output-display">
+
+| Model                        | Mean RSS | Mean Percentile (N) | Median Percentile (N) | Mean Prop Below Threshold (N) | Median Prop Below Threshold (N) | Number of Closures | Closure Years |
+|:-----------------------------|:--------:|:-------------------:|:---------------------:|:-----------------------------:|:-------------------------------:|:------------------:|:-------------:|
+| AR1v1                        |   38.8   |        0.500        |         0.512         |             0.203             |              0.223              |         0          |               |
+| PCFG Calves + ENP Strandings |  140.5   |        0.509        |         0.512         |             0.188             |              0.234              |         0          |               |
+| PCFG Calves only             |  153.7   |        0.509        |         0.519         |             0.185             |              0.183              |         0          |               |
+| ENP Strandings only          |  176.4   |        0.509        |         0.576         |             0.154             |              0.154              |         0          |               |
+| AR1v2                        |  194.6   |        0.509        |         0.469         |             0.163             |              0.176              |         0          |               |
+| Base                         |  218.8   |        0.504        |         0.465         |             0.147             |              0.178              |         0          |               |
+| ENP Calves                   |  221.1   |        0.512        |         0.459         |             0.165             |              0.183              |         0          |               |
+
+</div>
+
+The following figure depicts the predictive fits when abundance was
+projected forward one (top panel) or two years (bottom panel) for all
+model specifications. Observed abundance estimates for years 2003
+through 2022 are represented as back diamonds, median model predictions
+are represented by points, 60% credible intervals are depicted as solid
+error bars, and the 95% credible intervals are depicted as dashed error
+bars .
+
+![](README_files/figure-commonmark/retroFig-1.png)
+
+## Model-specific trends and projections
+
+Note, the number of PCFG calves used in projected years (models
+calves/strandings and calves only) are not accurate and likely represent
+underestimates of reality.
+
+![](README_files/figure-commonmark/trendFig-1.png)
+
+## Model-specific predictions for Y<sub>final</sub> + 2
+
+![](README_files/figure-commonmark/fig-final-proj-1.png)
+
+## Supplementary tables
+
 Model predictions when projecting one year forward for all data years
-from 2002 through 2021. RSS is the residual sum of squares.
+from 2002 through 2021 using models fit to the full time series. RSS is
+the residual sum of squares.
 
 <div class="cell-output-display">
 
@@ -334,7 +511,8 @@ from 2002 through 2021. RSS is the residual sum of squares.
 </div>
 
 Model predictions when projecting two years forward for all data years
-from 2002 through 2021. RSS is the residual sum of squares.
+from 2002 through 2021 using models fit to the full time series. RSS is
+the residual sum of squares.
 
 <div class="cell-output-display">
 
@@ -482,51 +660,3 @@ from 2002 through 2021. RSS is the residual sum of squares.
 | 2022 | PCFG Calves + ENP Strandings |       202.0        | 199.6  |  198.2   |      161.5       |      245.7       | 182.2 |  FALSE  |               0.571               |          0.379           |            0.078            |
 
 </div>
-
-Model fit statistics for predicting one year forward for all data years
-from 2002 through 2021. RSS is the residual sum of squares.
-
-<div class="cell-output-display">
-
-| Model                        |  RSS   | Mean Percentile (N) | Median Percentile (N) | Lower 95% CI for Percentile (N) | Upper 95% CI for Percentile (N) | Mean Prop Below Threshold (N) | Mean Prop Below Threshold (Nmin) | Number of Closures |
-|:-----------------------------|:------:|:-------------------:|:---------------------:|:-------------------------------:|:-------------------------------:|:-----------------------------:|:--------------------------------:|:------------------:|
-| AR1v1                        | 815.8  |        0.519        |         0.583         |              0.308              |              0.744              |             0.123             |              0.017               |         0          |
-| PCFG Calves only             | 1334.2 |        0.522        |         0.528         |              0.218              |              0.743              |             0.138             |              0.017               |         0          |
-| PCFG Calves + ENP Strandings | 1348.6 |        0.521        |         0.571         |              0.192              |              0.722              |             0.145             |              0.021               |         0          |
-| AR1v2                        | 1697.3 |        0.514        |         0.526         |              0.268              |              0.775              |             0.121             |              0.017               |         0          |
-| ENP Strandings only          | 1789.3 |        0.518        |         0.569         |              0.186              |              0.775              |             0.122             |              0.016               |         0          |
-| Base                         | 1861.0 |        0.513        |         0.530         |              0.246              |              0.803              |             0.110             |              0.013               |         0          |
-| ENP Calves                   | 1876.8 |        0.527        |         0.542         |              0.279              |              0.801              |             0.126             |              0.017               |         0          |
-
-</div>
-
-Model fit statistics for predicting two years forward for all data years
-from 2002 through 2021. RSS is the residual sum of squares.
-
-<div class="cell-output-display">
-
-| Model                        |  RSS   | Mean Percentile (N) | Median Percentile (N) | Lower 95% CI for Percentile (N) | Upper 95% CI for Percentile (N) | Mean Prop Below Threshold (N) | Mean Prop Below Threshold (Nmin) | Number of Closures |
-|:-----------------------------|:------:|:-------------------:|:---------------------:|:-------------------------------:|:-------------------------------:|:-----------------------------:|:--------------------------------:|:------------------:|
-| AR1v1                        | 737.7  |        0.500        |         0.512         |              0.365              |              0.604              |             0.203             |              0.071               |         0          |
-| PCFG Calves + ENP Strandings | 2669.6 |        0.509        |         0.512         |              0.151              |              0.725              |             0.188             |              0.048               |         0          |
-| PCFG Calves only             | 2920.8 |        0.509        |         0.519         |              0.173              |              0.776              |             0.185             |              0.042               |         0          |
-| ENP Strandings only          | 3352.1 |        0.509        |         0.576         |              0.153              |              0.817              |             0.154             |              0.036               |         0          |
-| AR1v2                        | 3697.3 |        0.509        |         0.469         |              0.228              |              0.826              |             0.163             |              0.039               |         0          |
-| Base                         | 4156.3 |        0.504        |         0.465         |              0.173              |              0.854              |             0.147             |              0.030               |         0          |
-| ENP Calves                   | 4200.1 |        0.512        |         0.459         |              0.209              |              0.846              |             0.165             |              0.040               |         0          |
-
-</div>
-
-![](README_files/figure-commonmark/retroFig-1.png)
-
-## Model-specific trends and projections
-
-Note, the number of PCFG calves used in projected years (models
-Calves/Strandings and Calves only) are not accurate and likely represent
-underestimates of reality.
-
-![](README_files/figure-commonmark/trendFig-1.png)
-
-## Model-specific predictions for Y<sub>final</sub> + 2
-
-![](README_files/figure-commonmark/fig-final-proj-1.png)

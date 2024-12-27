@@ -185,9 +185,12 @@ N_eval_retro <- purrr::map(Y_retro, function(y) {
 # Summary stats
 N_eval_retro_summ <- purrr::imap_dfr(N_eval_retro, ~ .x$summary %>% mutate(start_year = .y))
 
+# save output for use in Quarto docs
+save(N_eval_retro_summ, file = here("out", paste0("TruncatedRetroSummary", ".dat")))
+
 (N_eval_summary_proj1yr <- N_eval_retro_summ %>%
   filter(proj_set == "1 yr" & year != 2023) %>%
-  filter(year >= 2014) %>%
+  filter(year > 2014) %>%
   group_by(model) %>%
   summarize(
     mnRSS = mean(rss),
@@ -203,7 +206,7 @@ N_eval_retro_summ <- purrr::imap_dfr(N_eval_retro, ~ .x$summary %>% mutate(start
 
 (N_eval_summary_proj2yr <- N_eval_retro_summ %>%
   filter(proj_set == "2 yr" & year != 2023) %>%
-  filter(year >= 2014) %>%
+  filter(year > 2014) %>%
   group_by(model) %>%
   summarize(
     mnRSS = mean(rss),
@@ -220,6 +223,7 @@ N_eval_retro_summ <- purrr::imap_dfr(N_eval_retro, ~ .x$summary %>% mutate(start
 
 # Figure
 N_eval_table <- N_eval_retro_summ %>%
+  filter(year >= 2007 & year != 2023) %>%
   mutate(model = factor(model, 
                         levels = c("Base", "AR1v1", "AR1v2", "Calves/Strandings", 
                                    "Calves only", "Strandings only", "ENP Calves")))
@@ -243,14 +247,16 @@ tidy_plot_retroPred(N_eval_table, ylims = c(0, 500), truncated_retro = T)
     ))
 
 Retro_eval <- N_eval_summary_startYear %>%
+  ungroup() %>%
   mutate(
     scRSS = (mnRSS - mean(mnRSS)) / sd(mnRSS)
   )
 
-ggplot(Retro_eval, aes(x = start_year, y = scRSS, group = model, color = model)) +
+ggplot(Retro_eval, aes(x = start_year, y = mnRSS, group = model, color = model)) +
   geom_point() +
   geom_line() +
-  #scale_y_continuous(limits = c(-0.7, 2), oob = scales::squish) +
+  scale_y_continuous(limits = c(0, 5000), oob = scales::squish) +
+  #scale_y_continuous(limits = c(-0.7, 3), oob = scales::squish) +
   theme_bw()
 
 (N_eval_summary_startYear <- N_eval_retro_summ %>%
@@ -268,13 +274,15 @@ ggplot(Retro_eval, aes(x = start_year, y = scRSS, group = model, color = model))
     ))
 
 Retro_eval <- N_eval_summary_startYear %>%
+  ungroup() %>%
   mutate(
     scRSS = (mnRSS - mean(mnRSS)) / sd(mnRSS)
   )
 
-ggplot(Retro_eval, aes(x = start_year, y = scRSS, group = model, color = model)) +
+ggplot(Retro_eval, aes(x = start_year, y = mnRSS, group = model, color = model)) +
   geom_point() +
   geom_line() +
+  scale_y_continuous(limits = c(-1, 10000), oob = scales::squish) +
   #scale_y_continuous(limits = c(-0.4, 0), oob = scales::squish) +
   theme_bw()
 

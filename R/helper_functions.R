@@ -234,13 +234,12 @@ tidy_plot_retroPred = function(N_eval_table, ylims = c(0, 350), truncated_retro 
                   position = position_dodge(width = width)) + 
     geom_errorbar(aes(ymin = percentile_20, ymax = percentile_80), width = width, 
                   position = position_dodge(width = width)) +
-    geom_point(aes(x = year, y = meanN), position = position_dodge(width = width)) +
+    #geom_point(aes(x = year, y = meanN), position = position_dodge(width = width)) +
+    geom_point(aes(x = year, y = medianN), position = position_dodge(width = width)) +
     geom_point(size = 2, color = "black", fill = "black", shape = 23) +
-    #viridis::scale_color_viridis(discrete = T, option = "B") +
     scale_color_brewer(palette = "Reds") +
-    scale_y_continuous(limits = ylims, oob = scales::squish) +
-    scale_color_brewer(palette = "Reds") +
-    ylim(c(0, 350)) +
+    coord_cartesian(ylim = ylims) +
+    #scale_y_continuous(limits = ylims, oob = scales::squish) +
     labs(x = "Year", y = "PCFG Abundance") +
     scale_x_continuous(limits = c(min(N_eval_table$year) - 1.5, max(N_eval_table$year)) + 1, 
                        breaks = seq(min(N_eval_table$year), max(N_eval_table$year), 1),
