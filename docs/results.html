@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>PCFG Gray Whales - A state-space model for projecting population abundance</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./results.html">Model results</a></li></ol></nav>
+        <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">PCFG Gray Whales</a> 
+        <div class="sidebar-tools-main">
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label=""><i class="bi bi-github"></i></a>
+      <ul class="dropdown-menu" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm">
+            Source Code
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item sidebar-tools-main-item" href="https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm">
+            Report a Bug
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Intent and outcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./methodology.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model description</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./results.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Model results</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Supplementary</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./supp_tables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Supplementary tables</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./supp_diagnostics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Model diagnostics</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./acknowledgement.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Acknowledgements</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#model-results" id="toc-model-results" class="nav-link active" data-scroll-target="#model-results"><em>Model results</em></a>
+  <ul class="collapse">
+  <li><a href="#coefficient-estimates" id="toc-coefficient-estimates" class="nav-link" data-scroll-target="#coefficient-estimates">Coefficient estimates</a></li>
+  <li><a href="#leave-one-out-cross-validation-loo" id="toc-leave-one-out-cross-validation-loo" class="nav-link" data-scroll-target="#leave-one-out-cross-validation-loo">Leave-one-out Cross Validation (LOO)</a></li>
+  <li><a href="#predictive-accuracy-with-retrospection" id="toc-predictive-accuracy-with-retrospection" class="nav-link" data-scroll-target="#predictive-accuracy-with-retrospection">Predictive accuracy with retrospection</a>
+  <ul class="collapse">
+  <li><a href="#model-fits-derived-from-truncated-time-series" id="toc-model-fits-derived-from-truncated-time-series" class="nav-link" data-scroll-target="#model-fits-derived-from-truncated-time-series"><em>Model fits derived from truncated time series</em></a></li>
+  <li><a href="#model-fits-derived-from-full-time-series" id="toc-model-fits-derived-from-full-time-series" class="nav-link" data-scroll-target="#model-fits-derived-from-full-time-series"><em>Model fits derived from full time series</em></a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#model-predicted-population-trends" id="toc-model-predicted-population-trends" class="nav-link" data-scroll-target="#model-predicted-population-trends"><em>Model-predicted population trends</em></a>
+  <ul class="collapse">
+  <li><a href="#model-specific-predictions-for-yfinal-2" id="toc-model-specific-predictions-for-yfinal-2" class="nav-link" data-scroll-target="#model-specific-predictions-for-yfinal-2">Model-specific predictions for Y<sub>final</sub> + 2</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">A state-space model for projecting population abundance</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="model-results" class="level1">
+<h1><em>Model results</em></h1>
+<section id="coefficient-estimates" class="level2">
+<h2 class="anchored" data-anchor-id="coefficient-estimates">Coefficient estimates</h2>
+<p><a href="#tbl-coefs" class="quarto-xref">Table&nbsp;1</a> provides <span class="math inline">\(\beta\)</span> coefficient estimates for models where coefficients for <span class="math inline">\(\lambda\)</span> were estimated. Lower CI and Upper CI correspond to the lower and upper 95% credible intervals. <span class="math inline">\(Rhat\)</span> values less than 1.01 indicate effective mixing within and across chains, producing reliable and consistent estimates for the parameters. <span class="math inline">\(ESS\)</span> is the effective sample size and is an indicator of chain sampling efficiency. Here, <span class="math inline">\(ESS\)</span> values greater than 300 indicate sufficient sampling has been achieved.</p>
+<div class="cell">
+<div id="tbl-coefs" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-coefs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Coefficient estimates for models with coefficients on log <span class="math inline">\(\lambda\)</span>.
+</figcaption>
+<div aria-describedby="tbl-coefs-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">Variable</th>
+<th style="text-align: center;">Mean</th>
+<th style="text-align: center;">Median</th>
+<th style="text-align: center;">SD</th>
+<th style="text-align: center;">Lower CI</th>
+<th style="text-align: center;">Upper CI</th>
+<th style="text-align: center;">Rhat</th>
+<th style="text-align: center;">ESS_bulk</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ENP Calves</td>
+<td style="text-align: center;"><span class="math inline">\(\beta_{Calves}\)</span></td>
+<td style="text-align: center;">-0.004</td>
+<td style="text-align: center;">-0.004</td>
+<td style="text-align: center;">0.036</td>
+<td style="text-align: center;">-0.064</td>
+<td style="text-align: center;">0.055</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">1447.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCFG Calves only</td>
+<td style="text-align: center;"><span class="math inline">\(\beta_{Calves}\)</span></td>
+<td style="text-align: center;">0.021</td>
+<td style="text-align: center;">0.020</td>
+<td style="text-align: center;">0.020</td>
+<td style="text-align: center;">-0.010</td>
+<td style="text-align: center;">0.055</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">2918.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ENP Strandings only</td>
+<td style="text-align: center;"><span class="math inline">\(\beta_{Strandings}\)</span></td>
+<td style="text-align: center;">-0.002</td>
+<td style="text-align: center;">-0.002</td>
+<td style="text-align: center;">0.001</td>
+<td style="text-align: center;">-0.004</td>
+<td style="text-align: center;">0.001</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">2198.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCFG Calves + ENP Strandings</td>
+<td style="text-align: center;"><span class="math inline">\(\beta_{Calves}\)</span></td>
+<td style="text-align: center;">0.016</td>
+<td style="text-align: center;">0.015</td>
+<td style="text-align: center;">0.020</td>
+<td style="text-align: center;">-0.015</td>
+<td style="text-align: center;">0.049</td>
+<td style="text-align: center;">1.001</td>
+<td style="text-align: center;">2505.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PCFG Calves + ENP Strandings</td>
+<td style="text-align: center;"><span class="math inline">\(\beta_{Strandings}\)</span></td>
+<td style="text-align: center;">-0.001</td>
+<td style="text-align: center;">-0.001</td>
+<td style="text-align: center;">0.002</td>
+<td style="text-align: center;">-0.004</td>
+<td style="text-align: center;">0.001</td>
+<td style="text-align: center;">1.001</td>
+<td style="text-align: center;">1934.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="leave-one-out-cross-validation-loo" class="level2">
+<h2 class="anchored" data-anchor-id="leave-one-out-cross-validation-loo">Leave-one-out Cross Validation (LOO)</h2>
+<p><a href="#tbl-loo" class="quarto-xref">Table&nbsp;2</a> provides estimates of model fit using an information criterion (leave-one-out information criterion; <em>looic</em>) based on leave-one-out cross validation. Models with the lowest <span class="math inline">\(looic\)</span> value are considered the best fitting model given the time series of abundance data used to fit the model. <span class="math inline">\(\Delta looic\)</span> represents the difference in <span class="math inline">\(looic\)</span> relative to the model with the lowest <span class="math inline">\(looic\)</span>.</p>
+<div class="cell">
+<div id="tbl-loo" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-loo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Derived estimates of model fit using an information criterion based on leave-one-out cross validation (looic).
+</figcaption>
+<div aria-describedby="tbl-loo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">elpd_loo</th>
+<th style="text-align: center;">elpd_loo_se</th>
+<th style="text-align: center;">p_loo</th>
+<th style="text-align: center;">p_loo_se</th>
+<th style="text-align: center;">looic</th>
+<th style="text-align: center;">looic_se</th>
+<th style="text-align: center;">deltaLooic</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AR1</td>
+<td style="text-align: center;">25.59</td>
+<td style="text-align: center;">0.82</td>
+<td style="text-align: center;">2.24</td>
+<td style="text-align: center;">0.50</td>
+<td style="text-align: center;">-51.17</td>
+<td style="text-align: center;">1.65</td>
+<td style="text-align: center;">0.00</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCFG Calves + ENP Strandings</td>
+<td style="text-align: center;">24.68</td>
+<td style="text-align: center;">0.76</td>
+<td style="text-align: center;">2.86</td>
+<td style="text-align: center;">0.51</td>
+<td style="text-align: center;">-49.35</td>
+<td style="text-align: center;">1.52</td>
+<td style="text-align: center;">1.82</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PCFG Calves only</td>
+<td style="text-align: center;">24.57</td>
+<td style="text-align: center;">0.67</td>
+<td style="text-align: center;">3.02</td>
+<td style="text-align: center;">0.59</td>
+<td style="text-align: center;">-49.13</td>
+<td style="text-align: center;">1.34</td>
+<td style="text-align: center;">2.04</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ENP Strandings only</td>
+<td style="text-align: center;">24.44</td>
+<td style="text-align: center;">0.79</td>
+<td style="text-align: center;">2.88</td>
+<td style="text-align: center;">0.45</td>
+<td style="text-align: center;">-48.89</td>
+<td style="text-align: center;">1.57</td>
+<td style="text-align: center;">2.28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Base</td>
+<td style="text-align: center;">24.29</td>
+<td style="text-align: center;">0.70</td>
+<td style="text-align: center;">3.11</td>
+<td style="text-align: center;">0.62</td>
+<td style="text-align: center;">-48.57</td>
+<td style="text-align: center;">1.39</td>
+<td style="text-align: center;">2.60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ENP Calves</td>
+<td style="text-align: center;">23.86</td>
+<td style="text-align: center;">0.74</td>
+<td style="text-align: center;">3.37</td>
+<td style="text-align: center;">0.54</td>
+<td style="text-align: center;">-47.71</td>
+<td style="text-align: center;">1.48</td>
+<td style="text-align: center;">3.46</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</section>
+<section id="predictive-accuracy-with-retrospection" class="level2">
+<h2 class="anchored" data-anchor-id="predictive-accuracy-with-retrospection">Predictive accuracy with retrospection</h2>
+<p>Given that prediction was the primary objective of this exercise, we evaluated the ability of each model to retrospectively predict a “future”, known population abundance using the PCFG abundance time series from Harris et al.&nbsp;2024. Predicting future states, or “forecasting”, is notoriously challenging particularly as we project further into the future. However, within this system, data gaps of one or two years represent the most plausible scenarios managers are likely to encounter, providing the basis for our evaluation. In addition, we anticipated relative performance within model sets was likely to vary as we projected further into the future. Thus, in order to document a potential shift in model support in relation to projection length, we evaluated predictive performance when projecting one and two years separately. Finally, we evaluated predictive performance using models fitted to both truncated and complete abundance time series. The latter provides the best available knowledge of the system for model fitting, but might bias retrospective evaluations of predictive performance due to information “spillover” from future observed population states. The former can become data limited and select for overly simplistic models.</p>
+<p>All time series used in model fitting started with estimates from 2002, but varied in their end point. In the case of truncated times series, we fit each of the six specified models to multiple time series with varying end points from 2013 through 2021, providing projected abundance estimates for years 2014 through 2022. Notably, we evaluated endpoints between 2006 and 2012, but these shorter time series were inadequate for model convergence. In the case of the complete time series, we fit all seven models to a single time series representing abundance data from 2002 through 2022. Model parameters were then used to retrospectively project abundance forward one or two years from 2002 through 2021, providing projected abundance estimates for years 2003 through 2022.</p>
+<p>In all cases, projected estimates were then compared to “observed” abundance in the same year using residual sum of squares (RSS), 60% and 95% credible intervals, and whether an estimate dropped below threshold resulting in a presumed hunt closure. Predictive fits were summarized by one or two year projection lengths.</p>
+<section id="model-fits-derived-from-truncated-time-series" class="level3">
+<h3 class="anchored" data-anchor-id="model-fits-derived-from-truncated-time-series"><em>Model fits derived from truncated time series</em></h3>
+<p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-tRetro1summ" class="quarto-xref">Table&nbsp;3</a>) or two years forward (<a href="#tbl-tRetro2summ" class="quarto-xref">Table&nbsp;4</a>) from all data years between 2013 and 2021. RSS is the residual sum of squares.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Projected year 1 (Table 3)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Projected year 2 (Table 4)</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div id="tbl-tRetro1summ" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tRetro1summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;3: Model prediction statistics for one year projections using data years 2013 through 2021 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares.
+</figcaption>
+<div aria-describedby="tbl-tRetro1summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">Mean RSS</th>
+<th style="text-align: center;">Mean Percentile (N)</th>
+<th style="text-align: center;">Median Percentile (N)</th>
+<th style="text-align: center;">Mean Prop Below Threshold (N)</th>
+<th style="text-align: center;">Median Prop Below Threshold (N)</th>
+<th style="text-align: center;">Number of Closures (Nmin)</th>
+<th style="text-align: center;">Number of Closures (N)</th>
+<th style="text-align: center;">Number of Closures</th>
+<th style="text-align: left;">Closure Years</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AR1</td>
+<td style="text-align: center;">273.9</td>
+<td style="text-align: center;">0.4</td>
+<td style="text-align: center;">0.464</td>
+<td style="text-align: center;">0.195</td>
+<td style="text-align: center;">0.143</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ENP Strandings only</td>
+<td style="text-align: center;">320.1</td>
+<td style="text-align: center;">0.3</td>
+<td style="text-align: center;">0.374</td>
+<td style="text-align: center;">0.078</td>
+<td style="text-align: center;">0.030</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Base</td>
+<td style="text-align: center;">355.5</td>
+<td style="text-align: center;">0.3</td>
+<td style="text-align: center;">0.297</td>
+<td style="text-align: center;">0.053</td>
+<td style="text-align: center;">0.022</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ENP Calves</td>
+<td style="text-align: center;">396.6</td>
+<td style="text-align: center;">0.3</td>
+<td style="text-align: center;">0.280</td>
+<td style="text-align: center;">0.064</td>
+<td style="text-align: center;">0.037</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PCFG Calves only</td>
+<td style="text-align: center;">501.2</td>
+<td style="text-align: center;">0.5</td>
+<td style="text-align: center;">0.524</td>
+<td style="text-align: center;">0.285</td>
+<td style="text-align: center;">0.068</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">2019,2020</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCFG Calves + ENP Strandings</td>
+<td style="text-align: center;">657.8</td>
+<td style="text-align: center;">0.6</td>
+<td style="text-align: center;">0.639</td>
+<td style="text-align: center;">0.283</td>
+<td style="text-align: center;">0.048</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: left;">2019,2020</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div id="tbl-tRetro2summ" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tRetro2summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;4: Model prediction statistics for two year projections using data years 2013 through 2021 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares.
+</figcaption>
+<div aria-describedby="tbl-tRetro2summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">Mean RSS</th>
+<th style="text-align: center;">Mean Percentile (N)</th>
+<th style="text-align: center;">Median Percentile (N)</th>
+<th style="text-align: center;">Mean Prop Below Threshold (N)</th>
+<th style="text-align: center;">Median Prop Below Threshold (N)</th>
+<th style="text-align: center;">Number of Closures (Nmin)</th>
+<th style="text-align: center;">Number of Closures (N)</th>
+<th style="text-align: center;">Number of Closures</th>
+<th style="text-align: left;">Closure Years</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">ENP Strandings only</td>
+<td style="text-align: center;">804.6</td>
+<td style="text-align: center;">0.3</td>
+<td style="text-align: center;">0.361</td>
+<td style="text-align: center;">0.104</td>
+<td style="text-align: center;">0.058</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Base</td>
+<td style="text-align: center;">835.5</td>
+<td style="text-align: center;">0.3</td>
+<td style="text-align: center;">0.295</td>
+<td style="text-align: center;">0.071</td>
+<td style="text-align: center;">0.053</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PCFG Calves only</td>
+<td style="text-align: center;">947.5</td>
+<td style="text-align: center;">0.6</td>
+<td style="text-align: center;">0.492</td>
+<td style="text-align: center;">0.369</td>
+<td style="text-align: center;">0.203</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">2019,2020,2021,2022</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ENP Calves</td>
+<td style="text-align: center;">958.6</td>
+<td style="text-align: center;">0.3</td>
+<td style="text-align: center;">0.284</td>
+<td style="text-align: center;">0.093</td>
+<td style="text-align: center;">0.085</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">AR1</td>
+<td style="text-align: center;">1162.6</td>
+<td style="text-align: center;">0.4</td>
+<td style="text-align: center;">0.417</td>
+<td style="text-align: center;">0.259</td>
+<td style="text-align: center;">0.255</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">3</td>
+<td style="text-align: left;">2020,2021,2022</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCFG Calves + ENP Strandings</td>
+<td style="text-align: center;">1267.8</td>
+<td style="text-align: center;">0.7</td>
+<td style="text-align: center;">0.704</td>
+<td style="text-align: center;">0.372</td>
+<td style="text-align: center;">0.162</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">4</td>
+<td style="text-align: left;">2019,2020,2021,2022</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><strong>?@fig-truncRetroFig</strong> depicts the predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2014 through 2022 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-truncRetroFig1" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-truncRetroFig1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results_files/figure-html/fig-truncRetroFig1-1.png" class="img-fluid figure-img" width="3000">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-truncRetroFig1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2014 through 2022 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="model-fits-derived-from-full-time-series" class="level3">
+<h3 class="anchored" data-anchor-id="model-fits-derived-from-full-time-series"><em>Model fits derived from full time series</em></h3>
+<p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-retro1summ" class="quarto-xref">Table&nbsp;5</a>) or two years forward (<a href="#tbl-retro2summ" class="quarto-xref">Table&nbsp;6</a>) for all data years from 2002 through 2021.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Projected year 1 (Table 5)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Projected year 2 (Table 6)</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div id="tbl-retro1summ" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-retro1summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;5: Model prediction statistics for one year projections using data years 2002 through 2021 as starting points. Models were fit using the full time series. RSS is the residual sum of squares.
+</figcaption>
+<div aria-describedby="tbl-retro1summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">Mean RSS</th>
+<th style="text-align: center;">Mean Percentile (N)</th>
+<th style="text-align: center;">Median Percentile (N)</th>
+<th style="text-align: center;">Mean Prop Below Threshold (N)</th>
+<th style="text-align: center;">Median Prop Below Threshold (N)</th>
+<th style="text-align: center;">Number of Closures</th>
+<th style="text-align: center;">Closure Years</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AR1</td>
+<td style="text-align: center;">47.4</td>
+<td style="text-align: center;">0.519</td>
+<td style="text-align: center;">0.565</td>
+<td style="text-align: center;">0.118</td>
+<td style="text-align: center;">0.130</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCFG Calves only</td>
+<td style="text-align: center;">64.1</td>
+<td style="text-align: center;">0.518</td>
+<td style="text-align: center;">0.513</td>
+<td style="text-align: center;">0.142</td>
+<td style="text-align: center;">0.161</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PCFG Calves + ENP Strandings</td>
+<td style="text-align: center;">69.1</td>
+<td style="text-align: center;">0.522</td>
+<td style="text-align: center;">0.573</td>
+<td style="text-align: center;">0.135</td>
+<td style="text-align: center;">0.146</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ENP Strandings only</td>
+<td style="text-align: center;">89.5</td>
+<td style="text-align: center;">0.518</td>
+<td style="text-align: center;">0.569</td>
+<td style="text-align: center;">0.122</td>
+<td style="text-align: center;">0.113</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Base</td>
+<td style="text-align: center;">92.8</td>
+<td style="text-align: center;">0.520</td>
+<td style="text-align: center;">0.520</td>
+<td style="text-align: center;">0.114</td>
+<td style="text-align: center;">0.127</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ENP Calves</td>
+<td style="text-align: center;">93.8</td>
+<td style="text-align: center;">0.527</td>
+<td style="text-align: center;">0.542</td>
+<td style="text-align: center;">0.126</td>
+<td style="text-align: center;">0.148</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div id="tbl-retro2summ" class="cell quarto-float anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-retro2summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;6: Model prediction statistics for two year projections using data years 2002 through 2021 as starting points. Models were fit using the full time series. RSS is the residual sum of squares.
+</figcaption>
+<div aria-describedby="tbl-retro2summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">Mean RSS</th>
+<th style="text-align: center;">Mean Percentile (N)</th>
+<th style="text-align: center;">Median Percentile (N)</th>
+<th style="text-align: center;">Mean Prop Below Threshold (N)</th>
+<th style="text-align: center;">Median Prop Below Threshold (N)</th>
+<th style="text-align: center;">Number of Closures</th>
+<th style="text-align: center;">Closure Years</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">AR1</td>
+<td style="text-align: center;">43.1</td>
+<td style="text-align: center;">0.503</td>
+<td style="text-align: center;">0.536</td>
+<td style="text-align: center;">0.195</td>
+<td style="text-align: center;">0.236</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCFG Calves + ENP Strandings</td>
+<td style="text-align: center;">141.8</td>
+<td style="text-align: center;">0.507</td>
+<td style="text-align: center;">0.528</td>
+<td style="text-align: center;">0.178</td>
+<td style="text-align: center;">0.226</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PCFG Calves only</td>
+<td style="text-align: center;">151.4</td>
+<td style="text-align: center;">0.506</td>
+<td style="text-align: center;">0.507</td>
+<td style="text-align: center;">0.186</td>
+<td style="text-align: center;">0.177</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ENP Strandings only</td>
+<td style="text-align: center;">176.4</td>
+<td style="text-align: center;">0.509</td>
+<td style="text-align: center;">0.576</td>
+<td style="text-align: center;">0.154</td>
+<td style="text-align: center;">0.154</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Base</td>
+<td style="text-align: center;">217.7</td>
+<td style="text-align: center;">0.509</td>
+<td style="text-align: center;">0.461</td>
+<td style="text-align: center;">0.152</td>
+<td style="text-align: center;">0.177</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ENP Calves</td>
+<td style="text-align: center;">221.1</td>
+<td style="text-align: center;">0.512</td>
+<td style="text-align: center;">0.459</td>
+<td style="text-align: center;">0.165</td>
+<td style="text-align: center;">0.183</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><a href="#fig-retroFig" class="quarto-xref">Figure&nbsp;2</a> depicts the predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications. Observed abundance estimates for years 2003 through 2022 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars .</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-retroFig" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-retroFig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results_files/figure-html/fig-retroFig-1.png" class="img-fluid figure-img" width="3000">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-retroFig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications using the full time series. Observed abundance estimates for years 2003 through 2022 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="model-predicted-population-trends" class="level1">
+<h1><em>Model-predicted population trends</em></h1>
+<p>Note, the number of PCFG calves used in projected years (models calves/strandings and calves only) are not accurate and likely represent underestimates of reality.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-trendFig" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-trendFig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results_files/figure-html/fig-trendFig-1.png" class="img-fluid figure-img" width="2400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trendFig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications using the full time series. Observed abundance estimates for years 2003 through 2022 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<section id="model-specific-predictions-for-yfinal-2" class="level2">
+<h2 class="anchored" data-anchor-id="model-specific-predictions-for-yfinal-2">Model-specific predictions for Y<sub>final</sub> + 2</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-final-proj" class="quarto-figure quarto-figure-center quarto-float anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-final-proj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results_files/figure-html/fig-final-proj-1.png" class="img-fluid figure-img" width="2400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-final-proj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Model-specific estimated abundance in the second year of projections (Year 2024). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>2025, website authored by Peter J. Mahoney</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p>Built with <a href="https://quarto.org/">Quarto</a></p>
+</div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
