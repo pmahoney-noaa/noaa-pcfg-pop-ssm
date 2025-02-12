@@ -40,7 +40,7 @@ website:
 
 format:
   html:
-    theme: darkly
+    #theme: darkly
     linkcolor: "#007eb2"
     css: styles.css
     toc: true
