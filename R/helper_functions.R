@@ -90,7 +90,7 @@ tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names,
                                    ungroup() %>% 
                                    mutate(
                                      model = model_names[.y],
-                                     year = year + max(input_data$year) - 2))
+                                     year = year + max(input_data$year)))
   }
   
   N_out_table = N_out %>% 
@@ -181,7 +181,7 @@ tidy_plot_propBelowThresh = function(N_eval_table){
     ggplot(aes(x = year, y = prop_below_threshold, group = proj_set, color = proj_set)) + 
     geom_line() +
     geom_point() +
-    scale_color_brewer(palette = "Reds") +
+    scale_color_paletteer_d("Manu::Kotare") +
     labs(x = "Year", y = "Prop. of sims (< N threshold)") +
     guides(color = guide_legend(title = NULL, position = "top", direction = "horizontal")) +
     theme_bw(base_size = 16) +
@@ -192,7 +192,7 @@ tidy_plot_propBelowThresh = function(N_eval_table){
     ggplot(aes(x = year, y = prop_below_minThreshold, group = proj_set, color = proj_set)) + 
     geom_line() +
     geom_point() +
-    scale_color_brewer(palette = "Reds") +
+    scale_color_paletteer_d("Manu::Kotare") +
     labs(x = "Year", y = "Prop. of sims (< Nmin threshold)") +
     guides(color = "none") +
     theme_bw(base_size = 16) +
@@ -237,7 +237,7 @@ tidy_plot_retroPred = function(N_eval_table, ylims = c(0, 350), truncated_retro 
     #geom_point(aes(x = year, y = meanN), position = position_dodge(width = width)) +
     geom_point(aes(x = year, y = medianN), position = position_dodge(width = width)) +
     geom_point(size = 2, color = "black", fill = "black", shape = 23) +
-    scale_color_brewer(palette = "Reds") +
+    scale_color_paletteer_d("Manu::Kotare") +
     coord_cartesian(ylim = ylims) +
     #scale_y_continuous(limits = ylims, oob = scales::squish) +
     labs(x = "Year", y = "PCFG Abundance") +
@@ -276,7 +276,9 @@ pred_summary_tbl_multimodel = function(input_data, tidy_mcmc, model_names,
                             percentile_20 = quantile(N, 0.2),
                             percentile_80 = quantile(N, 0.8),
                             rss = (meanN - abundEst)^2, #sum((N - abundEst)^2),
-                            closure = meanN < threshold_N | percentile_20 < threshold_Nmin,
+                            closure_Nmin = percentile_20 < threshold_Nmin,
+                            closure_N = meanN < threshold_N,
+                            closure = closure_Nmin | closure_N,
                             percentile_abundEstN = ecdf(N)(abundEst),
                             prop_below_threshold = mean(N < threshold_N),
                             prop_below_minThreshold = mean(N < threshold_Nmin)

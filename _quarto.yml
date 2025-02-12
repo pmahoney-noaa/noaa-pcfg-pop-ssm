@@ -1,0 +1,46 @@
+project:
+  type: website
+  output-dir: docs
+  
+website:
+  title: "PCFG Gray Whales"
+  sidebar:
+    style: "docked"
+    search: true
+    #background: dark
+    tools:
+      - icon: github
+        menu:
+          - text: Source Code
+            href: https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm
+          - text: Report a Bug
+            href: https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm
+    contents:
+      - text: "Intent and outcome"
+        href: index.qmd
+      - text: "Model description"
+        href: methodology.qmd
+      - text: "Model results"
+        href: results.qmd
+      #- text: "Discussion"
+      #  href: discussion.qmd
+      - section: "Supplementary"
+        contents:
+          - text: "Supplementary tables"
+            href: supp_tables.qmd
+          #- text: "Supplementary figures"
+          #  href: supp_figs.qmd
+          - text: "Model diagnostics"
+            href: supp_diagnostics.qmd
+      - text: "Acknowledgements"
+        href: acknowledgement.qmd
+  page-footer:
+    right: "Built with [Quarto](https://quarto.org/)"
+    left: "2025, website authored by Peter J. Mahoney"
+
+format:
+  html:
+    theme: darkly
+    linkcolor: "#007eb2"
+    css: styles.css
+    toc: true

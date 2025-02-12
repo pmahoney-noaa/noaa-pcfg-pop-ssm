@@ -166,7 +166,9 @@ N_eval_retro <- purrr::map(Y_retro, function(y) {
                                       percentile_20 = quantile(N, 0.2),
                                       percentile_80 = quantile(N, 0.8),
                                       rss = (meanN - abundEst)^2, #sum((N - abundEst)^2),
-                                      closure = meanN < threshold_N | percentile_20 < threshold_Nmin,
+                                      closure_Nmin = percentile_20 < threshold_Nmin,
+                                      closure_N = meanN < threshold_N,
+                                      closure = closure_Nmin | closure_N,
                                       percentile_abundEstN = ecdf(N)(abundEst),
                                       prop_below_threshold = mean(N < threshold_N)
                                     ) %>%

@@ -1,0 +1,311 @@
+---
+title: "A state-space model for projecting population abundance"
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+
+# Load required packages -------------------------------------------------------
+
+library(pacman)
+p_load(cmdstanr, tidyverse, here, tidybayes, brms, bayesplot, knitr, kableExtra, gt, DT)
+#set_cmdstan_path("~/cmdstan")  # your `cmdstan` path may be different
+
+#
+## Load truncated retrospective results
+#
+load(here("out", "RetroSummary.dat"))
+
+# See pcfg_lognorm_retro_analysis.R for details
+load(here("out", "TruncatedRetroSummary.dat"))
+N_eval_retro_summ <- N_eval_retro_summ %>%
+  filter(model != "AR1v2") %>%
+  mutate(
+    model = factor(model, 
+                        levels = c("Base", "AR1v1", "ENP Calves", 
+                                   "PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"),
+                        labels = c("Base", "AR1", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
+    )
+```
+
+## Retrospective analysis
+
+:::::: panel-tabset
+## Truncated time series
+
+::: panel-tabset
+### Projected year 1
+
+<div style="background-color: white; padding: 15px">
+
+```{r tbl-tretro1, echo = F, warning = F, message = F}
+#| label: tbl-tretro1
+#| tbl-cap: "Model predictions when projecting one year forward for truncated time series ending in years 2013 through 2021."
+
+# Summary stats
+N_eval_tab_proj1yr <- N_eval_retro_summ %>%
+  filter(proj_set == "1 yr") %>%
+  filter(year > 2013) %>%
+  arrange(model, year) %>% 
+  dplyr::select(-.variable, -proj_set, -percentile_80, -rss, -start_year)
+
+# knitr::kable(
+#   N_eval_tab_proj1yr,
+#   row.names = F,
+#   col.names = c("Year", "Model", "Abundance Estimate",
+#                 "Mean N", "Median N", 
+#                 "Lower 95% CI (N)", "Upper 95% CI (N)",
+#                 "Nmin",
+#                 "Closure (Nmin)", "Closure (N)", "Closure",
+#                 "Percentile for Abundance Estimate",
+#                 "Prop Below Threshold (N)",
+#                 "Prop Below Threshold (Nmin)"),
+#   digits = c(rep(1, 9), rep(3, 3)),
+#   align = c(rep("l", 2), rep("c", 10)),
+#   #format = "simple",
+#   booktabs = T
+# )
+
+# HTML table output
+datatable(N_eval_tab_proj1yr,
+          rownames = F,
+          colnames = c("Year", "Model", "Abundance Estimate",
+                "Mean N", "Median N", 
+                "Lower 95% CI (N)", "Upper 95% CI (N)",
+                "Nmin",
+                "Closure (Nmin)", "Closure (N)", "Closure",
+                "Percentile for Abundance Estimate",
+                "Prop Below Threshold (N)"),
+          options = list(
+              columnDefs = list(list(className = 'dt-center', targets = 2:12)),
+              columnDefs = list(list(className = 'dt-left', targets = 0:1))
+              )) %>%
+  formatStyle(
+    columns = c(1:13), #specify columns to format
+    #fontFamily = "Arial",
+    #fontSize = "14px",
+    color = "#242424",
+    #paddingRight = "1em",
+    # borderBottomColor = "#242424",
+    # borderBottomStyle = "solid",
+    # borderBottomWidth = "1px",
+    borderCollapse = "collapse",
+    verticalAlign = "middle",
+    textAlign = "center",
+    wordWrap = "break-word",
+    backgroundColor = 'white'
+  ) %>%
+  formatRound(3:8, 1) %>%
+  formatRound(12, 3) %>%
+  formatRound(13, 2)
+```
+
+</div>
+
+### Projected year 2
+
+<div style="background-color: white; padding: 15px">
+
+```{r tbl-tretro2, echo = F, warning = F, message = F}
+#| label: tbl-tretro2
+#| tbl-cap: "Model predictions when projecting two years forward for truncated time series ending in years 2013 through 2021."
+
+# Summary stats
+N_eval_tab_proj2yr <- N_eval_retro_summ %>%
+  filter(proj_set == "2 yr" & year != 2023) %>%
+  filter(year > 2013) %>%
+  arrange(model, year) %>% 
+  dplyr::select(-.variable, -proj_set, -percentile_80, -rss, -start_year)
+
+# knitr::kable(
+#   N_eval_tab_proj1yr,
+#   row.names = F,
+#   col.names = c("Year", "Model", "Abundance Estimate",
+#                 "Mean N", "Median N", 
+#                 "Lower 95% CI (N)", "Upper 95% CI (N)",
+#                 "Nmin",
+#                 "Closure (Nmin)", "Closure (N)", "Closure",
+#                 "Percentile for Abundance Estimate",
+#                 "Prop Below Threshold (N)",
+#                 "Prop Below Threshold (Nmin)"),
+#   digits = c(rep(1, 9), rep(3, 3)),
+#   align = c(rep("l", 2), rep("c", 10)),
+#   #format = "simple",
+#   booktabs = T
+# )
+
+# HTML table output
+datatable(N_eval_tab_proj2yr,
+          rownames = F,
+          colnames = c("Year", "Model", "Abundance Estimate",
+                "Mean N", "Median N", 
+                "Lower 95% CI (N)", "Upper 95% CI (N)",
+                "Nmin",
+                "Closure (Nmin)", "Closure (N)", "Closure",
+                "Percentile for Abundance Estimate",
+                "Prop Below Threshold (N)"),
+          options = list(
+              columnDefs = list(list(className = 'dt-center', targets = 2:12)),
+              columnDefs = list(list(className = 'dt-left', targets = 0:1))
+              )) %>%
+  formatStyle(
+    columns = c(1:13), #specify columns to format
+    #fontFamily = "Arial",
+    #fontSize = "14px",
+    color = "#242424",
+    #paddingRight = "1em",
+    # borderBottomColor = "#242424",
+    # borderBottomStyle = "solid",
+    # borderBottomWidth = "1px",
+    borderCollapse = "collapse",
+    verticalAlign = "middle",
+    textAlign = "center",
+    wordWrap = "break-word",
+    backgroundColor = 'white'
+  ) %>%
+  formatRound(3:8, 1) %>%
+  formatRound(12, 3) %>%
+  formatRound(13, 2)
+```
+
+</div>
+
+:::
+
+## Full time series
+
+:::: {.panel-tabset}
+### Projected year 1
+
+<div style="background-color: white; padding: 15px">
+
+```{r tbl-retro1, echo = F, warning = F, message = F}
+#| label: tbl-retro1
+#| tbl-cap: "Model predictions when projecting one year forward for all data years from 2002 through 2021."
+
+# Summary stats
+N_eval_tab_proj1yr <- N_eval_table %>%
+  filter(proj_set == "pyear1") %>%
+  arrange(model, year) %>% 
+  dplyr::select(-proj_set, -percentile_80, -rss, -prop_below_minThreshold)
+
+# knitr::kable(
+#   N_eval_tab_proj1yr,
+#   row.names = F,
+#   col.names = c("Year", "Model", "Abundance Estimate",
+#                 "Mean N", "Median N", 
+#                 "Lower 95% CI (N)", "Upper 95% CI (N)",
+#                 "Nmin",
+#                 "Closure (Nmin)", "Closure (N)", "Closure",
+#                 "Percentile for Abundance Estimate",
+#                 "Prop Below Threshold (N)",
+#                 "Prop Below Threshold (Nmin)"),
+#   digits = c(rep(1, 9), rep(3, 3)),
+#   align = c(rep("l", 2), rep("c", 10)),
+#   #format = "simple",
+#   booktabs = T
+# )
+
+# HTML table output
+datatable(N_eval_tab_proj1yr,
+          rownames = F,
+          colnames = c("Year", "Model", "Abundance Estimate",
+                "Mean N", "Median N", 
+                "Lower 95% CI (N)", "Upper 95% CI (N)",
+                "Nmin",
+                "Closure (Nmin)", "Closure (N)", "Closure",
+                "Percentile for Abundance Estimate",
+                "Prop Below Threshold (N)"),
+          options = list(
+              columnDefs = list(list(className = 'dt-center', targets = 2:12)),
+              columnDefs = list(list(className = 'dt-left', targets = 0:1))
+              )) %>%
+  formatStyle(
+    columns = c(1:13), #specify columns to format
+    #fontFamily = "Arial",
+    #fontSize = "14px",
+    color = "#242424",
+    #paddingRight = "1em",
+    # borderBottomColor = "#242424",
+    # borderBottomStyle = "solid",
+    # borderBottomWidth = "1px",
+    borderCollapse = "collapse",
+    verticalAlign = "middle",
+    textAlign = "center",
+    wordWrap = "break-word",
+    backgroundColor = 'white'
+  ) %>%
+  formatRound(3:8, 1) %>%
+  formatRound(12, 3) %>%
+  formatRound(13, 2)
+```
+
+</div>
+
+### Projected year 2
+
+<div style="background-color: white; padding: 15px">
+
+```{r tbl-retro1, echo = F, warning = F, message = F}
+#| label: tbl-retro2
+#| tbl-cap: "Model predictions when projecting two years forward for all data years from 2002 through 2021."
+
+N_eval_tab_proj2yr <- N_eval_table %>%
+  filter(proj_set == "pyear2") %>%
+  arrange(model, year) %>% 
+  dplyr::select(-proj_set, -percentile_80, -rss, -prop_below_minThreshold)
+
+# knitr::kable(
+#   N_eval_tab_proj1yr,
+#   row.names = F,
+#   col.names = c("Year", "Model", "Abundance Estimate",
+#                 "Mean N", "Median N", 
+#                 "Lower 95% CI (N)", "Upper 95% CI (N)",
+#                 "Nmin",
+#                 "Closure (Nmin)", "Closure (N)", "Closure",
+#                 "Percentile for Abundance Estimate",
+#                 "Prop Below Threshold (N)",
+#                 "Prop Below Threshold (Nmin)"),
+#   digits = c(rep(1, 9), rep(3, 3)),
+#   align = c(rep("l", 2), rep("c", 10)),
+#   #format = "simple",
+#   booktabs = T
+# )
+
+# HTML table output
+datatable(N_eval_tab_proj2yr,
+          rownames = F,
+          colnames = c("Year", "Model", "Abundance Estimate",
+                "Mean N", "Median N", 
+                "Lower 95% CI (N)", "Upper 95% CI (N)",
+                "Nmin",
+                "Closure (Nmin)", "Closure (N)", "Closure",
+                "Percentile for Abundance Estimate",
+                "Prop Below Threshold (N)"),
+          options = list(
+              columnDefs = list(list(className = 'dt-center', targets = 2:12)),
+              columnDefs = list(list(className = 'dt-left', targets = 0:1))
+              )) %>%
+  formatStyle(
+    columns = c(1:13), #specify columns to format
+    #fontFamily = "Arial",
+    #fontSize = "14px",
+    color = "#242424",
+    #paddingRight = "1em",
+    # borderBottomColor = "#242424",
+    # borderBottomStyle = "solid",
+    # borderBottomWidth = "1px",
+    borderCollapse = "collapse",
+    verticalAlign = "middle",
+    textAlign = "center",
+    wordWrap = "break-word",
+    backgroundColor = 'white'
+  ) %>%
+  formatRound(3:8, 1) %>%
+  formatRound(12, 3) %>%
+  formatRound(13, 2)
+```
+
+</div>
+
+::::
+::::::

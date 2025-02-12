@@ -1,0 +1,95 @@
+---
+title: "A state-space model for projecting population abundance"
+crossref: 
+  tbl-title: "Table"
+  tbl-prefix: "Table"
+  title-delim: ":"
+bibliography: references.bib
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+
+# Load required packages -------------------------------------------------------
+
+library(pacman)
+p_load(cmdstanr, tidyverse, here, tidybayes, brms, bayesplot, gt)
+#set_cmdstan_path("~/cmdstan")  # your `cmdstan` path may be different
+
+# Load model fits & model names
+load(here("out", "mfits.RData"))
+```
+
+# Model fitting diagnostics
+
+All modeling was conducted using the R package `cmdstanr` [@cmdstanr]. Posterior sampling was performed using Hamiltonian Monte Carlo with three chains in parallel. The number of warmup (n~i~ = 1000) and sampling iterations (n~i~ = 1000) were kept at their defaults as these were adequate for sampling posterior distributions. @tbl-diags provides a summary of chain-specific diagnostics by model specification. Chains with few to no divergences (Number Divergent) and that do not hit maximum tree depth (Number Max Treedepth) indicate adequate sampling of posteriors and overall good chain performance. Similarly, an estimated Bayesian fraction of missing information (eBFMI) greater than 0.3 suggests reliable inference can be drawn from posterior estimates.
+
+```{r modelDiagnostics, echo = FALSE, warning = FALSE, message = FALSE}
+#| label: tbl-diags
+#| tbl-cap: "Chain diagnostics by model specification."
+
+tab_diag_summ <- purrr::map_dfr(mfit, \(x) {
+  i <- x$diagnostic_summary()
+  do.call(cbind, i) %>% 
+    as.data.frame() %>% 
+    add_column(chain = 1:3, .before = 1)
+}) %>%
+  add_column(
+    Model = rep(model_names, each = 3),
+    .before = 1
+  )
+
+# HTML table output
+# DT::datatable(tab_diag_summ,
+#               rownames = F,
+#           options = list(
+#             columnDefs = list(list(className = 'dt-center', targets = 1:4))
+#             )) %>%
+#   DT::formatRound(2:5, 2)
+
+# For GFM-based readme
+# tab_diag_summ %>%
+#   kbl(
+#     format = "simple",
+#     digits = 2,
+#     row.names = F,
+#     align = c("l", rep("c", 4)),
+#     booktabs = T
+#   ) %>%
+#   kable_classic(full_width = F, html_font = "Cambria")
+
+
+# GT tables
+tab_diag_summ %>%
+  mutate(
+    chain = factor(chain, levels = c(1:3), labels = paste("Chain", 1:3))
+  ) %>%
+  gt(
+    groupname_col = "Model", rowname_col = "chain"
+  ) %>%
+  cols_label(
+    num_divergent = "Number Divergent",
+    num_max_treedepth = "Number Max Treedepth",
+    ebfmi = "eBFMI"
+  ) %>%
+  tab_options(
+    column_labels.padding.horizontal = px(20),
+    data_row.padding = px(2),
+    row_group.padding = px(4)    # And even more for our groups
+  ) %>%
+  fmt_number(columns = "ebfmi", decimals = 2) %>%
+  cols_align(
+    align = 'center', 
+    columns = where(is.numeric)
+  ) %>%
+  cols_width(
+    num_divergent ~ px(100),
+    num_max_treedepth ~ px(100),
+    ebfmi ~ px(100),
+    chain ~ px (150)
+  ) %>%
+  opt_stylize(style = 6, color = "gray") %>%
+  data_color(
+    columns = 3:5,
+    palette = c("white")
+  )
+```
