@@ -3,9 +3,9 @@
 
 This repository contains all code associated with an effort to predict
 the abundance of Pacific Coast Feeding Group gray whales (*Eschrichtius
-robustus*) for a number of years beyond the last years for which we have
-more robust, mark-resight estimates. For a more user-friendly review of
-the information contained herein, refer to this repository’s GitHub
+robustus*) beyond the last years for which we have more robust,
+mark-resight estimates. For a more user-friendly review of the
+information contained herein, refer to this repository’s GitHub
 [Page](https://pmahoney-noaa.github.io/noaa-pcfg-pop-ssm).
 
   
