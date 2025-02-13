@@ -55,4 +55,4 @@ STAN/*.exe
 /.quarto/
 
 # Website docs
-/docs/
+docs/
