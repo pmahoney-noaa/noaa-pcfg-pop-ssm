@@ -50,4 +50,9 @@ out/
 
 # Compiled models
 STAN/*.exe
+
+# Quarto dir
 /.quarto/
+
+# Website docs
+/docs/
