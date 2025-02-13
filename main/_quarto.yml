@@ -7,7 +7,7 @@ project:
     - results.qmd
     - supp_tables.qmd
     - supp_diagnostics.qmd
-    - acknowledgements.qmd
+    - acknowledgement.qmd
   
 website:
   title: "PCFG Gray Whales"
