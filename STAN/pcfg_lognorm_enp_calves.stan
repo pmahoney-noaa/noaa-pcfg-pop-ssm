@@ -71,9 +71,9 @@ generated quantities{  // ------------------------------------------------------
  }
  
  // project abundance in log-space
- logN_proj[1] = log(exp(normal_rng(logN[n_dat_yrs] + (mu_logLambda + logC_proj[1] * beta), sigma_logLambda)) - N_harvest[1]);  
+ logN_proj[1] = log(exp(normal_rng(logN[n_dat_yrs] + (mu_logLambda + logC[n_dat_yrs] * beta), sigma_logLambda)) - N_harvest[1]);  
  for(t_proj in 2:n_proj_yrs){
-   logN_proj[t_proj] = log(exp(normal_rng(logN_proj[t_proj - 1] + (mu_logLambda + logC_proj[t_proj] * beta), sigma_logLambda)) - N_harvest[t_proj]);
+   logN_proj[t_proj] = log(exp(normal_rng(logN_proj[t_proj - 1] + (mu_logLambda + logC_proj[t_proj - 1] * beta), sigma_logLambda)) - N_harvest[t_proj]);
  }
  
  // project abundance in log-space for data year t; used in determing model performance
