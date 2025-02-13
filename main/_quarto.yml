@@ -1,6 +1,13 @@
 project:
   type: website
-  output-dir: docs
+  output-dir: ../docs/
+  render: 
+    - index.qmd
+    - methodology.qmd
+    - results.qmd
+    - supp_tables.qmd
+    - supp_diagnostics.qmd
+    - acknowledgements.qmd
   
 website:
   title: "PCFG Gray Whales"
@@ -17,23 +24,23 @@ website:
             href: https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm
     contents:
       - text: "Intent and summary"
-        href: main/index.qmd
+        href: index.qmd
       - text: "Model description"
-        href: main/methodology.qmd
+        href: methodology.qmd
       - text: "Model results"
-        href: main/results.qmd
+        href: results.qmd
       #- text: "Discussion"
       #  href: main/discussion.qmd
       - section: "Supplementary"
         contents:
           - text: "Supplementary tables"
-            href: main/supp_tables.qmd
+            href: supp_tables.qmd
           #- text: "Supplementary figures"
           #  href: main/supp_figs.qmd
           - text: "Model diagnostics"
-            href: main/supp_diagnostics.qmd
+            href: supp_diagnostics.qmd
       - text: "Acknowledgements"
-        href: main/acknowledgement.qmd
+        href: acknowledgement.qmd
   page-footer:
     right: "Built with [Quarto](https://quarto.org/)"
     left: "2025, website authored by Peter J. Mahoney"
@@ -42,7 +49,7 @@ format:
   html:
     #theme: darkly
     linkcolor: "#007eb2"
-    css: main/styles.css
+    css: styles.css
     toc: true
     
 execute:
