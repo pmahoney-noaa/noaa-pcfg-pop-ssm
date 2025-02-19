@@ -130,13 +130,13 @@ tidy_plot_traj = function(input_data, tidy_mcmc, threshold_N, threshold_Nmin){
     spread_draws(logN[year]) %>% 
     select(year, logN) %>% 
     ungroup() %>% 
-    mutate(year = year + Ndata_input$year[1] - 1) 
+    mutate(year = year + input_data$year[1] - 1) 
   
   N_proj_out = tidy_mcmc %>% 
     spread_draws(logN_proj[year]) %>% 
     select(year, logN = logN_proj) %>% 
     ungroup() %>% 
-    mutate(year = year + max(Ndata_input$year)) 
+    mutate(year = year + max(input_data$year)) 
   
   N_out_table = N_out %>% 
     bind_rows(N_proj_out) %>% 
