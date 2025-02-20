@@ -553,6 +553,62 @@ tidy_plot_retroPred(N_eval_table)
 tidy_plot_traj_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold_Nmin, ncols = 1)
 ```
 
+## Model-averaged population trend
+
+...
+
+```{r modelWeights, echo = F, warning = F, message = F}
+#| label: tbl-modelWeights
+#| tbl-cap: "Model weights..."
+
+# Model weights
+wgts_stacked <- loo_model_weights(loo_pcfg)
+wgts <- loo_model_weights(loo_pcfg, method = "pseudobma", BB = TRUE)
+
+wgts_tab <- data.frame(Model = model_names, Stacking = as.numeric(wgts_stacked), PseudoBMA = as.numeric(wgts))
+
+kable(wgts_tab,
+  row.names = F,
+  col.names = c("Model", "Stacking", "PseudoBMA+"),
+  digits = 3,
+  align = c("l", rep("c", 2)),
+  format = "simple",
+  booktabs = T) %>%
+kable_classic(full_width = F, html_font = "Cambria")
+```
+
+...
+
+```{r fig-stackedTrendFig, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}
+#| label: fig-stackedTrendFig
+#| fig-cap: "Estimated trend in PCFG gray whale abundance derived from model-averaged estimates using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N~min~, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~."
+
+# Model averaged abundance
+ma_abund <- tidy_model_avg(tfit, wgts, iters = 1000, Ndata_input)
+
+# Figure
+Ndata_input %>% 
+  ggplot(aes(x = year, y = N)) +  
+  geom_ribbon(data = ma_abund, aes(y = mean, ymin = percentile_20, ymax = percentile_80), alpha = 0.2) +
+  geom_ribbon(data = ma_abund, aes(y = mean, ymin = lo_ci, ymax = hi_ci), alpha = 0.2) +
+  geom_line(data = ma_abund, aes(y = mean)) +
+  geom_point(size = 3, color = "white", fill = "black", shape = 21) +
+  scale_x_continuous(limits = c(min(ma_abund$year), max(ma_abund$year)), 
+                       breaks = seq(min(ma_abund$year), max(ma_abund$year), by = 1), minor_breaks = NULL) +
+  scale_y_continuous(limits = c(0, 350), breaks = seq(0, 350, by = 100)) +
+  geom_hline(yintercept = threshold_N) + 
+  geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
+  geom_errorbar(aes(ymin = low_95CI, ymax = high_95CI)) +  
+  geom_errorbar(aes(ymin = low_60CI, ymax = N), linewidth = 0) +
+  geom_point(aes(y = low_60CI), shape = 23, fill = "red", size = 2) +
+  theme_bw(base_size = 16) +
+  labs(x = "Year", y = "PCFG Abundance") +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  NULL
+```
+
 ## Model-specific predictions for Y~final~ + 2
 
 ```{r finalEstimates, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}

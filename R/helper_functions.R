@@ -120,7 +120,11 @@ tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names,
     geom_point(aes(y = low_60CI), shape = 23, fill = "red", size = 2) +
     theme_bw(base_size = 16) +
     facet_wrap(~ model, ncol = ncols) +
-    labs(x = "Year", y = "PCFG Abundance")
+    labs(x = "Year", y = "PCFG Abundance") +
+    # theme(
+    #   axis.text.x = element_text(angle = 45, hjust = 1)
+    # ) +
+    NULL
   
   return(print(pl))
 }
@@ -156,7 +160,9 @@ tidy_plot_traj = function(input_data, tidy_mcmc, threshold_N, threshold_Nmin){
     geom_ribbon(data = N_out_table, aes(y = mean, ymin = lo_ci, ymax = hi_ci), alpha = 0.2) +
     geom_line(data = N_out_table, aes(y = mean)) +
     geom_point(size = 3, color = "white", fill = "black", shape = 21) +
-    ylim(c(0, 350)) +
+    scale_x_continuous(limits = c(min(N_out_table$year), max(N_out_table$year)), 
+                       breaks = seq(min(N_out_table$year), max(N_out_table$year), by = 1), minor_breaks = NULL) +
+    scale_y_continuous(limits = c(0, 350), breaks = seq(0, 350, by = 100)) +
     geom_hline(yintercept = threshold_N) + 
     geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
     geom_errorbar(aes(ymin = low_95CI, ymax = high_95CI)) +  
@@ -165,6 +171,9 @@ tidy_plot_traj = function(input_data, tidy_mcmc, threshold_N, threshold_Nmin){
     theme_bw(base_size = 16) +
     labs(x = "Year", y = "PCFG Abundance") +
     scale_x_continuous(breaks = 1990:2100, minor_breaks = NULL) +
+    # theme(
+    #   axis.text.x = element_text(angle = 45, hjust = 1)
+    # ) +
     NULL
   
   return(print(pl))
@@ -318,4 +327,34 @@ pred_summary_tbl = function(input_data, tidy_mcmc, threshold_N, threshold_Nmin){
     ungroup()
   
   return(tbl)
+}
+
+# Model averaged abundance -----------------------------------------------------
+tidy_model_avg <- function (tfit, wgts, iters, input_data) {
+  
+  N_out = map2_dfr(tfit, wgts, ~ .x %>%
+                     slice(sample(1:n(), size = round(.y*iters), replace = F)) %>% 
+                     spread_draws(logN[year]) %>% 
+                     select(year, logN) %>% 
+                     ungroup() %>% 
+                     mutate(year = year + input_data$year[1] - 1))
+  
+  N_proj_out = map2_dfr(tfit, wgts, ~ .x %>%
+                          slice(sample(1:n(), size = round(.y*iters), replace = F)) %>% 
+                          spread_draws(logN_proj[year]) %>% 
+                          select(year, logN = logN_proj) %>% 
+                          ungroup() %>% 
+                          mutate(year = year + max(input_data$year)))
+  
+  N_out_table = N_out %>% 
+    bind_rows(N_proj_out) %>% 
+    group_by(year) %>% 
+    summarize(mean = mean(logN),
+              median = median(logN),
+              lo_ci = quantile(logN, 0.025),
+              hi_ci = quantile(logN, 0.975),
+              percentile_20 = quantile(logN, 0.2),
+              percentile_80 = quantile(logN, 0.8)) %>% 
+    ungroup() %>% 
+    mutate(across(.cols = -year, .fns = exp)) 
 }

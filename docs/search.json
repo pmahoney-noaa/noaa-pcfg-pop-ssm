@@ -106,7 +106,7 @@
     "href": "results.html#model-specific-predictions-for-yfinal-2",
     "title": "A state-space model for projecting population abundance",
     "section": "Model-specific predictions for Yfinal + 2",
-    "text": "Model-specific predictions for Yfinal + 2\n\n\n\n\n\n\n\n\nFigure 4: Model-specific estimated abundance in the second year of projections (2024). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively.",
+    "text": "Model-specific predictions for Yfinal + 2\n\n\n\n\n\n\n\n\nFigure 5: Model-specific estimated abundance in the second year of projections (2024). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively.",
     "crumbs": [
       "Model results"
     ]
@@ -120,6 +120,16 @@
     "crumbs": [
       "Supplementary",
       "Model diagnostics"
+    ]
+  },
+  {
+    "objectID": "results.html#model-averaged-population-trend",
+    "href": "results.html#model-averaged-population-trend",
+    "title": "A state-space model for projecting population abundance",
+    "section": "Model-averaged population trend",
+    "text": "Model-averaged population trend\n…\n\n\n\n\nTable 7: Model weights…\n\n\n\n\n\n\nModel\nStacking\nPseudoBMA+\n\n\n\n\nBase\n0\n0.140\n\n\nAR1\n1\n0.343\n\n\nENP Calves\n0\n0.089\n\n\nPCFG Calves only\n0\n0.141\n\n\nENP Strandings only\n0\n0.176\n\n\nPCFG Calves + ENP Strandings\n0\n0.112\n\n\n\n\n\n\n\n\n…\n\n\n\n\n\n\n\n\nFigure 4: Estimated trend in PCFG gray whale abundance derived from model-averaged estimates using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated Nmin.",
+    "crumbs": [
+      "Model results"
     ]
   }
 ]
