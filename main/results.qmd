@@ -611,22 +611,45 @@ Ndata_input %>%
 
 ## Model-specific predictions for Y~final~ + 2
 
-```{r finalEstimates, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}
-#| label: fig-final-proj
-#| fig-cap: "Model-specific estimated abundance in the second year of projections (2025). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively."
-#| 
+```{r}
+#| label: tbl-modelPrediction2yr
+#| tbl-cap: "Model-predicted N and N~min~ in 2025 based on a two year projection from the last abundance estimate (2023)."
+
 # Projected estimated final abundance + 2 years --------------------------------
 #lastYr <- paste0("logN[", nrow(Ndata_input), "]")
 lastYr <- "logN_proj[2]"
 postLastYr <- purrr::imap(tfit, ~.x[lastYr] %>% add_column(Model = model_names[.y]))
 postLastYr <- do.call(rbind, postLastYr)
+
+ma_est <- ma_abund %>%
+  slice(n()) %>%
+  mutate(
+    Model = "Model-averaged estimate"
+  ) %>%
+  dplyr::select(Model, Nmean = mean, Nmin = percentile_20)
            
 
 postLastYr_mns <- postLastYr %>%
   group_by(Model) %>%
   summarize(
-    Nmean = exp(mean(`logN_proj[2]`))
-  )
+    Nmean = exp(mean(`logN_proj[2]`)),
+    Nmin = quantile(exp(`logN_proj[2]`), 0.2)
+  ) %>%
+  add_row(ma_est)
+
+kable(postLastYr_mns,
+  row.names = F,
+  col.names = c("Model", "N", "N~min~"),
+  digits = 1,
+  align = c("l", rep("c", 2)),
+  format = "simple",
+  booktabs = T) %>%
+kable_classic(full_width = F, html_font = "Cambria")
+```
+
+```{r finalEstimates, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}
+#| label: fig-final-proj
+#| fig-cap: "Model-specific estimated abundance in the second year of projections (2025). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively."
 
 ggplot(postLastYr, aes(group = Model, fill = Model, color = Model)) +
   geom_density(aes(x = exp(`logN_proj[2]`)), alpha = 0.4) +
