@@ -613,7 +613,7 @@ Ndata_input %>%
 
 ```{r finalEstimates, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}
 #| label: fig-final-proj
-#| fig-cap: "Model-specific estimated abundance in the second year of projections (2024). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively."
+#| fig-cap: "Model-specific estimated abundance in the second year of projections (2025). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively."
 #| 
 # Projected estimated final abundance + 2 years --------------------------------
 #lastYr <- paste0("logN[", nrow(Ndata_input), "]")
@@ -641,6 +641,6 @@ ggplot(postLastYr, aes(group = Model, fill = Model, color = Model)) +
   scale_x_continuous(limits = c(0, 350)) +
   guides(color = guide_legend(title = NULL, position = "top", direction = "horizontal", nrow = 1),
          fill = guide_legend(title = NULL, position = "top", direction = "horizontal", nrow = 1)) +
-  labs(x = "Projected N (Year 2024)", y = "Density") +
+  labs(x = "Projected N (Year 2025)", y = "Density") +
   theme_bw()
 ```
