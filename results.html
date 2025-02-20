@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -919,32 +953,32 @@ Table&nbsp;7: Model weights…
 <tr class="odd">
 <td style="text-align: left;">Base</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.140</td>
+<td style="text-align: center;">0.142</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">AR1</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: center;">0.343</td>
+<td style="text-align: center;">0.341</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ENP Calves</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.089</td>
+<td style="text-align: center;">0.088</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PCFG Calves only</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.141</td>
+<td style="text-align: center;">0.142</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ENP Strandings only</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.176</td>
+<td style="text-align: center;">0.175</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PCFG Calves + ENP Strandings</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.112</td>
+<td style="text-align: center;">0.111</td>
 </tr>
 </tbody>
 </table>
@@ -972,6 +1006,100 @@ Figure&nbsp;4: Estimated trend in PCFG gray whale abundance derived from model-a
 <section id="model-specific-predictions-for-yfinal-2" class="level2">
 <h2 class="anchored" data-anchor-id="model-specific-predictions-for-yfinal-2">Model-specific predictions for Y<sub>final</sub> + 2</h2>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Projected estimated final abundance + 2 years --------------------------------</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>lastYr <span class="ot">&lt;-</span> <span class="st">"logN_proj[2]"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>postLastYr <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">imap</span>(tfit, <span class="sc">~</span>.x[lastYr] <span class="sc">%&gt;%</span> <span class="fu">add_column</span>(<span class="at">Model =</span> model_names[.y]))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>postLastYr <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, postLastYr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Pulling the model-averaged estimate</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>ma_est <span class="ot">&lt;-</span> ma_abund <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">Model =</span> <span class="st">"Model-averaged estimate"</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(Model, <span class="at">Nmean =</span> mean, <span class="at">Nmin =</span> percentile_20)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Summarizing last projected year and appending model-averaged estimate           </span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>postLastYr_mns <span class="ot">&lt;-</span> postLastYr <span class="sc">%&gt;%</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Model) <span class="sc">%&gt;%</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Nmean =</span> <span class="fu">exp</span>(<span class="fu">mean</span>(<span class="st">`</span><span class="at">logN_proj[2]</span><span class="st">`</span>)),</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">Nmin =</span> <span class="fu">quantile</span>(<span class="fu">exp</span>(<span class="st">`</span><span class="at">logN_proj[2]</span><span class="st">`</span>), <span class="fl">0.2</span>)</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_row</span>(ma_est)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(postLastYr_mns,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> F,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"Model"</span>, <span class="st">"N"</span>, <span class="st">"N~min~"</span>),</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">1</span>,</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">align =</span> <span class="fu">c</span>(<span class="st">"l"</span>, <span class="fu">rep</span>(<span class="st">"c"</span>, <span class="dv">2</span>)),</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">format =</span> <span class="st">"simple"</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">booktabs =</span> T) <span class="sc">%&gt;%</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="fu">kable_classic</span>(<span class="at">full_width =</span> F, <span class="at">html_font =</span> <span class="st">"Cambria"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in kable_styling(kable_input, "none", htmltable_class = light_class, :
+Please specify format in kable. kableExtra can customize either HTML or LaTeX
+outputs. See https://haozhu233.github.io/kableExtra/ for details.</code></pre>
+</div>
+<div id="tbl-modelPrediction2yr" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelPrediction2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8: Model-predicted N and N<sub>min</sub> in 2025 based on a two year projection from the last abundance estimate (2023).
+</figcaption>
+<div aria-describedby="tbl-modelPrediction2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">N</th>
+<th style="text-align: center;">N<sub>min</sub></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Base</td>
+<td style="text-align: center;">215.9</td>
+<td style="text-align: center;">197.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AR1</td>
+<td style="text-align: center;">203.9</td>
+<td style="text-align: center;">174.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ENP Calves</td>
+<td style="text-align: center;">213.3</td>
+<td style="text-align: center;">189.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCFG Calves only</td>
+<td style="text-align: center;">221.0</td>
+<td style="text-align: center;">200.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ENP Strandings only</td>
+<td style="text-align: center;">199.7</td>
+<td style="text-align: center;">181.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCFG Calves + ENP Strandings</td>
+<td style="text-align: center;">204.3</td>
+<td style="text-align: center;">182.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Model-averaged estimate</td>
+<td style="text-align: center;">208.7</td>
+<td style="text-align: center;">185.3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell">
 <div class="cell-output-display">
 <div id="fig-final-proj" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -979,7 +1107,7 @@ Figure&nbsp;4: Estimated trend in PCFG gray whale abundance derived from model-a
 <img src="results_files/figure-html/fig-final-proj-1.png" class="img-fluid figure-img" width="2400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-final-proj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Model-specific estimated abundance in the second year of projections (2024). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively.
+Figure&nbsp;5: Model-specific estimated abundance in the second year of projections (2025). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively.
 </figcaption>
 </figure>
 </div>
