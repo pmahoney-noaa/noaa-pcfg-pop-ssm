@@ -38,19 +38,23 @@ Cdata_2020 <- Cdata_input %>%             # Impute mean of shoulder years for mi
 
 Cdata_input <- Cdata_input %>%
   add_row(Cdata_2020) %>%
-  arrange(year)
+  arrange(year) %>%
+  
+  # adding filler row for ENP calf data base on last year's
+  # should be adjusted to some modeled estimate
+  add_row(Cdata_input %>% filter(year == max(year)))
 
 # Covariate data (point estimates only) on lambda; at present, 
 # not the precise time series and should be viewed as a filler for model development
 x_lambda = data.frame(
-  N_pcfg_calves = c(4,5,3,0,3,2,1,4,6,12,14,17,12,7,4,4,2,4,5,2, # abundance data years
-                    0,0,0), # projected years, real values exist.
-  N_strandings = Sdata %>% filter(state == "All" & year >= 2002) %>% pull(N_strand) %>% c(., 40) # This last value is not real!
+  N_pcfg_calves = c(9,4,5,3,0,3,2,1,4,6,12,14,17,12,7,4,4,2,4,5,2,11, # abundance data years
+                    13,10), # projected years, real values exist.
+  N_strandings = Sdata %>% filter(state == "All" & year >= 2002) %>% pull(N_strand) %>% c(., 40, 40) # This last value is not real!
 )
-#x_lambda[,1] = scale(x_lambda[,1])
+x_lambda[,1] = scale(x_lambda[,1])
 
 # Define harvest data
-N_harvest = c(0,0,0)
+N_harvest = c(0,0)
 
 # STAN model definitions -------------------------------------------------------
 # models <- list.files("./STAN", "*.stan$")
@@ -70,7 +74,7 @@ models <- list(f_pcfg_base, f_pcfg_ar1v1, f_pcfg_ar1v2, f_pcfg_enp,
 
 # Retrospective evaluation -----------------------------------------------------
 # Years to retrospectively evaluate
-Y_retro = c(2005:2021)
+Y_retro = c(2013:2021)
 
 purrr::map(Y_retro, function(y) {
   Ndata_input_y <- Ndata_input %>% filter(year <= y)
@@ -118,14 +122,14 @@ purrr::map(Y_retro, function(y) {
     adapt_delta = 0.99
   ))
   
-  save(mfit, file = here("out", paste0("Harris_2022_retro_y", y, ".dat")))
+  save(mfit, file = here("out", paste0("Harris_2025_retro_y", y, ".dat")))
 })
 
 
 # Prepping data for plotting ---------------------------------------------------
 
 # Years to retrospectively evaluate
-Y_retro = c(2005:2021)
+Y_retro = c(2013:2021)
 
 # Closure thresholds
 threshold_N = 192    # Threshold on abundance below which a hunt is closed
@@ -133,7 +137,7 @@ threshold_Nmin = 171 # Threshold on minimum abundance below which a hunt is clos
 
 N_eval_retro <- purrr::map(Y_retro, function(y) {
   # Load model results
-  load(file = here("out", paste0("Harris_2022_retro_y", y, ".dat")))
+  load(file = here("out", paste0("Harris_2025_retro_y", y, ".dat")))
   
   # Tidy draws
   tfit = purrr::map(mfit, tidy_draws, .progress = T)
@@ -188,7 +192,7 @@ N_eval_retro <- purrr::map(Y_retro, function(y) {
 N_eval_retro_summ <- purrr::imap_dfr(N_eval_retro, ~ .x$summary %>% mutate(start_year = .y))
 
 # save output for use in Quarto docs
-save(N_eval_retro_summ, file = here("out", paste0("TruncatedRetroSummary", ".dat")))
+save(N_eval_retro_summ, file = here("out", paste0("TruncatedRetroSummary_2025", ".dat")))
 
 (N_eval_summary_proj1yr <- N_eval_retro_summ %>%
   filter(proj_set == "1 yr" & year != 2023) %>%

@@ -49,10 +49,22 @@ retro_dat
 # View(retro_dat)
 
 # Most recent time series of abundance estimates
-Ndata = retro_dat %>% 
+Ndata_last = retro_dat %>% 
   filter(ref == "Harris et al. 2024") %>% 
   select(-N_delta_perc, -estimator, -ref_yr, -init_N) %>% 
   select(year:SE, lambda:sd_log, cv, ref_id, ref, year_id)
+
+Ndata = retro_dat %>% 
+  filter(ref == "Harris et al. 2025") %>% 
+  select(-N_delta_perc, -estimator, -ref_yr, -init_N) %>% 
+  select(year:SE, lambda:sd_log, cv, ref_id, ref, year_id)
+
+plot_abund_paired = rbind(Ndata_last, Ndata) %>%
+  ggplot(aes(x = year, y = N, group = ref, color = ref)) +
+  geom_errorbar(aes(ymin = low_95CI, ymax = high_95CI, width = 0.25), position = position_dodge(width = 0.5)) +
+  geom_point(position = position_dodge(width = 0.5)) +
+  scale_y_continuous(limits = c(0, 350)) +
+  theme_bw()
 
 # Garbage collection
 rm(list = c("ref_table", "retro_dat", "retro_dat_raw"))

@@ -34,19 +34,23 @@ Cdata_2020 <- Cdata_input %>%             # Impute mean of shoulder years for mi
 
 Cdata_input <- Cdata_input %>%
   add_row(Cdata_2020) %>%
-  arrange(year)
+  arrange(year) %>%
+
+  # adding filler row for ENP calf data base on last year's
+  # should be adjusted to some modeled estimate
+  add_row(Cdata_input %>% filter(year == max(year)))
 
 # Covariate data (point estimates only) on lambda; at present, 
 # not the precise time series and should be viewed as a filler for model development
 x_lambda = data.frame(
-  N_pcfg_calves = c(4,5,3,0,3,2,1,4,6,12,14,17,12,7,4,4,2,4,5,2, # abundance data years
-                   11,13,10), # projected years, real values exist.
-  N_strandings = Sdata %>% filter(state == "All" & year >= 2002) %>% pull(N_strand) %>% c(., 40) # This last value is not real!
+  N_pcfg_calves = c(9,4,5,3,0,3,2,1,4,6,12,14,17,12,7,4,4,2,4,5,2,11, # abundance data years
+                   13,10), # projected years, real values exist.
+  N_strandings = Sdata %>% filter(state == "All" & year >= 2002) %>% pull(N_strand) %>% c(., 40, 40) # This last value is not real!
 )
 x_lambda[,1] = scale(x_lambda[,1])
 
 # Define harvest data
-N_harvest = c(0,0,0)
+N_harvest = c(0,0)
 
 # Input data -------------------------------------------------------------------
 init_pcfg_data_3yr = list(
@@ -169,14 +173,14 @@ threshold_Nmin = 171 # Threshold on minimum abundance below which a hunt is clos
 
 # Load truncated retrospective results
 # See pcfg_lognorm_retro_analysis.R for details
-load(here("out", "TruncatedRetroSummary.dat"))
+load(here("out", "TruncatedRetroSummary_2025.dat"))
 
 N_eval_retro_summ <- N_eval_retro_summ %>%
   filter(model != "AR1v2") %>%
   mutate(
     model = factor(model, 
                         levels = c("Base", "AR1v1", "ENP Calves", 
-                                   "PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"),
+                                   "Calves only", "Strandings only", "Calves/Strandings"),
                         labels = c("Base", "AR1", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
     )
   # mutate(
@@ -231,7 +235,7 @@ kable_classic(full_width = F, html_font = "Cambria")
 #| label: tbl-loo
 #| tbl-cap: "Derived estimates of model fit using an information criterion based on leave-one-out cross validation (looic)."
 
-loo_pcfg <- purrr::map(mfit, \(x) x$loo(cores = 4))
+loo_pcfg <- purrr::map(mfit, \(x) x$loo(cores = 4, k_threshold = 0.7))
 #purrr::map(loo_pcfg, plot)
 
 tab_loo <- purrr::map_dfr(loo_pcfg, \(x) 
