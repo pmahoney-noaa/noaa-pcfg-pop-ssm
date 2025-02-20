@@ -611,9 +611,9 @@ Ndata_input %>%
 
 ## Model-specific predictions for Y~final~ + 2
 
-```{r}
+```{r, echo = F, warning = F, message = F}
 #| label: tbl-modelPrediction2yr
-#| tbl-cap: "Model-predicted N and N~min~ in 2025 based on a two year projection from the last abundance estimate (2023)."
+#| tbl-cap: "Predicted N and N~min~ for PCFG gray whales in 2025 based on a two year projection from the last documented abundance estimate (2023)."
 
 # Projected estimated final abundance + 2 years --------------------------------
 lastYr <- "logN_proj[2]"
@@ -657,13 +657,14 @@ ggplot(postLastYr, aes(group = Model, fill = Model, color = Model)) +
   geom_rug(aes(x = threshold_Nmin), color = "red", linewidth = 1.5) +
   # vline_at(threshold_N, linetype = 2) +
   # vline_at(threshold_Nmin, color = "red", linetype = 2) +
-  geom_vline(data = postLastYr_mns, aes(xintercept = Nmean, group = Model, color = Model),
+  geom_vline(data = postLastYr_mns %>% filter(Model != "Model-averaged estimate"), aes(xintercept = Nmean, group = Model, color = Model),
              alpha = 1, linewidth = 0.8, linetype = 3) +
   viridis::scale_fill_viridis(discrete = T, option = "B") +
   viridis::scale_color_viridis(discrete = T, option = "B") +
   scale_x_continuous(limits = c(0, 350)) +
-  guides(color = guide_legend(title = NULL, position = "top", direction = "horizontal", nrow = 1),
-         fill = guide_legend(title = NULL, position = "top", direction = "horizontal", nrow = 1)) +
+  guides(
+    color = guide_legend(title = NULL, position = "top", direction = "horizontal", nrow = 1),
+    fill = guide_legend(title = NULL, position = "top", direction = "horizontal", nrow = 1)) +
   labs(x = "Projected N (Year 2025)", y = "Density") +
   theme_bw()
 ```
