@@ -330,21 +330,40 @@ pred_summary_tbl = function(input_data, tidy_mcmc, threshold_N, threshold_Nmin){
 }
 
 # Model averaged abundance -----------------------------------------------------
-tidy_model_avg <- function (tfit, wgts, iters, input_data) {
+tidy_model_avg <- function (tfit, wgts, iters, input_data, seed = 1001) {
   
-  N_out = map2_dfr(tfit, wgts, ~ .x %>%
+  set.seed(seed)
+  
+  N_out = map2(tfit, wgts, ~ .x %>%
                      slice(sample(1:n(), size = round(.y*iters), replace = F)) %>% 
                      spread_draws(logN[year]) %>% 
-                     select(year, logN) %>% 
+                     select(year, logN, .draw) %>% 
                      ungroup() %>% 
                      mutate(year = year + input_data$year[1] - 1))
   
-  N_proj_out = map2_dfr(tfit, wgts, ~ .x %>%
-                          slice(sample(1:n(), size = round(.y*iters), replace = F)) %>% 
+  N_proj_out = map2_dfr(tfit, N_out, ~ .x %>%
                           spread_draws(logN_proj[year]) %>% 
-                          select(year, logN = logN_proj) %>% 
+                          filter(.draw %in% unique(.y$.draw)) %>%
+                          select(year, logN = logN_proj, .draw) %>% 
                           ungroup() %>% 
                           mutate(year = year + max(input_data$year)))
+  
+  N_out = do.call("rbind", N_out) %>%
+    add_row(N_proj_out)
+  
+  # N_out = map2_dfr(tfit, wgts, ~ .x %>%
+  #                    slice(sample(1:n(), size = round(.y*iters), replace = F)) %>% 
+  #                    spread_draws(logN[year]) %>% 
+  #                    select(year, logN, .draw) %>% 
+  #                    ungroup() %>% 
+  #                    mutate(year = year + input_data$year[1] - 1))
+  
+  # N_proj_out = map2_dfr(tfit, wgts, ~ .x %>%
+  #                         slice(sample(1:n(), size = round(.y*iters), replace = F)) %>% 
+  #                         spread_draws(logN_proj[year]) %>% 
+  #                         select(year, logN = logN_proj) %>% 
+  #                         ungroup() %>% 
+  #                         mutate(year = year + max(input_data$year)))
   
   N_out_table = N_out %>% 
     bind_rows(N_proj_out) %>% 

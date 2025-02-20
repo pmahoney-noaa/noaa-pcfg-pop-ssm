@@ -584,7 +584,7 @@ kable_classic(full_width = F, html_font = "Cambria")
 #| fig-cap: "Estimated trend in PCFG gray whale abundance derived from model-averaged estimates using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N~min~, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~."
 
 # Model averaged abundance
-ma_abund <- tidy_model_avg(tfit, wgts, iters = 1000, Ndata_input)
+ma_abund <- tidy_model_avg(tfit, wgts, iters = 1000, Ndata_input, 101)
 
 # Figure
 Ndata_input %>% 
