@@ -112,6 +112,8 @@ tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names,
     geom_ribbon(data = N_out_table, aes(y = mean, ymin = lo_ci, ymax = hi_ci), alpha = 0.2) +
     geom_line(data = N_out_table, aes(y = mean)) +
     geom_point(size = 3, color = "white", fill = "black", shape = 21) +
+    scale_x_continuous(limits = c(min(N_out_table$year), max(N_out_table$year)), 
+                       breaks = seq(min(N_out_table$year), max(N_out_table$year), by = 1), minor_breaks = NULL) +
     scale_y_continuous(limits = ylims, oob = scales::squish) +
     geom_hline(yintercept = threshold_N) + 
     geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
@@ -121,9 +123,9 @@ tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names,
     theme_bw(base_size = 16) +
     facet_wrap(~ model, ncol = ncols) +
     labs(x = "Year", y = "PCFG Abundance") +
-    # theme(
-    #   axis.text.x = element_text(angle = 45, hjust = 1)
-    # ) +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
     NULL
   
   return(print(pl))
