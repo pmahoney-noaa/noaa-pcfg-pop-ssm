@@ -320,7 +320,7 @@ knitr::kable(
                 "Median Prop Below Threshold (N)",
                 "Number of Closures (Nmin)", "Number of Closures (N)",
                 "Number of Closures", "Closure Years"),
-  digits = c(rep(1, 3), rep(3, 4), rep(0, 4)),
+  digits = c(rep(1, 2), rep(3, 4), rep(0, 4)),
   align = c("l", rep("c", 8)),
   format = "simple",
   booktabs = T
@@ -362,7 +362,7 @@ knitr::kable(
                 "Median Prop Below Threshold (N)",
                 "Number of Closures (Nmin)", "Number of Closures (N)",
                 "Number of Closures", "Closure Years"),
-  digits = c(rep(1, 3), rep(3, 4), rep(0, 4)),
+  digits = c(rep(1, 2), rep(3, 4), rep(0, 4)),
   align = c("l", rep("c", 8)),
   format = "simple",
   booktabs = T

@@ -15,6 +15,53 @@ library(pacman)
 p_load(cmdstanr, tidyverse, here, tidybayes, brms, bayesplot)
 #set_cmdstan_path("~/cmdstan")  # your `cmdstan` path may be different
 
+# Additional functions ---------------------------------------------------------
+
+tidy_traj_multimodel = function(input_data, tidy_mcmc, model_names, 
+                                     truncated_retro = F) { # arg. to specify a truncated retrospective analysis
+  
+  N_out = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
+                            spread_draws(logN[year]) %>% 
+                            select(year, logN) %>% 
+                            ungroup() %>% 
+                            mutate(
+                              model = model_names[.y],
+                              year = year + input_data$year[1] - 1))
+  
+  if (truncated_retro) {
+    N_proj_out = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
+                                   spread_draws(logN_proj[year]) %>% 
+                                   select(year, logN = logN_proj) %>% 
+                                   ungroup() %>% 
+                                   mutate(
+                                     model = model_names[.y],
+                                     year = year + max(input_data$year) - 2))
+  } else {
+    N_proj_out = purrr::imap_dfr(tidy_mcmc, ~ .x %>% 
+                                   spread_draws(logN_proj[year]) %>% 
+                                   select(year, logN = logN_proj) %>% 
+                                   ungroup() %>% 
+                                   mutate(
+                                     model = model_names[.y],
+                                     year = year + max(input_data$year)))
+  }
+  
+  N_out_table = N_out %>% 
+    bind_rows(N_proj_out) %>% 
+    group_by(model, year) %>% 
+    summarize(mean = mean(logN),
+              median = median(logN),
+              lo_ci = quantile(logN, 0.025),
+              hi_ci = quantile(logN, 0.975),
+              percentile_20 = quantile(logN, 0.2),
+              percentile_80 = quantile(logN, 0.8)) %>% 
+    ungroup() %>% 
+    mutate(across(.cols = c(-model, -year), .fns = exp)) %>%
+    arrange(model, year)
+
+  return(N_out_table)
+}
+
 # Initialize -------------------------------------------------------------------
 
 # Data import
@@ -60,21 +107,21 @@ N_harvest = c(0,0)
 # models <- list.files("./STAN", "*.stan$")
 f_pcfg_base <- here::here('STAN', 'pcfg_lognorm_base.stan')
 f_pcfg_ar1v1 <- here::here('STAN', 'pcfg_lognorm_ar1_v1.stan')
-f_pcfg_ar1v2 <- here::here('STAN', 'pcfg_lognorm_ar1_v2.stan')
 f_pcfg_enp <- here::here('STAN', 'pcfg_lognorm_enp_calves.stan')
 f_pcfg_covs <- here::here('STAN', 'pcfg_lognorm_covs.stan')
-model_names <- factor(c("Base", "AR1v1", "AR1v2", "ENP Calves", "Calves/Strandings", "Calves only", "Strandings only"),
-                      levels = c("Base", "AR1v1", "AR1v2", "ENP Calves", "Calves/Strandings", "Calves only", "Strandings only"))
+model_names <- factor(c("Base", "AR1v1", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"),
+                      levels = c("Base", "AR1v1", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"),
+                      labels = c("Base", "AR1", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
 
 # Model file pointers
-models <- list(f_pcfg_base, f_pcfg_ar1v1, f_pcfg_ar1v2, f_pcfg_enp, 
-               f_pcfg_covs, f_pcfg_covs, f_pcfg_covs)
+models <- list(f_pcfg_base, f_pcfg_ar1v1, #f_pcfg_ar1v2, 
+               f_pcfg_enp, f_pcfg_covs, f_pcfg_covs, f_pcfg_covs)
 
 
 
 # Retrospective evaluation -----------------------------------------------------
 # Years to retrospectively evaluate
-Y_retro = c(2013:2022)
+Y_retro = c(2017:2022)
 
 purrr::map(Y_retro, function(y) {
   Ndata_input_y <- Ndata_input %>% filter(year <= y)
@@ -104,8 +151,8 @@ purrr::map(Y_retro, function(y) {
   init_pcfg_data_strandings$x_lambda_proj <- as.matrix(x_lambda %>% dplyr::select(N_strandings) %>% slice(-c(1:nrow(Ndata_input_y))) %>% slice(1:2))
   
   init_data <- list(
-    init_pcfg_data, init_pcfg_data, init_pcfg_data, init_pcfg_data, init_pcfg_data,
-    init_pcfg_data_calves, init_pcfg_data_strandings
+    init_pcfg_data, init_pcfg_data, init_pcfg_data, #init_pcfg_data,
+    init_pcfg_data_calves, init_pcfg_data_strandings, init_pcfg_data
   )
   
   # Compile models (if they haven't been)
@@ -122,74 +169,99 @@ purrr::map(Y_retro, function(y) {
     adapt_delta = 0.99
   ))
   
-  save(mfit, file = here("out", paste0("Harris_2025_retro_y", y, ".dat")))
+  save(mfit, file = here("out", paste0("Harris_2025_retro_y", y, "_bma.dat")))
 })
 
 
 # Prepping data for plotting ---------------------------------------------------
 
 # Years to retrospectively evaluate
-Y_retro = c(2013:2022)
+Y_retro = c(2017:2022)
 
 # Closure thresholds
 threshold_N = 192    # Threshold on abundance below which a hunt is closed
 threshold_Nmin = 171 # Threshold on minimum abundance below which a hunt is closed
 
-N_eval_retro <- purrr::map(Y_retro, function(y) {
-  # Load model results
-  load(file = here("out", paste0("Harris_2025_retro_y", y, ".dat")))
+N_eval_retro_ma <- purrr::map(Y_retro, function(y) {
   
-  # Tidy draws
-  tfit = purrr::map(mfit, tidy_draws, .progress = T)
-  
-  # Build tables
+  # Input_data subset
   if (y == max(Y_retro)) {
     input_data <- Ndata_input %>% filter(year <= (y + 1))
   } else{
     input_data <- Ndata_input %>% filter(year <= (y + 2))
   }
   
-  N_eval_table <- purrr::imap_dfr(tfit, ~ .x %>% 
-                                    gather_draws(logN_proj[year]) %>% #, logN_pyear3[year]) %>%
-                                    select(year, N = .value) %>% 
-                                    mutate(
-                                      proj_set = paste0(year, " yr"),
-                                      year = year + y,
-                                      N = exp(N) 
-                                    ) %>%
-                                    left_join(input_data %>% dplyr::select(year, abundEstN = N), by = "year") %>% 
-                                    #group_by(proj_set, year) %>% 
-                                    summarize(
-                                      proj_set = proj_set[1],
-                                      model = model_names[.y],
-                                      abundEst = mean(abundEstN),
-                                      meanN = mean(N),
-                                      medianN = median(N),
-                                      loN_ci = quantile(N, 0.025),
-                                      hiN_ci = quantile(N, 0.975),
-                                      percentile_20 = quantile(N, 0.2),
-                                      percentile_80 = quantile(N, 0.8),
-                                      rss = (meanN - abundEst)^2, #sum((N - abundEst)^2),
-                                      closure_Nmin = percentile_20 < threshold_Nmin,
-                                      closure_N = meanN < threshold_N,
-                                      closure = closure_Nmin | closure_N,
-                                      percentile_abundEstN = ecdf(N)(abundEst),
-                                      prop_below_threshold = mean(N < threshold_N)
-                                    ) %>%
-                                    ungroup())
+  # Load model results
+  load(file = here("out", paste0("Harris_2025_retro_y", y, "_bma.dat")))
   
+  # LOO
+  loo_pcfg <- purrr::map(mfit, \(x) x$loo(cores = 4, k_threshold = 0.7))
+  
+  # PseudoBMA+ weights
+  #wgts <- loo_model_weights(loo_pcfg)
+  wgts <- loo_model_weights(loo_pcfg, method = "pseudobma", BB = TRUE)
+  
+  # Tidy draws
+  tfit = purrr::map(mfit, tidy_draws, .progress = T)
+  
+  # Model-specific estimates
+  mo <- tidy_traj_multimodel(input_data %>% slice(-((n()-1):n())), tfit, model_names, truncated_retro = F)
+  
+  # Model averaged estimates
+  ma <- tidy_model_avg(tfit, wgts, iters = 1000, input_data %>% slice(-((n()-1):n())), seed = 101)
+  
+  ma_sub <- ma %>%
+    slice_tail(n = 2) %>%
+    add_column(
+      proj_set = c("1 yr", "2 yr"),
+      model = "BMA",.before = 1
+    ) %>%
+    left_join(input_data %>% dplyr::select(year, abundEstN = N), by = "year") %>%
+    mutate(
+      rss = (mean - abundEstN)^2, #sum((N - abundEst)^2),
+      closure_Nmin = percentile_20 < threshold_Nmin,
+      closure_N = mean < threshold_N,
+      closure = closure_Nmin | closure_N
+    )
+
   # Build population trajectories
   # At present, doesn't plot the last projected year in data year + 1 (e.g., 2023 if last abundance estimate in 2022)
-  pl <- tidy_plot_traj_multimodel(input_data, tfit, model_names, 
-                            threshold_N, threshold_Nmin, ncols = 1,
-                            ylims = c(0, 350), truncated_retro = T)
+
+  # mma <- ma %>%
+  #   add_column(model = "BMA", .before = 1) %>%
+  #   add_row(mo)
+    
+  pl <- input_data %>% 
+    ggplot(aes(x = year, y = N)) +  
+    geom_ribbon(data = ma, aes(y = mean, ymin = percentile_20, ymax = percentile_80), fill = "red", alpha = 0.2) +
+    #geom_ribbon(data = ma, aes(y = mean, ymin = lo_ci, ymax = hi_ci), fill = "red", alpha = 0.2) +
+    
+    geom_ribbon(data = mo, aes(y = mean, ymin = percentile_20, ymax = percentile_80), alpha = 0.2) +
+    geom_ribbon(data = mo, aes(y = mean, ymin = lo_ci, ymax = hi_ci), alpha = 0.2) +
+    geom_line(data = mo, aes(y = mean)) +
+    geom_point(size = 3, color = "white", fill = "black", shape = 21) +
+    scale_x_continuous(limits = c(2002, y+2), 
+                       breaks = seq(2002, y+2, by = 1), minor_breaks = NULL) +
+    scale_y_continuous(limits = c(0, 350), oob = scales::squish) +
+    geom_hline(yintercept = threshold_N) + 
+    geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
+    geom_errorbar(aes(ymin = low_95CI, ymax = high_95CI)) +  
+    geom_errorbar(aes(ymin = low_60CI, ymax = N), linewidth = 0) +
+    geom_point(aes(y = low_60CI), shape = 23, fill = "red", size = 2) +
+    theme_bw(base_size = 16) +
+    facet_wrap(~ model, ncol = 1) +
+    labs(x = "Year", y = "PCFG Abundance") +
+    theme(
+      axis.text.x = element_text(angle = 45, hjust = 1)
+    ) +
+    NULL
   
-  
-  return(list(summary = N_eval_table, plot = pl))
+  return(list(summary = ma_sub, plot = pl, weights = wgts))
 })
 
 # Summary stats
-N_eval_retro_summ <- purrr::imap_dfr(N_eval_retro, ~ .x$summary %>% mutate(start_year = .y))
+N_eval_retro_ma_weights <- purrr::imap_dfr(N_eval_retro_ma, ~ .x$weights)
+N_eval_retro_summ_ma <- purrr::imap_dfr(N_eval_retro_ma, ~ .x$summary %>% mutate(start_year = .y))
 
 # save output for use in Quarto docs
 save(N_eval_retro_summ, file = here("out", paste0("TruncatedRetroSummary_2025", ".dat")))
