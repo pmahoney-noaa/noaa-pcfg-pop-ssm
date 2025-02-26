@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.6.40">
+<meta name="generator" content="quarto-1.6.42">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -35,10 +35,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9572c04e107d0f8bdd42cb1a2f5f76fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-e2132ecb7661c51165ef74b6a36c7b8f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -188,6 +188,12 @@ window.Quarto = {
   <div class="sidebar-item-container"> 
   <a href="./supp_diagnostics.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Model diagnostics</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./supp_simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simulation analysis</span></a>
   </div>
 </li>
       </ul>
@@ -919,12 +925,12 @@ Table&nbsp;7: Model weights…
 <tr class="odd">
 <td style="text-align: left;">Base</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.143</td>
+<td style="text-align: center;">0.141</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">AR1</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: center;">0.340</td>
+<td style="text-align: center;">0.339</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ENP Calves</td>
@@ -934,17 +940,17 @@ Table&nbsp;7: Model weights…
 <tr class="even">
 <td style="text-align: left;">PCFG Calves only</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.143</td>
+<td style="text-align: center;">0.142</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ENP Strandings only</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.175</td>
+<td style="text-align: center;">0.177</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PCFG Calves + ENP Strandings</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.111</td>
+<td style="text-align: center;">0.113</td>
 </tr>
 </tbody>
 </table>
@@ -968,6 +974,67 @@ Figure&nbsp;4: Estimated trend in PCFG gray whale abundance derived from model-a
 </div>
 </div>
 </div>
+<p>…</p>
+<div class="cell">
+<div id="tbl-modelWeights_subset" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelWeights_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;8: Model weights…without ENP strandings.
+</figcaption>
+<div aria-describedby="tbl-modelWeights_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="do-not-create-environment cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model</th>
+<th style="text-align: center;">Stacking</th>
+<th style="text-align: center;">PseudoBMA+</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Base</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0.196</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AR1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0.481</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ENP Calves</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0.126</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PCFG Calves only</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0.197</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>…</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-stackedTrendFig_subset" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-stackedTrendFig_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="results_files/figure-html/fig-stackedTrendFig_subset-1.png" class="img-fluid figure-img" width="2400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-stackedTrendFig_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N<sub>min</sub>, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>…</p>
 </section>
 <section id="model-specific-predictions-for-yfinal-2" class="level2">
 <h2 class="anchored" data-anchor-id="model-specific-predictions-for-yfinal-2">Model-specific predictions for Y<sub>final</sub> + 2</h2>
@@ -975,7 +1042,7 @@ Figure&nbsp;4: Estimated trend in PCFG gray whale abundance derived from model-a
 <div id="tbl-modelPrediction2yr" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelPrediction2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;8: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based on a two year projection from the last documented abundance estimate (2023).
+Table&nbsp;9: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based on a two year projection from the last documented abundance estimate (2023).
 </figcaption>
 <div aria-describedby="tbl-modelPrediction2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
@@ -1020,8 +1087,8 @@ Table&nbsp;8: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Model-averaged estimate</td>
-<td style="text-align: center;">208.5</td>
-<td style="text-align: center;">185.2</td>
+<td style="text-align: center;">211.4</td>
+<td style="text-align: center;">186.6</td>
 </tr>
 </tbody>
 </table>
@@ -1038,7 +1105,7 @@ Table&nbsp;8: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based
 <img src="results_files/figure-html/fig-final-proj-1.png" class="img-fluid figure-img" width="2400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-final-proj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Model-specific estimated abundance in the second year of projections (2025). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively.
+Figure&nbsp;6: Model-specific estimated abundance in the second year of projections (2025). Mean estimates are represented by vertical dashed lines in the corresponding colors. The black and red ticks along the x-axis (rugs) correspond to the management closure thresholds for N and N minimum, respectively.
 </figcaption>
 </figure>
 </div>

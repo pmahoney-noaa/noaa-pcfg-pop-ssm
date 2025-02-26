@@ -20,27 +20,7 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for citations */
-div.csl-bib-body { }
-div.csl-entry {
-  clear: both;
-  margin-bottom: 0em;
-}
-.hanging-indent div.csl-entry {
-  margin-left:2em;
-  text-indent:-2em;
-}
-div.csl-left-margin {
-  min-width:2em;
-  float:left;
-}
-div.csl-right-inline {
-  margin-left:2em;
-  padding-left:1em;
-}
-div.csl-indent {
-  margin-left: 2em;
-}</style>
+</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -87,35 +67,6 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -129,7 +80,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./methodology.html">Model description</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./supp_tables.html">Supplementary</a></li><li class="breadcrumb-item"><a href="./supp_simulation.html">Simulation analysis</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -179,7 +130,7 @@ window.Quarto = {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./methodology.html" class="sidebar-item-text sidebar-link active">
+  <a href="./methodology.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Model description</span></a>
   </div>
 </li>
@@ -212,7 +163,7 @@ window.Quarto = {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./supp_simulation.html" class="sidebar-item-text sidebar-link">
+  <a href="./supp_simulation.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Simulation analysis</span></a>
   </div>
 </li>
@@ -234,19 +185,14 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#model-description" id="toc-model-description" class="nav-link active" data-scroll-target="#model-description"><em>Model description</em></a>
-  <ul class="collapse">
-  <li><a href="#additional-prior-specifications" id="toc-additional-prior-specifications" class="nav-link" data-scroll-target="#additional-prior-specifications">Additional prior specifications</a></li>
-  </ul></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
-  <li><a href="#modeling-environment" id="toc-modeling-environment" class="nav-link" data-scroll-target="#modeling-environment"><em>Modeling environment</em></a></li>
+  <li><a href="#simulation-analysis-results" id="toc-simulation-analysis-results" class="nav-link active" data-scroll-target="#simulation-analysis-results">Simulation analysis results</a></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./supp_tables.html">Supplementary</a></li><li class="breadcrumb-item"><a href="./supp_simulation.html">Simulation analysis</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">A state-space model for projecting population abundance</h1>
 </div>
@@ -265,53 +211,124 @@ window.Quarto = {
 </header>
 
 
-<section id="model-description" class="level1">
-<h1><em>Model description</em></h1>
-<p>The SSM models abundance in log-space with Gaussian errors and can be defined as the following:</p>
-<p><em>Observation process:</em></p>
-<p><span class="math display">\[ logN_{est} \sim normal(logN, \sigma_{obs}) \]</span></p>
-<p><em>State process:</em></p>
-<p><span class="math display">\[ logN_{est_{t+1}} = logN_{est_{t}} + ln(\lambda_{t}) \]</span></p>
-<p><span class="math display">\[ ln(\lambda_{t}) \sim normal(\mu, \sigma) \]</span></p>
-<p>Where <span class="math inline">\(logN\)</span> and <span class="math inline">\(\sigma_{obs}\)</span> are the estimated (log) population abundance and standard error for each year with observation data, respectively. Models vary by the specification of <span class="math inline">\(\lambda\)</span> and the factors hypothesized to be correlated with population growth, at least given current knowledge and available data within this system. At present, seven models were considered. (DEFINE LAMBDA AND MU)</p>
-<ol type="1">
-<li>Base: <span class="math inline">\(\mu = \mu_{ln(\lambda)}; \sigma = \sigma_{ln(\lambda)}\)</span></li>
-<li>AR1: <span class="math inline">\(\mu = ln(\lambda_{t-1}); \sigma = \sigma_{ln(\lambda)}\)</span></li>
-<li>ENP calves: <span class="math inline">\(\mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t}; \sigma = \sigma_{ln(\lambda)}\)</span></li>
-<li>(PCFG) Calves only: <span class="math inline">\(\mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t}; \sigma = \sigma_{ln(\lambda)}\)</span></li>
-<li>(ENP) Strandings only: <span class="math inline">\(\mu = \mu_{ln(\lambda)} + \beta_{strand} * S_{t}; \sigma = \sigma_{ln(\lambda)}\)</span></li>
-<li>(PCFG) Calves + (ENP) Strandings: <span class="math inline">\(\mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t} + \beta_{strand} * S_{t}; \sigma = \sigma_{ln(\lambda)}\)</span></li>
-</ol>
-<!--#  1. Base: $ln(\lambda_{t}) \sim normal(\mu_{ln(\lambda)}, \sigma_{ln(\lambda)})$  2. AR1v1: $ln(\lambda_{t}) \sim normal(ln(\lambda_{t-1}), \sigma_{ln(\lambda_{t})})$  3. AR2v2: $ln(\lambda_{t}) \sim normal(\mu_{ln(\lambda_{t})} + ln(\lambda_{t-1}) * \beta, \sigma_{ln(\lambda_{t})})$  4. ENP calves: $ln(\lambda_{t}) \sim normal(\mu_{ln(\lambda_{t})} + C_{t} * \beta_{calves}, \sigma_{ln(\lambda_{t})})$  5. (PCFG) Calves only: $ln(\lambda_{t}) \sim normal(\mu_{ln(\lambda_{t})} + C_{t} * \beta_{calves}, \sigma_{ln(\lambda_{t})})$  6. (ENP) Strandings only: $ln(\lambda_{t}) \sim normal(\mu_{ln\lambda} + S_{t} * \beta_{strand}, \sigma_{ln\lambda})$  7. (PCFG) Calves + Strandings: $ln(\lambda_{t}) \sim normal(\mu_{ln(\lambda_{t})} + C_{t} * \beta_{calves} + S_{t} * \beta_{strand}, \sigma_{ln(\lambda_{t})})$  -->
-<p><span class="math inline">\(C_{t}\)</span> corresponds the number of calves in year <em>t</em> (either ENP or PCFG); <span class="math inline">\(S_{t}\)</span> corresponds to the number of ENP strandings in year <em>t</em>.</p>
-<section id="additional-prior-specifications" class="level3">
-<h3 class="anchored" data-anchor-id="additional-prior-specifications">Additional prior specifications</h3>
-<p>Where appropriate, the following weakly informative hyper-priors were implemented for both mean and scale parameters in the <span class="math inline">\(ln(\lambda)\)</span> priors.</p>
-<p><span class="math display">\[ \mu_{ln(\lambda)} \sim normal(0, 1) \]</span></p>
-<p><span class="math display">\[ \sigma_{ln(\lambda)} \sim lognormal(0, 1) \]</span></p>
-<p>Importantly, <span class="math inline">\(\sigma_{ln(\lambda_{t})}\)</span> is constrained to be positive. For models with beta coefficients (models 4 - 6), additional normal priors are specified for each coefficient, <em>i</em> (e.g., <span class="math inline">\(ln(\lambda_{t-1})\)</span>, ENP calves, PCFG calves, or number of strandings). At present, no hyper-priors were used for coefficients.</p>
-<p><span class="math display">\[ \beta_i \sim normal(0, 1) \]</span></p>
-</section>
-</section>
-<section id="section" class="level1">
-<h1></h1>
-</section>
-<section id="modeling-environment" class="level1">
-<h1><em>Modeling environment</em></h1>
-<p>All modeling was conducted using the package <code>cmdstanr</code> <span class="citation" data-cites="cmdstanr">(<a href="#ref-cmdstanr" role="doc-biblioref">Gabry et al. 2024</a>)</span> in <strong>R</strong> <span class="citation" data-cites="Rcore">(<a href="#ref-Rcore" role="doc-biblioref">R Core Team 2024</a>)</span> . Posterior sampling was performed using Hamiltonian Monte Carlo with three chains in parallel. The number of warmup (n<sub>i</sub> = 1000) and sampling iterations (n<sub>i</sub> = 1000) were kept at their defaults as these were adequate for sampling posterior distributions. Refer to the chain diagnostic summary <a href="supp_diagnostics.html">table</a> or the <a href="https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm">R code</a> for more details.</p>
-
-
-
-</section>
-
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
-<div id="ref-cmdstanr" class="csl-entry" role="listitem">
-Gabry, J., R. Češnovar, A. Johnson, and S. Bronder. 2024. <span>“Cmdstanr: R Interface to ’CmdStan’.”</span> <a href="https://mc-stan.org/cmdstanr/">https://mc-stan.org/cmdstanr/</a>.
+<section id="simulation-analysis-results" class="level2">
+<h2 class="anchored" data-anchor-id="simulation-analysis-results">Simulation analysis results</h2>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" aria-current="page">Projected trends</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Affect of Lambda</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Projected year 1</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Projected year 2</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-simulatedDecline_proj1yr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-simulatedDecline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="supp_simulation_files/figure-html/fig-simulatedDecline_proj1yr-1.png" class="img-fluid figure-img" width="3000">
 </div>
-<div id="ref-Rcore" class="csl-entry" role="listitem">
-R Core Team. 2024. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedDecline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (= 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. was varied to explore the how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
+</figcaption>
+</figure>
 </div>
-</div></section></div></main> <!-- /main -->
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-simulatedIncline_proj1yr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-simulatedIncline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="supp_simulation_files/figure-html/fig-simulatedIncline_proj1yr-1.png" class="img-fluid figure-img" width="3000">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedIncline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (= 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. was varied to explore the how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-simulatedDecline_proj2yr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-simulatedDecline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="supp_simulation_files/figure-html/fig-simulatedDecline_proj2yr-1.png" class="img-fluid figure-img" width="3000">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedDecline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (= 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. was varied to explore the how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-simulatedIncline_proj2yr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-simulatedIncline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="supp_simulation_files/figure-html/fig-simulatedIncline_proj2yr-1.png" class="img-fluid figure-img" width="3000">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedIncline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (= 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. was varied to explore the how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Decreasing Lambda</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Increasing Lambda</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-simulatedDecline_lambda" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-simulatedDecline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="supp_simulation_files/figure-html/fig-simulatedDecline_lambda-1.png" class="img-fluid figure-img" width="3000">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedDecline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;5: Mean difference between simulated and projected abundance (N) by , model, and projection interval. Error bars correspond 95% credible intervals.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-simulatedIncline_lambda" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-simulatedIncline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="supp_simulation_files/figure-html/fig-simulatedIncline_lambda-1.png" class="img-fluid figure-img" width="3000">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedIncline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;6: Mean difference between simulated and projected abundance (N) by , model, and projection interval. Error bars correspond 95% credible intervals.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
