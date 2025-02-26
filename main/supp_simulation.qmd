@@ -1,0 +1,183 @@
+---
+title: "A state-space model for projecting population abundance"
+---
+
+```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
+
+# Load required packages -------------------------------------------------------
+
+# Load required packages -------------------------------------------------------
+
+library(pacman)
+p_load(cmdstanr, tidyverse, here, tidybayes, brms, bayesplot, furrr)
+plan(multisession, workers = 4)
+
+# Closure thresholds
+threshold_N = 192    # Threshold on abundance below which a hunt is closed
+threshold_Nmin = 171 # Threshold on minimum abundance below which a hunt is closed
+
+#
+## Load simulation results
+#
+load(here("out", "SimulatedDecline_projections.dat"))
+summ_dec <- summ_proj
+
+load(here("out", "SimulatedIncline_projections.dat"))
+summ_inc <- summ_proj
+```
+
+## Simulation analysis results
+
+:::::: panel-tabset
+## Projected trends
+
+::: panel-tabset
+### Projected year 1
+
+```{r simulatedDecline_proj1yr, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
+#| label: fig-simulatedDecline_proj1yr
+#| fig-cap: "Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (\\lambda = 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. \\lambda was varied to explore the how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N~min~."
+ 
+summ_dec <- summ_dec %>%
+  filter(sim_lambda %in% c(seq(0.92, 0.98, by = 0.01))) %>%
+  mutate(
+    lambda = factor(sim_lambda, 
+                     levels = unique(sim_lambda), 
+                     labels = paste("lambda:", unique(sim_lambda)))
+  )
+ggplot(summ_dec %>% filter(proj_set == "1 yr"), aes(x = year, group = model)) +
+  geom_hline(yintercept = threshold_N) + 
+  geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
+  geom_ribbon(aes(ymin = percentile_20, ymax = percentile_80, fill = model), alpha = 0.2) +
+  geom_line(aes(y = meanN, color = model), alpha = 0.5) +
+  geom_point(aes(y = abundEst), color = 'black') +
+  scale_fill_manual(values = c("red", "black")) +
+  scale_color_manual(values = c("red", "black")) +
+  facet_wrap(~ lambda, nrow = 4, labeller = label_parsed) +
+  labs(x = "Year", "Abundance (N)") +
+  scale_x_continuous(limits = c(16, 25), breaks = 16:25) +
+  theme_bw()
+```
+
+```{r simulatedIncline_proj1yr, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
+#| label: fig-simulatedIncline_proj1yr
+#| fig-cap: "Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (\\lambda = 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. \\lambda was varied to explore the how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N~min~."
+ 
+summ_inc <- summ_inc %>%
+  filter(sim_lambda %in% c(seq(1.02, 1.08, by = 0.01))) %>%
+  mutate(
+    lambda = factor(sim_lambda, 
+                    levels = unique(sim_lambda), 
+                    labels = paste("lambda:", unique(sim_lambda)))
+  )
+ggplot(summ_inc %>% filter(proj_set == "1 yr"), aes(x = year, group = model)) +
+  geom_hline(yintercept = threshold_N) + 
+  geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
+  geom_ribbon(aes(ymin = percentile_20, ymax = percentile_80, fill = model), alpha = 0.2) +
+  geom_line(aes(y = meanN, color = model), alpha = 0.5) +
+  geom_point(aes(y = abundEst), color = 'black') +
+  scale_fill_manual(values = c("red", "black")) +
+  scale_color_manual(values = c("red", "black")) +
+  facet_wrap(~ lambda, nrow = 4, labeller = label_parsed) +
+  labs(x = "Year", "Abundance (N)") +
+  scale_x_continuous(limits = c(16, 25), breaks = 16:25) +
+  theme_bw()
+```
+
+### Projected year 2
+
+```{r simulatedDecline_proj2yr, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
+#| label: fig-simulatedDecline_proj2yr
+#| fig-cap: "Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (\\lambda = 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. \\lambda was varied to explore the how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N~min~."
+ 
+ggplot(summ_dec %>% filter(proj_set == "2 yr"), aes(x = year, group = model)) +
+  geom_hline(yintercept = threshold_N) + 
+  geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
+  geom_ribbon(aes(ymin = percentile_20, ymax = percentile_80, fill = model), alpha = 0.2) +
+  geom_line(aes(y = meanN, color = model), alpha = 0.5) +
+  geom_point(aes(y = abundEst), color = 'black') +
+  scale_fill_manual(values = c("red", "black")) +
+  scale_color_manual(values = c("red", "black")) +
+  facet_wrap(~ lambda, nrow = 4, labeller = label_parsed) +
+  labs(x = "Year", "Abundance (N)") +
+  scale_x_continuous(limits = c(16, 25), breaks = 16:25) +
+  theme_bw()
+```
+
+```{r simulatedIncline_proj2yr, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
+#| label: fig-simulatedIncline_proj2yr
+#| fig-cap: "Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (\\lambda = 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. \\lambda was varied to explore the how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N~min~."
+ 
+ggplot(summ_inc %>% filter(proj_set == "2 yr"), aes(x = year, group = model)) +
+  geom_hline(yintercept = threshold_N) + 
+  geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
+  geom_ribbon(aes(ymin = percentile_20, ymax = percentile_80, fill = model), alpha = 0.2) +
+  geom_line(aes(y = meanN, color = model), alpha = 0.5) +
+  geom_point(aes(y = abundEst), color = 'black') +
+  scale_fill_manual(values = c("red", "black")) +
+  scale_color_manual(values = c("red", "black")) +
+  facet_wrap(~ lambda, nrow = 4, labeller = label_parsed) +
+  labs(x = "Year", "Abundance (N)") +
+  scale_x_continuous(limits = c(16, 25), breaks = 16:25) +
+  theme_bw()
+```
+
+:::
+
+## Affect of Lambda
+
+:::: {.panel-tabset}
+### Decreasing Lambda
+
+```{r simulatedDecline_lambda, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
+#| label: fig-simulatedDecline_lambda
+#| fig-cap: "Mean difference between simulated and projected abundance (N) by \\lambda, model, and projection interval. Error bars correspond 95% credible intervals."
+ 
+summ_diff <- summ_dec %>%
+  group_by(sim_lambda, proj_set, model) %>%
+  summarize(
+    mnDiffN = mean(meanN - abundEst),
+    sdDiffN = sd(meanN - abundEst),
+    lo_ci = quantile(meanN - abundEst, 0.025),
+    hi_ci = quantile(meanN - abundEst, 0.975),
+    mnPercentileN = mean(percentile_abundEstN)
+  )
+
+ggplot(summ_diff, aes(x = sim_lambda, y = mnDiffN, group = model, color = model)) + 
+  geom_errorbar(aes(ymin = lo_ci, ymax = hi_ci), width = 0.001, position = position_dodge(width = 0.001)) +
+  geom_line(position = position_dodge(width = 0.001)) +
+  geom_point(position = position_dodge(width = 0.001)) +
+  scale_color_manual(values = c("red", "black")) +
+  labs(y = "Mean difference in Abundance", x = expression(Simulated~lambda)) +
+  facet_wrap(~proj_set, ncol = 1) +
+  theme_bw()
+```
+
+### Increasing Lambda
+
+```{r simulatedIncline_lambda, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
+#| label: fig-simulatedIncline_lambda
+#| fig-cap: "Mean difference between simulated and projected abundance (N) by \\lambda, model, and projection interval. Error bars correspond 95% credible intervals."
+ 
+summ_diff <- summ_inc %>%
+  group_by(sim_lambda, proj_set, model) %>%
+  summarize(
+    mnDiffN = mean(meanN - abundEst),
+    sdDiffN = sd(meanN - abundEst),
+    lo_ci = quantile(meanN - abundEst, 0.025),
+    hi_ci = quantile(meanN - abundEst, 0.975),
+    mnPercentileN = mean(percentile_abundEstN)
+  )
+
+ggplot(summ_diff, aes(x = sim_lambda, y = mnDiffN, group = model, color = model)) + 
+  geom_errorbar(aes(ymin = lo_ci, ymax = hi_ci), width = 0.001, position = position_dodge(width = 0.001)) +
+  geom_line(position = position_dodge(width = 0.001)) +
+  geom_point(position = position_dodge(width = 0.001)) +
+  scale_color_manual(values = c("red", "black")) +
+  labs(y = "Mean difference in Abundance", x = expression(Simulated~lambda)) +
+  facet_wrap(~proj_set, ncol = 1) +
+  theme_bw()
+```
+
+::::
+::::::

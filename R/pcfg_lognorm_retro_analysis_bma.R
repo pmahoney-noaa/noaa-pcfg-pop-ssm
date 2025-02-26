@@ -109,13 +109,13 @@ f_pcfg_base <- here::here('STAN', 'pcfg_lognorm_base.stan')
 f_pcfg_ar1v1 <- here::here('STAN', 'pcfg_lognorm_ar1_v1.stan')
 f_pcfg_enp <- here::here('STAN', 'pcfg_lognorm_enp_calves.stan')
 f_pcfg_covs <- here::here('STAN', 'pcfg_lognorm_covs.stan')
-model_names <- factor(c("Base", "AR1v1", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"),
-                      levels = c("Base", "AR1v1", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"),
-                      labels = c("Base", "AR1", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
+model_names <- factor(c("Base", "AR1v1", "ENP Calves", "Calves only"), #, "Strandings only", "Calves/Strandings"),
+                      levels = c("Base", "AR1v1", "ENP Calves", "Calves only"), #, "Strandings only", "Calves/Strandings"),
+                      labels = c("Base", "AR1", "ENP Calves","PCFG Calves only"))#, "ENP Strandings only", "PCFG Calves + ENP Strandings"))
 
 # Model file pointers
 models <- list(f_pcfg_base, f_pcfg_ar1v1, #f_pcfg_ar1v2, 
-               f_pcfg_enp, f_pcfg_covs, f_pcfg_covs, f_pcfg_covs)
+               f_pcfg_enp, f_pcfg_covs)#, f_pcfg_covs, f_pcfg_covs)
 
 
 
@@ -152,7 +152,7 @@ purrr::map(Y_retro, function(y) {
   
   init_data <- list(
     init_pcfg_data, init_pcfg_data, init_pcfg_data, #init_pcfg_data,
-    init_pcfg_data_calves, init_pcfg_data_strandings, init_pcfg_data
+    init_pcfg_data_calves#, init_pcfg_data_strandings, init_pcfg_data
   )
   
   # Compile models (if they haven't been)
@@ -264,105 +264,35 @@ N_eval_retro_ma_weights <- purrr::imap_dfr(N_eval_retro_ma, ~ .x$weights)
 N_eval_retro_summ_ma <- purrr::imap_dfr(N_eval_retro_ma, ~ .x$summary %>% mutate(start_year = .y))
 
 # save output for use in Quarto docs
-save(N_eval_retro_summ, file = here("out", paste0("TruncatedRetroSummary_2025", ".dat")))
+save(N_eval_retro_summ, file = here("out", paste0("TruncatedRetroSummary_BMA_2025", ".dat")))
 
-(N_eval_summary_proj1yr <- N_eval_retro_summ %>%
+(N_eval_summary_proj1yr <- N_eval_retro_summ_ma %>%
   filter(proj_set == "1 yr" & year != 2023) %>%
-  filter(year > 2014) %>%
   group_by(model) %>%
   summarize(
     mnRSS = mean(rss),
     mdRSS = median(rss),
-    mnPercentile_abundEstN = mean(percentile_abundEstN),
-    mdPercentile_abundEstN = median(percentile_abundEstN),
-    mnProp_below_threshold = mean(prop_below_threshold),
-    mdProp_below_threshold = median(prop_below_threshold),
+    # mnPercentile_abundEstN = mean(percentile_abundEstN),
+    # mdPercentile_abundEstN = median(percentile_abundEstN),
+    # mnProp_below_threshold = mean(prop_below_threshold),
+    # mdProp_below_threshold = median(prop_below_threshold),
     Nclosures = sum(closure),
     closure_years = paste(cur_data()$year[closure == T], collapse = ",")
   ) %>%
   arrange(mnRSS))
 
-(N_eval_summary_proj2yr <- N_eval_retro_summ %>%
+(N_eval_summary_proj2yr <- N_eval_retro_summ_ma %>%
   filter(proj_set == "2 yr" & year != 2023) %>%
-  filter(year > 2014) %>%
   group_by(model) %>%
   summarize(
     mnRSS = mean(rss),
     mdRSS = median(rss),
-    mnPercentile_abundEstN = mean(percentile_abundEstN),
-    mdPercentile_abundEstN = median(percentile_abundEstN),
-    mnProp_below_threshold = mean(prop_below_threshold),
-    mdProp_below_threshold = median(prop_below_threshold),
+    # mnPercentile_abundEstN = mean(percentile_abundEstN),
+    # mdPercentile_abundEstN = median(percentile_abundEstN),
+    # mnProp_below_threshold = mean(prop_below_threshold),
+    # mdProp_below_threshold = median(prop_below_threshold),
     Nclosures = sum(closure),
     closure_years = paste(cur_data()$year[closure == T], collapse = ",")
   ) %>%
   arrange(mnRSS))
-
-
-# Figure
-N_eval_table <- N_eval_retro_summ %>%
-  filter(year >= 2007 & year != 2023) %>%
-  mutate(model = factor(model, 
-                        levels = c("Base", "AR1v1", "AR1v2", "Calves/Strandings", 
-                                   "Calves only", "Strandings only", "ENP Calves")))
-tidy_plot_retroPred(N_eval_table, ylims = c(0, 500), truncated_retro = T)
-
-
-# Relative model performance x time series length
-
-(N_eval_summary_startYear <- N_eval_retro_summ %>%
-    filter(proj_set == "1 yr" & year != 2023 & start_year > 1) %>%
-    group_by(model, start_year) %>%
-    summarize(
-      mnRSS = mean(rss),
-      #mdRSS = median(rss),
-      mnPercentile_abundEstN = mean(percentile_abundEstN),
-      mdPercentile_abundEstN = median(percentile_abundEstN),
-      mnProp_below_threshold = mean(prop_below_threshold),
-      mdProp_below_threshold = median(prop_below_threshold),
-      Nclosures = sum(closure),
-      closure_years = paste(cur_data()$year[closure == T], collapse = ",")
-    ))
-
-Retro_eval <- N_eval_summary_startYear %>%
-  ungroup() %>%
-  mutate(
-    scRSS = (mnRSS - mean(mnRSS)) / sd(mnRSS)
-  )
-
-ggplot(Retro_eval, aes(x = start_year, y = mnRSS, group = model, color = model)) +
-  geom_point() +
-  geom_line() +
-  scale_y_continuous(limits = c(0, 5000), oob = scales::squish) +
-  #scale_y_continuous(limits = c(-0.7, 3), oob = scales::squish) +
-  theme_bw()
-
-(N_eval_summary_startYear <- N_eval_retro_summ %>%
-    filter(proj_set == "2 yr" & year != 2023 & start_year > 1) %>%
-    group_by(model, start_year) %>%
-    summarize(
-      mnRSS = mean(rss),
-      #mdRSS = median(rss),
-      mnPercentile_abundEstN = mean(percentile_abundEstN),
-      mdPercentile_abundEstN = median(percentile_abundEstN),
-      mnProp_below_threshold = mean(prop_below_threshold),
-      mdProp_below_threshold = median(prop_below_threshold),
-      Nclosures = sum(closure),
-      closure_years = paste(cur_data()$year[closure == T], collapse = ",")
-    ))
-
-Retro_eval <- N_eval_summary_startYear %>%
-  ungroup() %>%
-  mutate(
-    scRSS = (mnRSS - mean(mnRSS)) / sd(mnRSS)
-  )
-
-ggplot(Retro_eval, aes(x = start_year, y = mnRSS, group = model, color = model)) +
-  geom_point() +
-  geom_line() +
-  scale_y_continuous(limits = c(-1, 10000), oob = scales::squish) +
-  #scale_y_continuous(limits = c(-0.4, 0), oob = scales::squish) +
-  theme_bw()
-
-# Diagnostic summary -----------------------------------------------------------
 
