@@ -181,6 +181,12 @@ div.csl-indent {
  <span class="menu-text">Model diagnostics</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./supp_simulation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Simulation analysis</span></a>
+  </div>
+</li>
       </ul>
   </li>
         <li class="sidebar-item">
@@ -200,7 +206,7 @@ div.csl-indent {
    
   <ul>
   <li><a href="#intent" id="toc-intent" class="nav-link active" data-scroll-target="#intent"><em>Intent</em></a></li>
-  <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link" data-scroll-target="#executive-summary"><em>EXECUTIVE SUMMARY</em></a>
+  <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link" data-scroll-target="#executive-summary"><em>Executive summary</em></a>
   <ul class="collapse">
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><em>References</em></a></li>
   </ul></li>
@@ -229,9 +235,18 @@ div.csl-indent {
 </header>
 
 
-<p>Contributors: <em>Peter J. Mahoney<sup>1</sup>, contributor placeholder</em></p>
-<section id="nmfs-alaska-fisheries-science-center-marine-mammal-laboratory-seattle-wa-poc-wemail" class="level5">
-<h5 class="anchored" data-anchor-id="nmfs-alaska-fisheries-science-center-marine-mammal-laboratory-seattle-wa-poc-wemail"><sup>1</sup>NMFS Alaska Fisheries Science Center, Marine Mammal Laboratory, Seattle, WA (POC W/EMAIL)</h5>
+<p>Contributors: <em>Peter J. Mahoney<sup>1*</sup>, John R. Brandon<sup>2</sup>, Jonathon Scordino<sup>3</sup></em></p>
+<section id="nmfs-alaska-fisheries-science-center-marine-mammal-laboratory-seattle-wa" class="level5">
+<h5 class="anchored" data-anchor-id="nmfs-alaska-fisheries-science-center-marine-mammal-laboratory-seattle-wa"><sup>1</sup>NMFS Alaska Fisheries Science Center, Marine Mammal Laboratory, Seattle, WA</h5>
+</section>
+<section id="section" class="level5">
+<h5 class="anchored" data-anchor-id="section"><sup>2</sup></h5>
+</section>
+<section id="section-1" class="level5">
+<h5 class="anchored" data-anchor-id="section-1"><sup>3</sup></h5>
+</section>
+<section id="poc-peter.mahoneynoaa.gov" class="level5">
+<h5 class="anchored" data-anchor-id="poc-peter.mahoneynoaa.gov">*POC: peter.mahoney@noaa.gov</h5>
 </section>
 <section id="intent" class="level1">
 <h1><em>Intent</em></h1>
@@ -240,8 +255,8 @@ div.csl-indent {
 FIGURE/IMAGE PLACEHOLDER</p>
 </section>
 <section id="executive-summary" class="level1">
-<h1><em>EXECUTIVE SUMMARY</em></h1>
-<p>PLACEHOLDER (PLAIN LANGUAGE INCLUDING MODEL SELECTION; PASS PAPER ON BAYESIAN STACKING TO DIANA)</p>
+<h1><em>Executive summary</em></h1>
+<p>PLACEHOLDER (PLAIN LANGUAGE INCLUDING MODEL SELECTION)</p>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references"><em>References</em></h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
@@ -344,7 +359,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
-      var filterRegex = new RegExp("https:\/\/pmahoney-noaa\.github\.io\/noaa-pcfg-pop-ssm\/");
+      var filterRegex = new RegExp('/' + window.location.host + '/');
     var isInternal = (href) => {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }

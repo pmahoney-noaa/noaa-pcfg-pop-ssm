@@ -3,9 +3,15 @@ title: "A state-space model for projecting population abundance"
 bibliography: references.bib
 ---
 
-Contributors: *Peter J. Mahoney^1^, contributor placeholder*
+Contributors: *Peter J. Mahoney^1\*^, John R. Brandon^2^, Jonathon Scordino^3^*
 
-##### ^1^NMFS Alaska Fisheries Science Center, Marine Mammal Laboratory, Seattle, WA (POC W/EMAIL)
+##### ^1^NMFS Alaska Fisheries Science Center, Marine Mammal Laboratory, Seattle, WA
+
+##### ^2^
+
+##### ^3^
+
+##### \*POC: peter.mahoney\@noaa.gov
 
 # *Intent*
 
@@ -14,7 +20,7 @@ The abundance of gray whales within the Pacific Coast Feeding Group (PCFG) - a s
 \
 FIGURE/IMAGE PLACEHOLDER
 
-# *EXECUTIVE SUMMARY*
+# *Executive summary*
 
 PLACEHOLDER (PLAIN LANGUAGE INCLUDING MODEL SELECTION)
 

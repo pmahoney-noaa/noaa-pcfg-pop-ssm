@@ -109,13 +109,13 @@ f_pcfg_base <- here::here('STAN', 'pcfg_lognorm_base.stan')
 f_pcfg_ar1v1 <- here::here('STAN', 'pcfg_lognorm_ar1_v1.stan')
 f_pcfg_enp <- here::here('STAN', 'pcfg_lognorm_enp_calves.stan')
 f_pcfg_covs <- here::here('STAN', 'pcfg_lognorm_covs.stan')
-model_names <- factor(c("Base", "AR1v1", "ENP Calves", "Calves only"), #, "Strandings only", "Calves/Strandings"),
-                      levels = c("Base", "AR1v1", "ENP Calves", "Calves only"), #, "Strandings only", "Calves/Strandings"),
-                      labels = c("Base", "AR1", "ENP Calves","PCFG Calves only"))#, "ENP Strandings only", "PCFG Calves + ENP Strandings"))
+model_names <- factor(c("Base", "AR1v1", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"),
+                      levels = c("Base", "AR1v1", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"),
+                      labels = c("Base", "AR1", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
 
 # Model file pointers
 models <- list(f_pcfg_base, f_pcfg_ar1v1, #f_pcfg_ar1v2, 
-               f_pcfg_enp, f_pcfg_covs)#, f_pcfg_covs, f_pcfg_covs)
+               f_pcfg_enp, f_pcfg_covs, f_pcfg_covs, f_pcfg_covs)
 
 
 
@@ -152,7 +152,7 @@ purrr::map(Y_retro, function(y) {
   
   init_data <- list(
     init_pcfg_data, init_pcfg_data, init_pcfg_data, #init_pcfg_data,
-    init_pcfg_data_calves#, init_pcfg_data_strandings, init_pcfg_data
+    init_pcfg_data_calves, init_pcfg_data_strandings, init_pcfg_data
   )
   
   # Compile models (if they haven't been)
@@ -169,7 +169,7 @@ purrr::map(Y_retro, function(y) {
     adapt_delta = 0.99
   ))
   
-  save(mfit, file = here("out", paste0("Harris_2025_retro_y", y, "_bma.dat")))
+  save(mfit, file = here("out", paste0("Harris_2025_retro_y", y, "_cbma.dat")))
 })
 
 
@@ -264,7 +264,7 @@ N_eval_retro_ma_weights <- purrr::imap_dfr(N_eval_retro_ma, ~ .x$weights)
 N_eval_retro_summ_ma <- purrr::imap_dfr(N_eval_retro_ma, ~ .x$summary %>% mutate(start_year = .y))
 
 # save output for use in Quarto docs
-save(N_eval_retro_summ, file = here("out", paste0("TruncatedRetroSummary_BMA_2025", ".dat")))
+save(N_eval_retro_summ_ma, file = here("out", paste0("TruncatedRetroSummary_BMA_2025", ".dat")))
 
 (N_eval_summary_proj1yr <- N_eval_retro_summ_ma %>%
   filter(proj_set == "1 yr" & year != 2023) %>%
