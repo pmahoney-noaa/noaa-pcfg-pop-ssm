@@ -38,7 +38,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-e2132ecb7661c51165ef74b6a36c7b8f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6bb8e303458870ece33a90b1c6bb7f0a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -154,7 +154,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Intent and summary</span></a>
+ <span class="menu-text">Executive summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -217,11 +217,11 @@ window.Quarto = {
   <li><a href="#model-results" id="toc-model-results" class="nav-link active" data-scroll-target="#model-results"><em>Model results</em></a>
   <ul class="collapse">
   <li><a href="#coefficient-estimates" id="toc-coefficient-estimates" class="nav-link" data-scroll-target="#coefficient-estimates">Coefficient estimates</a></li>
-  <li><a href="#leave-one-out-cross-validation-loo" id="toc-leave-one-out-cross-validation-loo" class="nav-link" data-scroll-target="#leave-one-out-cross-validation-loo">Leave-one-out Cross Validation (LOO)</a></li>
-  <li><a href="#predictive-accuracy-with-retrospection" id="toc-predictive-accuracy-with-retrospection" class="nav-link" data-scroll-target="#predictive-accuracy-with-retrospection">Predictive accuracy with retrospection</a>
+  <li><a href="#leave-one-out" id="toc-leave-one-out" class="nav-link" data-scroll-target="#leave-one-out">Leave-one-out Cross Validation (LOO)</a></li>
+  <li><a href="#retrospective" id="toc-retrospective" class="nav-link" data-scroll-target="#retrospective">Predictive accuracy with retrospection</a>
   <ul class="collapse">
-  <li><a href="#model-fits-derived-from-truncated-time-series" id="toc-model-fits-derived-from-truncated-time-series" class="nav-link" data-scroll-target="#model-fits-derived-from-truncated-time-series"><em>Model fits derived from truncated time series</em></a></li>
-  <li><a href="#model-fits-derived-from-full-time-series" id="toc-model-fits-derived-from-full-time-series" class="nav-link" data-scroll-target="#model-fits-derived-from-full-time-series"><em>Model fits derived from full time series</em></a></li>
+  <li><a href="#model-fits-trunc" id="toc-model-fits-trunc" class="nav-link" data-scroll-target="#model-fits-trunc"><em>Model fits derived from truncated time series</em></a></li>
+  <li><a href="#model-fits-full" id="toc-model-fits-full" class="nav-link" data-scroll-target="#model-fits-full"><em>Model fits derived from full time series</em></a></li>
   </ul></li>
   </ul></li>
   <li><a href="#model-predicted-population-trends" id="toc-model-predicted-population-trends" class="nav-link" data-scroll-target="#model-predicted-population-trends"><em>Model-predicted population trends</em></a>
@@ -345,8 +345,8 @@ Table&nbsp;1: Coefficient estimates for models with coefficients on log <span cl
 </div>
 </div>
 </section>
-<section id="leave-one-out-cross-validation-loo" class="level2">
-<h2 class="anchored" data-anchor-id="leave-one-out-cross-validation-loo">Leave-one-out Cross Validation (LOO)</h2>
+<section id="leave-one-out" class="level2">
+<h2 class="anchored" data-anchor-id="leave-one-out">Leave-one-out Cross Validation (LOO)</h2>
 <p><a href="#tbl-loo" class="quarto-xref">Table&nbsp;2</a> provides estimates of model fit using an information criterion (leave-one-out information criterion; <em>looic</em>) based on leave-one-out cross validation. Models with the lowest <span class="math inline">\(looic\)</span> value are considered the best fitting model given the time series of abundance data used to fit the model. <span class="math inline">\(\Delta looic\)</span> represents the difference in <span class="math inline">\(looic\)</span> relative to the model with the lowest <span class="math inline">\(looic\)</span>.</p>
 <div class="cell">
 <div id="tbl-loo" class="cell quarto-float quarto-figure quarto-figure-center anchored">
@@ -438,13 +438,13 @@ Table&nbsp;2: Derived estimates of model fit using an information criterion base
 </div>
 </div>
 </section>
-<section id="predictive-accuracy-with-retrospection" class="level2">
-<h2 class="anchored" data-anchor-id="predictive-accuracy-with-retrospection">Predictive accuracy with retrospection</h2>
+<section id="retrospective" class="level2">
+<h2 class="anchored" data-anchor-id="retrospective">Predictive accuracy with retrospection</h2>
 <p>Given that prediction was the primary objective of this exercise, we evaluated the ability of each model to retrospectively predict a “future”, known population abundance using the PCFG abundance time series from <span class="citation" data-cites="harrisPCFG2022">[@harrisPCFG2022]</span>. Predicting future states, or “forecasting”, is notoriously challenging particularly as we project further into the future. However, within this system, data gaps of one or two years represent the most plausible scenarios managers are likely to encounter, providing the basis for our evaluation. In addition, we anticipated relative performance within model sets was likely to vary as we projected further into the future. Thus, in order to document a potential shift in model support in relation to projection length, we evaluated predictive performance when projecting one and two years separately. Finally, we evaluated predictive performance using models fitted to both truncated and complete abundance time series. The latter provides the best available knowledge of the system for model fitting, but might bias retrospective evaluations of predictive performance due to information “spillover” from future observed population states. The former can become data limited and select for overly simplistic models.</p>
 <p>All time series used in model fitting started with estimates from 2002, but varied in their end point. In the case of truncated times series, we fit each of the six specified models to multiple time series with varying end points from 2013 through 2021, providing projected abundance estimates for years 2014 through 2022. Notably, we evaluated endpoints between 2006 and 2012, but these shorter time series were inadequate for model convergence. In the case of the complete time series, we fit all seven models to a single time series representing abundance data from 2002 through 2022. Model parameters were then used to retrospectively project abundance forward one or two years from 2002 through 2021, providing projected abundance estimates for years 2003 through 2022.</p>
 <p>In all cases, projected estimates were then compared to “observed” abundance in the same year using residual sum of squares (RSS), 60% and 95% credible intervals, and whether an estimate dropped below threshold resulting in a presumed hunt closure. Predictive fits were summarized by one or two year projection lengths.</p>
-<section id="model-fits-derived-from-truncated-time-series" class="level3">
-<h3 class="anchored" data-anchor-id="model-fits-derived-from-truncated-time-series"><em>Model fits derived from truncated time series</em></h3>
+<section id="model-fits-trunc" class="level3">
+<h3 class="anchored" data-anchor-id="model-fits-trunc"><em>Model fits derived from truncated time series</em></h3>
 <p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-tRetro1summ" class="quarto-xref">Table&nbsp;3</a>) or two years forward (<a href="#tbl-tRetro2summ" class="quarto-xref">Table&nbsp;4</a>) from all data years between 2013 and 2021. RSS is the residual sum of squares.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Projected year 1 (Table 3)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Projected year 2 (Table 4)</a></li></ul>
@@ -677,8 +677,8 @@ Figure&nbsp;1: The predictive fits when abundance was projected forward one (top
 </div>
 </div>
 </section>
-<section id="model-fits-derived-from-full-time-series" class="level3">
-<h3 class="anchored" data-anchor-id="model-fits-derived-from-full-time-series"><em>Model fits derived from full time series</em></h3>
+<section id="model-fits-full" class="level3">
+<h3 class="anchored" data-anchor-id="model-fits-full"><em>Model fits derived from full time series</em></h3>
 <p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-retro1summ" class="quarto-xref">Table&nbsp;5</a>) or two years forward (<a href="#tbl-retro2summ" class="quarto-xref">Table&nbsp;6</a>) for all data years from 2002 through 2021.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Projected year 1 (Table 5)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Projected year 2 (Table 6)</a></li></ul>
@@ -925,12 +925,12 @@ Table&nbsp;7: Model weights…
 <tr class="odd">
 <td style="text-align: left;">Base</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.141</td>
+<td style="text-align: center;">0.142</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">AR1</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: center;">0.339</td>
+<td style="text-align: center;">0.346</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ENP Calves</td>
@@ -940,17 +940,17 @@ Table&nbsp;7: Model weights…
 <tr class="even">
 <td style="text-align: left;">PCFG Calves only</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.142</td>
+<td style="text-align: center;">0.141</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ENP Strandings only</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.177</td>
+<td style="text-align: center;">0.173</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PCFG Calves + ENP Strandings</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.113</td>
+<td style="text-align: center;">0.109</td>
 </tr>
 </tbody>
 </table>
@@ -995,22 +995,22 @@ Table&nbsp;8: Model weights…without ENP strandings.
 <tr class="odd">
 <td style="text-align: left;">Base</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.196</td>
+<td style="text-align: center;">0.198</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">AR1</td>
 <td style="text-align: center;">1</td>
-<td style="text-align: center;">0.481</td>
+<td style="text-align: center;">0.477</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ENP Calves</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.126</td>
+<td style="text-align: center;">0.125</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PCFG Calves only</td>
 <td style="text-align: center;">0</td>
-<td style="text-align: center;">0.197</td>
+<td style="text-align: center;">0.200</td>
 </tr>
 </tbody>
 </table>
@@ -1087,7 +1087,7 @@ Table&nbsp;9: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based
 </tr>
 <tr class="odd">
 <td style="text-align: left;">Model-averaged estimate</td>
-<td style="text-align: center;">211.4</td>
+<td style="text-align: center;">211.2</td>
 <td style="text-align: center;">186.6</td>
 </tr>
 </tbody>

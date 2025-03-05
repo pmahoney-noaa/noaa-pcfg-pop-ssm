@@ -38,7 +38,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-e2132ecb7661c51165ef74b6a36c7b8f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-6bb8e303458870ece33a90b1c6bb7f0a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -67,6 +67,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -125,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Intent and summary</span></a>
+ <span class="menu-text">Executive summary</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -185,7 +214,7 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#simulation-analysis-results" id="toc-simulation-analysis-results" class="nav-link active" data-scroll-target="#simulation-analysis-results">Simulation analysis results</a></li>
+  <li><a href="#simulation" id="toc-simulation" class="nav-link active" data-scroll-target="#simulation">Simulation analysis results</a></li>
   </ul>
 </nav>
     </div>
@@ -211,8 +240,8 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="simulation-analysis-results" class="level2">
-<h2 class="anchored" data-anchor-id="simulation-analysis-results">Simulation analysis results</h2>
+<section id="simulation" class="level2">
+<h2 class="anchored" data-anchor-id="simulation">Simulation analysis results</h2>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true" aria-current="page">Projected trends</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Affect of Lambda</a></li></ul>
 <div class="tab-content">
@@ -221,63 +250,79 @@ ul.task-list li input[type="checkbox"] {
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Projected year 1</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Projected year 2</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div id="sf-simulatedDecline_proj1yr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-sf figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-sf" id="sf-simulatedDecline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure C1: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (<span class="math inline">\(\lambda\)</span> = 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. <span class="math inline">\(\lambda\)</span> was varied to explore the how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
+</figcaption>
+<div aria-describedby="sf-simulatedDecline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-simulatedDecline_proj1yr" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-simulatedDecline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="supp_simulation_files/figure-html/fig-simulatedDecline_proj1yr-1.png" class="img-fluid figure-img" width="3000">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedDecline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (= 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. was varied to explore the how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="supp_simulation_files/figure-html/simulatedDecline_proj1yr-1.png" class="img-fluid figure-img" width="3000"></p>
 </figure>
 </div>
 </div>
 </div>
+</div>
+</figure>
+</div>
+<div id="sf-simulatedIncline_proj1yr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-sf figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-sf" id="sf-simulatedIncline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure C2: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (<span class="math inline">\(\lambda\)</span> = 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. <span class="math inline">\(\lambda\)</span> was varied to explore the how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
+</figcaption>
+<div aria-describedby="sf-simulatedIncline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-simulatedIncline_proj1yr" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-simulatedIncline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="supp_simulation_files/figure-html/fig-simulatedIncline_proj1yr-1.png" class="img-fluid figure-img" width="3000">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedIncline_proj1yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (= 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. was varied to explore the how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="supp_simulation_files/figure-html/simulatedIncline_proj1yr-1.png" class="img-fluid figure-img" width="3000"></p>
 </figure>
 </div>
 </div>
+</div>
+</div>
+</figure>
 </div>
 </div>
 <div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div id="sf-simulatedDecline_proj2yr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-sf figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-sf" id="sf-simulatedDecline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure C3: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (<span class="math inline">\(\lambda\)</span> = 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. <span class="math inline">\(\lambda\)</span> was varied to explore the how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
+</figcaption>
+<div aria-describedby="sf-simulatedDecline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-simulatedDecline_proj2yr" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-simulatedDecline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="supp_simulation_files/figure-html/fig-simulatedDecline_proj2yr-1.png" class="img-fluid figure-img" width="3000">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedDecline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (= 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. was varied to explore the how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="supp_simulation_files/figure-html/simulatedDecline_proj2yr-1.png" class="img-fluid figure-img" width="3000"></p>
 </figure>
 </div>
 </div>
 </div>
+</div>
+</figure>
+</div>
+<div id="sf-simulatedIncline_proj2yr" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-sf figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-sf" id="sf-simulatedIncline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure C4: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (<span class="math inline">\(\lambda\)</span> = 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. <span class="math inline">\(\lambda\)</span> was varied to explore the how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
+</figcaption>
+<div aria-describedby="sf-simulatedIncline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-simulatedIncline_proj2yr" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-simulatedIncline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="supp_simulation_files/figure-html/fig-simulatedIncline_proj2yr-1.png" class="img-fluid figure-img" width="3000">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedIncline_proj2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable (= 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. was varied to explore the how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N<sub>min</sub>.
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="supp_simulation_files/figure-html/simulatedIncline_proj2yr-1.png" class="img-fluid figure-img" width="3000"></p>
 </figure>
 </div>
 </div>
+</div>
+</div>
+</figure>
 </div>
 </div>
 </div>
@@ -288,35 +333,43 @@ Figure&nbsp;4: Results from a simulation analysis evaluating the predictive accu
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Decreasing Lambda</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Increasing Lambda</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div id="sf-simulatedDecline_lambda" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-sf figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-sf" id="sf-simulatedDecline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure C5: Mean difference between simulated and projected abundance (N) by <span class="math inline">\(\lambda\)</span>, model, and projection interval. Error bars correspond 95% credible intervals.
+</figcaption>
+<div aria-describedby="sf-simulatedDecline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-simulatedDecline_lambda" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-simulatedDecline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="supp_simulation_files/figure-html/fig-simulatedDecline_lambda-1.png" class="img-fluid figure-img" width="3000">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedDecline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Mean difference between simulated and projected abundance (N) by , model, and projection interval. Error bars correspond 95% credible intervals.
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="supp_simulation_files/figure-html/simulatedDecline_lambda-1.png" class="img-fluid figure-img" width="3000"></p>
 </figure>
 </div>
 </div>
+</div>
+</div>
+</figure>
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div id="sf-simulatedIncline_lambda" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-sf figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-sf" id="sf-simulatedIncline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure C6: Mean difference between simulated and projected abundance (N) by <span class="math inline">\(\lambda\)</span>, model, and projection interval. Error bars correspond 95% credible intervals.
+</figcaption>
+<div aria-describedby="sf-simulatedIncline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell">
 <div class="cell-output-display">
-<div id="fig-simulatedIncline_lambda" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure">
-<div aria-describedby="fig-simulatedIncline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="supp_simulation_files/figure-html/fig-simulatedIncline_lambda-1.png" class="img-fluid figure-img" width="3000">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-simulatedIncline_lambda-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;6: Mean difference between simulated and projected abundance (N) by , model, and projection interval. Error bars correspond 95% credible intervals.
-</figcaption>
+<div>
+<figure class="figure">
+<p><img src="supp_simulation_files/figure-html/simulatedIncline_lambda-1.png" class="img-fluid figure-img" width="3000"></p>
 </figure>
 </div>
 </div>
+</div>
+</div>
+</figure>
 </div>
 </div>
 </div>
