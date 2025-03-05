@@ -1,9 +1,12 @@
 ---
 title: "A state-space model for projecting population abundance"
-crossref: 
-  tbl-title: "Table"
-  tbl-prefix: "Table"
-  title-delim: ":"
+crossref:
+  custom:
+    - kind: float
+      key: st
+      reference-prefix: Table B
+      space-before-numbering: false
+      caption-location: top
 bibliography: references.bib
 ---
 
@@ -21,12 +24,11 @@ load(here("out", "mfits.RData"))
 
 # Model fitting diagnostics
 
-All modeling was conducted using the R package `cmdstanr` [@cmdstanr]. Posterior sampling was performed using Hamiltonian Monte Carlo with three chains in parallel. The number of warmup (n~i~ = 1000) and sampling iterations (n~i~ = 1000) were kept at their defaults as these were adequate for sampling posterior distributions. @tbl-diags provides a summary of chain-specific diagnostics by model specification. Chains with few to no divergences (Number Divergent) and that do not hit maximum tree depth (Number Max Treedepth) indicate adequate sampling of posteriors and overall good chain performance. Similarly, an estimated Bayesian fraction of missing information (eBFMI) greater than 0.3 suggests reliable inference can be drawn from posterior estimates.
+All modeling was conducted using the R package `cmdstanr` [@cmdstanr]. Posterior sampling was performed using Hamiltonian Monte Carlo with three chains in parallel. The number of warmup (n~i~ = 1000) and sampling iterations (n~i~ = 1000) were kept at their defaults as these were adequate for sampling posterior distributions. @st-diags provides a summary of chain-specific diagnostics by model specification. Chains with few to no divergences (Number Divergent) and that do not hit maximum tree depth (Number Max Treedepth) indicate adequate sampling of posteriors and overall good chain performance. Similarly, an estimated Bayesian fraction of missing information (eBFMI) greater than 0.3 suggests reliable inference can be drawn from posterior estimates.
+
+::: {#st-diags}
 
 ```{r modelDiagnostics, echo = FALSE, warning = FALSE, message = FALSE}
-#| label: tbl-diags
-#| tbl-cap: "Chain diagnostics by model specification."
-
 tab_diag_summ <- purrr::map_dfr(mfit, \(x) {
   i <- x$diagnostic_summary()
   do.call(cbind, i) %>% 
@@ -93,3 +95,7 @@ tab_diag_summ %>%
     palette = c("white")
   )
 ```
+
+Chain diagnostics by model specification.
+
+:::

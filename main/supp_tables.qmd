@@ -1,5 +1,12 @@
 ---
 title: "A state-space model for projecting population abundance"
+crossref:
+  custom:
+    - kind: float
+      key: st
+      reference-prefix: Table A
+      space-before-numbering: false
+      caption-location: top
 ---
 
 ```{r setup, echo = FALSE, warning = FALSE, message = FALSE}
@@ -35,11 +42,8 @@ N_eval_retro_summ <- N_eval_retro_summ %>%
 ::::: panel-tabset
 ### Projected year 1
 
-::: {style="background-color: white; padding: 15px"}
+::: {#st-tretro1 style="background-color: white; padding: 15px"}
 ```{r tbl-tretro1, echo = F, warning = F, message = F}
-#| label: tbl-tretro1
-#| tbl-cap: "Model predictions when projecting one year forward for truncated time series ending in years 2013 through 2021."
-
 # Summary stats
 N_eval_tab_proj1yr <- N_eval_retro_summ %>%
   filter(proj_set == "1 yr") %>%
@@ -97,15 +101,15 @@ datatable(N_eval_tab_proj1yr,
   formatRound(12, 3) %>%
   formatRound(13, 2)
 ```
+
+Model predictions when projecting one year forward for truncated time series ending in years 2013 through 2021.
+
 :::
 
 ### Projected year 2
 
-::: {style="background-color: white; padding: 15px"}
+::: {#st-tretro2 style="background-color: white; padding: 15px"}
 ```{r tbl-tretro2, echo = F, warning = F, message = F}
-#| label: tbl-tretro2
-#| tbl-cap: "Model predictions when projecting two years forward for truncated time series ending in years 2013 through 2021."
-
 # Summary stats
 N_eval_tab_proj2yr <- N_eval_retro_summ %>%
   filter(proj_set == "2 yr" & year != 2023) %>%
@@ -163,6 +167,9 @@ datatable(N_eval_tab_proj2yr,
   formatRound(12, 3) %>%
   formatRound(13, 2)
 ```
+
+Model predictions when projecting two years forward for truncated time series ending in years 2013 through 2021.
+
 :::
 :::::
 
@@ -171,11 +178,8 @@ datatable(N_eval_tab_proj2yr,
 ::::: panel-tabset
 ### Projected year 1
 
-::: {style="background-color: white; padding: 15px"}
+::: {#st-retro1 style="background-color: white; padding: 15px"}
 ```{r tbl-retro1, echo = F, warning = F, message = F}
-#| label: tbl-retro1
-#| tbl-cap: "Model predictions when projecting one year forward for all data years from 2002 through 2021."
-
 # Summary stats
 N_eval_tab_proj1yr <- N_eval_table %>%
   filter(proj_set == "pyear1") %>%
@@ -232,15 +236,15 @@ datatable(N_eval_tab_proj1yr,
   formatRound(12, 3) %>%
   formatRound(13, 2)
 ```
+
+Model predictions when projecting one year forward for all data years from 2002 through 2021.
+
 :::
 
 ### Projected year 2
 
-::: {style="background-color: white; padding: 15px"}
+::: {#st-retro2 style="background-color: white; padding: 15px"}
 ```{r tbl-retro2, echo = F, warning = F, message = F}
-#| label: tbl-retro2
-#| tbl-cap: "Model predictions when projecting two years forward for all data years from 2002 through 2021."
-
 N_eval_tab_proj2yr <- N_eval_table %>%
   filter(proj_set == "pyear2") %>%
   arrange(model, year) %>% 
@@ -296,6 +300,9 @@ datatable(N_eval_tab_proj2yr,
   formatRound(12, 3) %>%
   formatRound(13, 2)
 ```
+
+Model predictions when projecting two years forward for all data years from 2002 through 2021.
+
 :::
 :::::
 
@@ -304,11 +311,8 @@ datatable(N_eval_tab_proj2yr,
 ::::: panel-tabset
 ### Complete model set
 
-::: {style="background-color: white; padding: 15px"}
+::: {#st-bma1 style="background-color: white; padding: 15px"}
 ```{r tbl-bma1, echo = F, warning = F, message = F}
-#| label: tbl-bma1
-#| tbl-cap: "Complete model-averaged predictions when projecting one year forward for all data years from 2017 through 2021."
-
 # Summary stats
 load(here("out", paste0("TruncatedRetroSummary_cBMA_2025", ".dat")))
 N_eval_retro_summ_ma <- N_eval_retro_summ_ma %>%
@@ -345,15 +349,15 @@ datatable(N_eval_retro_summ_ma,
   ) %>%
   formatRound(4:9, 1)
 ```
+
+Complete model-averaged predictions when projecting one year forward for all data years from 2017 through 2021.
+
 :::
 
 ### Model set w/o ENP strandings
 
-::: {style="background-color: white; padding: 15px"}
+::: {#st-bma2 style="background-color: white; padding: 15px"}
 ```{r tbl-bma2, echo = F, warning = F, message = F}
-#| label: tbl-bma2
-#| tbl-cap: "Model-averaged predictions, without ENP strandings, when projecting one year forward for all data years from 2017 through 2021."
-
 # Summary stats
 load(here("out", paste0("TruncatedRetroSummary_BMA_2025", ".dat")))
 N_eval_retro_summ_ma <- N_eval_retro_summ_ma %>%
@@ -390,6 +394,9 @@ datatable(N_eval_retro_summ_ma,
   ) %>%
   formatRound(4:9, 1)
 ```
+
+Model-averaged predictions, without ENP strandings, when projecting one year forward for all data years from 2017 through 2021.
+
 :::
 :::::
 ::::::::::::

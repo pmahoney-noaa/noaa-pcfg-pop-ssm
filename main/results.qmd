@@ -227,7 +227,7 @@ kable(coefs_tab,
 kable_classic(full_width = F, html_font = "Cambria")
 ```
 
-## Leave-one-out Cross Validation (LOO)
+## Leave-one-out Cross Validation (LOO) {#leave-one-out}
 
 @tbl-loo provides estimates of model fit using an information criterion (leave-one-out information criterion; *looic*) based on leave-one-out cross validation. Models with the lowest $looic$ value are considered the best fitting model given the time series of abundance data used to fit the model. $\Delta looic$ represents the difference in $looic$ relative to the model with the lowest $looic$.
 
@@ -273,7 +273,7 @@ knitr::kable(
 kable_classic(full_width = F, html_font = "Cambria")
 ```
 
-## Predictive accuracy with retrospection
+## Predictive accuracy with retrospection {#retrospective}
 
 Given that prediction was the primary objective of this exercise, we evaluated the ability of each model to retrospectively predict a "future", known population abundance using the PCFG abundance time series from [@harrisPCFG2022]. Predicting future states, or "forecasting", is notoriously challenging particularly as we project further into the future. However, within this system, data gaps of one or two years represent the most plausible scenarios managers are likely to encounter, providing the basis for our evaluation. In addition, we anticipated relative performance within model sets was likely to vary as we projected further into the future. Thus, in order to document a potential shift in model support in relation to projection length, we evaluated predictive performance when projecting one and two years separately. Finally, we evaluated predictive performance using models fitted to both truncated and complete abundance time series. The latter provides the best available knowledge of the system for model fitting, but might bias retrospective evaluations of predictive performance due to information "spillover" from future observed population states. The former can become data limited and select for overly simplistic models.
 
@@ -281,7 +281,7 @@ All time series used in model fitting started with estimates from 2002, but vari
 
 In all cases, projected estimates were then compared to "observed" abundance in the same year using residual sum of squares (RSS), 60% and 95% credible intervals, and whether an estimate dropped below threshold resulting in a presumed hunt closure. Predictive fits were summarized by one or two year projection lengths.
 
-### *Model fits derived from truncated time series*
+### *Model fits derived from truncated time series* {#model-fits-trunc}
 
 The following tables show predictive performance statistics by model specification when predicting one (@tbl-tRetro1summ) or two years forward (@tbl-tRetro2summ) from all data years between 2013 and 2021. RSS is the residual sum of squares.
 
@@ -415,7 +415,7 @@ tidy_plot_retroPred(N_eval_table_trunc, ylims = c(0, 500), truncated_retro = T)
 #   theme_bw()
 ```
 
-### *Model fits derived from full time series*
+### *Model fits derived from full time series* {#model-fits-full}
 
 The following tables show predictive performance statistics by model specification when predicting one (@tbl-retro1summ) or two years forward (@tbl-retro2summ) for all data years from 2002 through 2021.
 
@@ -723,4 +723,13 @@ ggplot(postLastYr, aes(group = Model, fill = Model, color = Model)) +
     fill = guide_legend(title = NULL, position = "top", direction = "horizontal", nrow = 1)) +
   labs(x = "Projected N (Year 2025)", y = "Density") +
   theme_bw()
+```
+
+```{r, echo = F, warning = F, message = F}
+# For front page matter
+mainPred <- ma_abund %>%
+  slice((n()-1):n()) %>%
+  dplyr::select(year, N = mean, Nmin = percentile_20)
+
+save(mainPred, Ndata_input, file = here("out", "front_page_matter.Rdata"))
 ```

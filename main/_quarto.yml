@@ -24,7 +24,7 @@ website:
           - text: Report a Bug
             href: https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm
     contents:
-      - text: "Intent and summary"
+      - text: "Executive summary"
         href: index.qmd
       - text: "Model description"
         href: methodology.qmd
@@ -51,9 +51,15 @@ website:
 format:
   html:
     #theme: darkly
+    html-table-processing: none
     linkcolor: "#007eb2"
     css: styles.css
     toc: true
+    grid:
+      sidebar-width: 225px
+      body-width: 900px
+      margin-width: 250px
+      gutter-width: 1.5rem
     
 execute:
   freeze: auto

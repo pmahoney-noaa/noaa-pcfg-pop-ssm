@@ -5,24 +5,119 @@ bibliography: references.bib
 
 Contributors: *Peter J. Mahoney^1\*^, John R. Brandon^2^, Jonathon Scordino^3^*
 
-##### ^1^NMFS Alaska Fisheries Science Center, Marine Mammal Laboratory, Seattle, WA
+##### ^1^NOAA, NMFS Alaska Fisheries Science Center, Marine Mammal Laboratory, Seattle, WA
 
-##### ^2^
+##### ^2^Senior Biometrician, ICF International, San Francisco, CA
 
-##### ^3^
+##### ^3^Marine Mammal Program, Makah Fisheries Management, Makah Tribe, Neah Bay, WA
 
 ##### \*POC: peter.mahoney\@noaa.gov
 
-# *Intent*
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(pacman)
+p_load(knitr, kableExtra,tidyverse, here, gt)
 
-The abundance of gray whales within the Pacific Coast Feeding Group (PCFG) - a subset of the broader Eastern North Pacific (ENP) population - is estimated within a Jolly-Seber modeling framework using data derived from yearly mark-resight surveys [@harrisPCFG2022]. Due to the time required to match thousands of sightings each year to a growing photographic catalog, the most recent abundance estimates often lag behind the current calendar year by one or more years. However, management decisions are contingent upon abundance estimates for PCFG gray whales through the current calendar year or into the next. To meet this need, we implemented a Bayesian state-space model (SSM) to predict abundance beyond the last year for which PCFG abundance was estimated.
+# Define last updated date
+today <- Sys.Date()
+
+# Load front page matter
+load(here("out", "front_page_matter.Rdata"))
+
+minYr <- Ndata_input %>% filter(year == min(year)) %>% pull(year)
+maxYr <- Ndata_input %>% filter(year == max(year)) %>% pull(year)
+lastAbundEst <- round(Ndata_input %>% filter(year == max(year)) %>% pull(N), 1)
+lastAbundSe <- round(Ndata_input %>% filter(year == max(year)) %>% pull(SE), 1)
+lastNminEst <- round(Ndata_input %>% filter(year == max(year)) %>% pull(low_60CI))
+```
 
 \
-FIGURE/IMAGE PLACEHOLDER
+*Last updated on **`{r} today`**.*
 
 # *Executive summary*
 
-PLACEHOLDER (PLAIN LANGUAGE INCLUDING MODEL SELECTION)
+::::: {layout="[ 80, -2, 20 ]"}
+::: {layout-valign="top"}
+## Purpose
+
+The abundance of gray whales within the Pacific Coast Feeding Group (PCFG) - a subset of the broader Eastern North Pacific (ENP) population - is estimated within a Jolly-Seber modeling framework using data derived from yearly mark-resight surveys [@harrisPCFG2025]. Due to the time required to match thousands of sightings each year to a growing photographic catalog, the most recent abundance estimates often lag behind the current calendar year by one or more years. However, management decisions are contingent upon abundance estimates for PCFG gray whales through the current calendar year or into the next. To meet this need, we implemented a Bayesian state-space model (SSM) to predict abundance beyond the last year for which PCFG abundance was estimated.
+:::
+
+::: {layout-valign="bottom"}
+![](img/Er_aerial_1.png){fig-alt="PCFG Gray Whale, E. robustus (NMFS Permit #25563)" fig-align="left" width="1.96in"}
+:::
+:::::
+
+## Key results
+
+The modeled PCFG population abundance projections for 2024 and 2025 are as follows:
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+#| classes: plain
+
+# GT tables
+mainPred %>%
+  gt() %>%
+  cols_label(
+    year = "Projection Year",
+    N = "N",
+    Nmin = html("N<sub>min</sub>")
+  ) %>%
+  tab_options(
+    column_labels.padding.horizontal = px(20),
+    data_row.padding = px(2),
+    row_group.padding = px(4)    # And even more for our groups
+  ) %>%
+  fmt_number(columns = c("N", "Nmin"), decimals = 1) %>%
+  cols_align(
+    align = 'center'
+  ) %>%
+  cols_width(
+    year ~ px(150),
+    N ~ px(100),
+    Nmin ~ px(100)
+  ) %>%
+  opt_stylize(style = 6, color = "gray") %>%
+  data_color(
+    columns = 1:3,
+    palette = c("white")
+  )
+```
+
+A suite of six competing models were fitted to estimates of PCFG gray whale abundance derived using mark-resight survey data from `r minYr` through `r maxYr`. Each model reflects hypothetical drivers of population growth within the PCFG and our current understanding of the system as whole ([Model Description](methodology.qmd)). The most recent estimate of PCFG abundance in `r maxYr` was `r lastAbundEst` (SE = `r lastAbundSe`, N~min~ = `r lastNminEst`) non-calf individuals within the PCFG [@harrisPCFG2025]. 
+
+Of the six models considered, the autoregressive model with a one-year lag (AR1) fit the full time series of abundance data the best ([Table 2](results.qmd#tbl-loo)). When evaluating the ability of each model to predict a “future” population size using the historical time series as a reference (the so-called [Retrospective Analysis](results.qmd#retrospective)), the AR1 model continued to perform best when naively projecting one year forward based on models fit to truncated time series and when projecting one or two years forward when using a model fit to the complete time series.  However, the uncertainty associated with projected estimates in year two appear to be conservative when using AR1 relative to the other models considered. The base model, or the model where $\lambda$ was based on a posterior prediction for mean annual $\lambda$s, performed best when naively projecting two years forward with truncated time series.
+
+Evaluating the naive predictions revealed that the model with ENP strandings substantially underestimated PCFG abundance following an unusual mortality event (UME) in 2019 (see [Figure 1](results.qmd#fig-truncRetroFig1)). Although model predictions improved when fit to the complete time series, the covariate for ENP strandings was removed from consideration out of an abundance of caution until such time when the impact of another UME on model predictions can be evaluated (the UME in 2019 was the only such event between `r minYr` and `r maxYr`). The removal of ENP strandings reduced the model set from six to four total models.
+
+In addition, both the base and AR1 model could be slow to respond to rapid changes in population growth given neither model accounts for environmental factors signaling a change in population trend. However, the extent of the overshoot is dependent on the degree to which $\lambda$ shifts, but overall the AR1 model recovers the quickest ([Figure C1-C4](supp_simulation.qmd)). Further, the base model, by virtue of relying on an average expectation for $\lambda$, exhibits a persistent bias in population estimates during both extended negative and positive population trends ([Figure C1-C4](supp_simulation.qmd)).
+
+In light of these behaviors, and the inherent uncertainty associated with model selection, a model averaging approach was used to forecast abundance estimates through `r maxYr + 1`. However, due to the poor performance of models with ENP strandings during the 2019 UME, the model averaging was constrained to the remaining four models. The weighted model average predictions in the Results table above therefore represent our best supported and most accurate projections of PCFG population abundance in `r maxYr + 1` and `r maxYr + 2` The model-averaged estimates for PCFG abundance (N) and minimum abundance (N~min~), including the estimates from the four models individually, were above key management thresholds in `r maxYr + 1` and `r maxYr + 2`
+
+## Methodology
+
+### Model development
+
+Several models were developed and evaluated to forecast the population size of PCFG gray whales in future years. To do so, we consider the most recent available estimate of population size, and apply a model-estimated annual growth rate (i.e., $\lambda$) over time. The models developed for population forecasting varied based on assumptions made about the PCFG growth rate (e.g., assuming $\lambda$ in a given year is or is not correlated with $\lambda$ in the previous year), and factors hypothesized to be correlated with population growth (such as how many calves had been sighted or how many ENP gray whales had washed ashore dead or stranded in the previous year). Details about the parameters included in each of the six models can be found on the [Model Description](methodology.qmd) page.
+
+### Model selection
+
+Model fit was evaluated using leave-one-out cross validation (LOOCV) using the complete mark-resight time series from Harris et al. [-@harrisPCFG2025]. LOOCV is a method whereby models are fit to the full dataset, but the quality of the fit is evaluated by iteratively removing and predicting a single record from the data time series (in this case, an annual abundance estimate). Models were in turn ranked using the leave-one-out information criterion [LOOIC, @vehtari2017practical], a criterion based on LOOCV wherein smaller values equate to better fitting models (see "[Leave-one-out Cross Validation](results.qmd#leave-one-out)"). 
+
+### Model evaluation and performance
+
+Model performance was evaluated by assessing the ability of each model to retrospectively predict a “future” known population abundance from the mark-resight time series [see @harrisPCFG2025]. Specifically, predictive accuracy of each model was evaluated by fitting to 1) a truncated time series where the model was fitted with data only up to the prediction year being evaluated to make the same predictions, and 2) the full time series, less the number of years being predicted (e.g., `r minYr` - `r maxYr - 2`). Scenario (1) reflects the naivety of the current model to future population states when projecting estimates, but constrains knowledge of the system and associated dynamics by truncating the data time series, providing a pessimistic assessment of models that are more sensitive to sample size. Scenario (2) provides the most comprehensive understanding of factors influencing $\lambda$, but can impose undue influence on projections from past years, providing a slightly optimistic assessment of predictive performance. Details from these assessments can be found in sections "[Model fits derived from truncated time series](results.qmd#model-fits-trunc)" and "[Model fits derived from full time series](results.qmd#model-fits-full)".
+
+Simulation analyses were also conducted to look at model behavior for the models most likely to over- or under-predict the true abundance following a trend in $\lambda$. Two hypothetical scenarios were tested; 1) a stable population of 250 individuals ($\lambda$ = 1 for 15 yrs)  that went into successive years of decline, and 2) a stable population of 125 individuals ($\lambda$ = 1 for 15 yrs) that experienced successive years of growth (see "[Simulation analysis](supp_simulation.qmd#simulation)"). 
+
+### Model averaging
+
+In cases where the accuracy of predictions is paramount, model averaging is recommended as a means of dealing with uncertainty in model selection and model behavior [@burnham2011aic; @anderson2007model]. Model averaging is a statistical approach by which multiple models are combined in order to derive a single best estimate. The models are combined by first estimating the strength of support for each model (via metrics such as LOOIC), which in turn is used to derive model-specific weights reflecting how much influence each model will have on the final estimates. Here, model weights were derived using a pseudo-Bayesian model averaging approach with bootstrapping [@yaoStacking2018]. These weights were then applied to the abundance estimates from `r minYr` through `r maxYr` as well the forecasted estimates through `r maxYr + 2`.
+
+## Future Updates
+
+This forecast will be updated as new PCFG abundance estimates become available. With each additional year, we anticipate the model predictions will become more accurate as the time series informing it becomes longer. The exact weighting of models may vary from year to year; new data may reveal changes in model performance, and the relative weighting of models averaged to predict PCFG abundance will be updated to reflect the most recent data available.  
+
+Models containing coefficients dependent on external data (i.e., calf counts) may be dropped if data of suitable quality are not available for a given year. Testing and validation demonstrate the Base and AR1 models perform sufficiently to make reasonable predictions of PCFG abundance in the absence of recent calf counts.
 
 ## *References*
 
