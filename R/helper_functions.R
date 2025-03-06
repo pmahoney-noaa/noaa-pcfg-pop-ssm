@@ -115,8 +115,8 @@ tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names,
     scale_x_continuous(limits = c(min(N_out_table$year), max(N_out_table$year)), 
                        breaks = seq(min(N_out_table$year), max(N_out_table$year), by = 1), minor_breaks = NULL) +
     scale_y_continuous(limits = ylims, oob = scales::squish) +
-    geom_hline(yintercept = threshold_N) + 
-    geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "red") +
+    geom_hline(yintercept = threshold_N, color = "#4d4d4d") + 
+    geom_hline(yintercept = threshold_Nmin, linetype = 2, color = "#4d4d4d") +
     geom_errorbar(aes(ymin = low_95CI, ymax = high_95CI)) +  
     geom_errorbar(aes(ymin = low_60CI, ymax = N), linewidth = 0) +
     geom_point(aes(y = low_60CI), shape = 23, fill = "red", size = 2) +
@@ -124,7 +124,9 @@ tidy_plot_traj_multimodel = function(input_data, tidy_mcmc, model_names,
     facet_wrap(~ model, ncol = ncols) +
     labs(x = "Year", y = "PCFG Abundance") +
     theme(
-      axis.text.x = element_text(angle = 45, hjust = 1)
+      axis.text.x = element_text(angle = 45, hjust = 1),
+      panel.grid.major.y = element_blank(),
+      panel.grid.minor.y = element_blank()
     ) +
     NULL
   
@@ -377,5 +379,7 @@ tidy_model_avg <- function (tfit, wgts, iters, input_data, seed = 1001) {
               percentile_20 = quantile(logN, 0.2),
               percentile_80 = quantile(logN, 0.8)) %>% 
     ungroup() %>% 
-    mutate(across(.cols = -year, .fns = exp)) 
+    mutate(across(.cols = -year, .fns = exp))
+  
+  return(list(draws = N_out, summary = N_out_table))
 }

@@ -50,10 +50,12 @@ website:
 
 format:
   html:
-    #theme: darkly
+    theme: custom.scss
+      #light: custom.scss
+      #dark: darkly
     html-table-processing: none
     linkcolor: "#007eb2"
-    css: styles.css
+    #css: styles.css
     toc: true
     grid:
       sidebar-width: 225px

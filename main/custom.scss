@@ -1,0 +1,41 @@
+/*-- scss:defaults --*/
+
+// Colors
+$primary: #535454;
+
+// Sidebar document colors
+$sidebar-bg:                          #535454;
+$sidebar-fg:                          #e8e8e8;
+$sidebar-hover-color:                 #52a3ff !default;
+
+// TOC;
+$toc-color:                           #52a3ff;
+
+// Links
+$link-decoration:                     none;
+$link-color:                          #535454;
+$link-shade-percentage:               20% !default;
+$link-hover-color:                    #52a3ff !default;
+
+$h5-font-size:                        14px;
+$h5-font-weight:                      0;
+$h6-font-size:                        12px;
+
+h5 {
+  font-weight: 0;
+}
+
+a:not(.nav-link) {
+  color: #8c8c8c;
+  border-bottom: none;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    color: #52a3ff;
+  }
+}
+
+.sidebar-title {
+  color: #e8e8e8;
+}

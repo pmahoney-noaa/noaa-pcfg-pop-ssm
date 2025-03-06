@@ -1,5 +1,6 @@
 ---
 title: "A state-space model for projecting population abundance"
+bibliography: references.bib
 crossref:
   custom:
     - kind: float
