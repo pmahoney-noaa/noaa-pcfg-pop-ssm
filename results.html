@@ -175,7 +175,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Executive summary</span></a>
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -463,7 +463,7 @@ Table&nbsp;2: Derived estimates of model fit using an information criterion base
 <p>In all cases, projected estimates were then compared to “observed” abundance in the same year using residual sum of squares (RSS), the quantile for observed abundance, 60% and 95% credible intervals, and whether an estimate dropped below threshold resulting in a presumed hunt closure. Predictive fits were summarized by one or two year projection lengths.</p>
 <section id="model-fits-trunc" class="level3">
 <h3 class="anchored" data-anchor-id="model-fits-trunc"><em>Model fits derived from truncated time series</em></h3>
-<p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-tRetro1summ" class="quarto-xref">Table&nbsp;3</a>) or two years forward (<a href="#tbl-tRetro2summ" class="quarto-xref">Table&nbsp;4</a>) from all data years between 2013 and 2021 using the truncated time series described above.</p>
+<p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-tRetro1summ" class="quarto-xref">Table&nbsp;3</a>) or two years forward (<a href="#tbl-tRetro2summ" class="quarto-xref">Table&nbsp;4</a>) from all data years between 2013 and 2021 using the truncated time series described above. Makah hunt closures will be imposed when N falls below 192 or N<sub>min</sub> falls below 171.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Projected year 1 (Table 3)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Projected year 2 (Table 4)</a></li></ul>
 <div class="tab-content">
@@ -699,7 +699,7 @@ Figure&nbsp;1: The predictive fits when abundance was projected forward one (top
 </section>
 <section id="model-fits-full" class="level3">
 <h3 class="anchored" data-anchor-id="model-fits-full"><em>Model fits derived from full time series</em></h3>
-<p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-retro1summ" class="quarto-xref">Table&nbsp;5</a>) or two years forward (<a href="#tbl-retro2summ" class="quarto-xref">Table&nbsp;6</a>) for all data years from 2002 through 2021 using the full time series.</p>
+<p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-retro1summ" class="quarto-xref">Table&nbsp;5</a>) or two years forward (<a href="#tbl-retro2summ" class="quarto-xref">Table&nbsp;6</a>) for all data years from 2002 through 2021 using the full time series. As stated above, Makah hunt closures will be imposed when N falls below 192 or N<sub>min</sub> falls below 171.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Projected year 1 (Table 5)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Projected year 2 (Table 6)</a></li></ul>
 <div class="tab-content">
@@ -946,7 +946,7 @@ Figure&nbsp;2: The predictive fits when abundance was projected forward one (top
 <img src="results_files/figure-html/fig-trendFig-1.png" class="img-fluid figure-img" width="4800">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trendFig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2022), as well as abundance projections for two years beyond (through 2024). The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N and Nmin, respectively.
+Figure&nbsp;3: Predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2022), as well as abundance projections for two years beyond (through 2024). The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N &lt; 192) and N<sub>min</sub> (N<sub>min</sub> &lt; 171), respectively.
 </figcaption>
 </figure>
 </div>
@@ -954,7 +954,6 @@ Figure&nbsp;3: Predicted trends in PCFG gray whale abundance by state-space mode
 </div>
 <section id="model-averaged-population-trend" class="level2">
 <h2 class="anchored" data-anchor-id="model-averaged-population-trend">Model-averaged population trend</h2>
-<p><a href="#tbl-modelWeights_subset" class="quarto-xref">Table&nbsp;7</a> captures the estimated model weights, and therefore relative support for each, when averaging estimates into a single, unified prediction using pseudo-Bayesian model averaging with bootstrapping <span class="citation" data-cites="yaoStacking2018">(<a href="#ref-yaoStacking2018" role="doc-biblioref">Yao et al. 2018</a>)</span>. Model weights favored the AR1 model, with the remaining 50% of the divided among base, ENP calves, and PCFG calves models. After accounting for estimated model weights, model-average prediction for the trend in PCFG abundance is depicted in <a href="#fig-stackedTrendFig_subset" class="quarto-xref">Figure&nbsp;4</a>.</p>
 <div class="cell">
 <div id="tbl-modelWeights_subset" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -973,19 +972,19 @@ Table&nbsp;7: Model weights for all models without ENP strandings. Each was deri
 <tbody>
   <tr>
    <td style="text-align:left;"> Base </td>
-   <td style="text-align:center;"> 0.199 </td>
+   <td style="text-align:center;"> 0.198 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 0.473 </td>
+   <td style="text-align:center;"> 0.478 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 0.127 </td>
+   <td style="text-align:center;"> 0.126 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves only </td>
-   <td style="text-align:center;"> 0.201 </td>
+   <td style="text-align:center;"> 0.198 </td>
   </tr>
 </tbody>
 </table>
@@ -995,6 +994,7 @@ Table&nbsp;7: Model weights for all models without ENP strandings. Each was deri
 </figure>
 </div>
 </div>
+<p><a href="#tbl-modelWeights_subset" class="quarto-xref">Table&nbsp;7</a> captures the estimated model weights, and therefore relative support for each, when averaging estimates into a single, unified prediction using pseudo-Bayesian model averaging with bootstrapping <span class="citation" data-cites="yaoStacking2018">(<a href="#ref-yaoStacking2018" role="doc-biblioref">Yao et al. 2018</a>)</span>. Model weights favored the AR1 model, with the remaining 52.2% of the model weight divided among base, ENP calves, and PCFG calves models. After accounting for estimated model weights, model-average prediction for the trend in PCFG abundance is depicted in <a href="#fig-stackedTrendFig_subset" class="quarto-xref">Figure&nbsp;4</a>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-stackedTrendFig_subset" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1003,7 +1003,7 @@ Table&nbsp;7: Model weights for all models without ENP strandings. Each was deri
 <img src="results_files/figure-html/fig-stackedTrendFig_subset-1.png" class="img-fluid figure-img" width="2400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-stackedTrendFig_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N<sub>min</sub>, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N and Nmin, respectively.
+Figure&nbsp;4: Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N<sub>min</sub>, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N &lt; 192) and N<sub>min</sub> (N<sub>min</sub> &lt; 171), respectively.
 </figcaption>
 </figure>
 </div>
@@ -1062,8 +1062,8 @@ Table&nbsp;8: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based
   </tr>
   <tr>
    <td style="text-align:left;"> Model-averaged estimate </td>
-   <td style="text-align:center;"> 211.1 </td>
-   <td style="text-align:center;"> 186.3 </td>
+   <td style="text-align:center;"> 210.9 </td>
+   <td style="text-align:center;"> 186.4 </td>
   </tr>
 </tbody>
 </table>
@@ -1073,8 +1073,6 @@ Table&nbsp;8: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based
 </figure>
 </div>
 </div>
-<p><br>
-</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-final-proj" class="quarto-float quarto-figure quarto-figure-center anchored">

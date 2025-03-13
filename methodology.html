@@ -173,7 +173,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Executive summary</span></a>
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -272,17 +272,22 @@ window.Quarto = {
 <p><em>State process:</em></p>
 <p><span class="math display">\[ logN_{est_{t+1}} = logN_{est_{t}} + ln(\lambda_{t}) \]</span></p>
 <p><span class="math display">\[ ln(\lambda_{t}) \sim normal(\mu, \sigma) \]</span></p>
-<p>Where <span class="math inline">\(logN\)</span> and <span class="math inline">\(\sigma_{obs}\)</span> are the estimated (log) population abundance and standard error for each year with observation data, respectively. Models vary by the specification of <span class="math inline">\(\lambda\)</span> and the factors hypothesized to be correlated with population growth, at least given current knowledge and available data within this system. At present, seven models were considered. (DEFINE LAMBDA AND MU)</p>
+<p>Where <span class="math inline">\(logN\)</span> and <span class="math inline">\(\sigma_{obs}\)</span> are the estimated (log) population abundance and standard error for each year with observation data, respectively. Models vary by the specification of <span class="math inline">\(\lambda\)</span> - or the intrinsic rate of growth in a population from year to year - and the factors hypothesized to be correlated with population growth, at least given current knowledge and available data within this system. At present, six models were considered.</p>
 <ol type="1">
-<li>Base: <span class="math inline">\(\mu = \mu_{ln(\lambda)}; \sigma = \sigma_{ln(\lambda)}\)</span></li>
-<li>AR1: <span class="math inline">\(\mu = ln(\lambda_{t-1}); \sigma = \sigma_{ln(\lambda)}\)</span></li>
-<li>ENP calves: <span class="math inline">\(\mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t}; \sigma = \sigma_{ln(\lambda)}\)</span></li>
-<li>(PCFG) Calves only: <span class="math inline">\(\mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t}; \sigma = \sigma_{ln(\lambda)}\)</span></li>
-<li>(ENP) Strandings only: <span class="math inline">\(\mu = \mu_{ln(\lambda)} + \beta_{strand} * S_{t}; \sigma = \sigma_{ln(\lambda)}\)</span></li>
-<li>(PCFG) Calves + (ENP) Strandings: <span class="math inline">\(\mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t} + \beta_{strand} * S_{t}; \sigma = \sigma_{ln(\lambda)}\)</span></li>
+<li><p>Base: assumes future PCFG whale abundance is informed by an average growth rate (<span class="math inline">\(\mu_{ln(\lambda)}\)</span>), with an associated measure of variability or uncertainty (<span class="math inline">\(\sigma_{ln(\lambda)}\)</span>), for all years since 2002.</p>
+<p><span class="math display">\[ \mu = \mu_{ln(\lambda)}; \sigma = \sigma_{ln(\lambda)} \]</span></p></li>
+<li><p>AR1: assumes an autoregressive correlation in population growth (<span class="math inline">\(\lambda\)</span>). In this case, population growth in the current year (<span class="math inline">\(\mu\)</span> or <span class="math inline">\(ln(\lambda_{t})\)</span>) is dependent upon population growth in the previous year (<span class="math inline">\(ln(\lambda_{t-1})\)</span>), permitting more persistent trends in population abundance through time.</p>
+<p><span class="math display">\[ \mu = ln(\lambda_{t-1}); \sigma = \sigma_{ln(\lambda)} \]</span></p></li>
+<li><p>ENP calves: similar to the Base model, the ENP calves model includes a covariate representing the number of Eastern North Pacific (ENP) gray whale calves, permitting our average expectation for population growth to scale (<span class="math inline">\(\beta_{calves}\)</span>) with the number of reported calves in the previous year (<span class="math inline">\(C_{t-1}\)</span>). The ENP calves model is informed by a long-term dataset from counts of gray whale calves as they migrate with their mothers past Piedras Blancas, California to more northerly feeding grounds in the Bering, Beaufort, and Chukchi seas <span class="citation" data-cites="lang2024">(<a href="#ref-lang2024" role="doc-biblioref">Lang, Eguchi, and Weller 2024</a>)</span>. Notably, the numbers of ENP calves correlates with calf numbers observed in the PCFG range, providing the benefit of standardized and rigorous time series than for PCFG calves alone. Further, these data are more consistently available during years in which PCFG abundance estimates, or possibly PCFG calf counts, are available, providing a measure of constraint on our expectations for population growth during projected years.</p>
+<p><span class="math display">\[ \mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t-1}; \sigma = \sigma_{ln(\lambda)} \]</span></p></li>
+<li><p>PCFG Calves only: as with the ENP calves model, the PCFG calves model includes a covariate representing the number of PCFG gray whale calves, permitting our average expectation for population growth to scale (<span class="math inline">\(\beta_{calves}\)</span>) with the number of reported calves in the previous year (<span class="math inline">\(C_{t-1}\)</span>). PCFG calf counts are collected during the feeding season (June-November) surveys in the PCFG range of 41°-52°N. Observed whales can be hard to classify as calves during the feeding season because the mean observed weaning date is 1 August, after which observers cannot confidently classify the whale as a calf <span class="citation" data-cites="calambokidis2017">(<a href="#ref-calambokidis2017" role="doc-biblioref">Lang, Eguchi, and Weller 2017</a>)</span>. The advantage of this data set is that it is a direct observation of just PCFG whales and is not influenced by fluctuations in productivity of ENP whales that feed in the Arctic.</p>
+<p><span class="math display">\[ \mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t-1}; \sigma = \sigma_{ln(\lambda)} \]</span></p></li>
+<li><p>ENP Strandings only: includes a covariate representing the number of gray whale strandings along the coasts of California, Oregon, and Washington, permitting our average expectation for population growth to scale (<span class="math inline">\(\beta_{strand}\)</span>) with the number of reported strandings (ENP, including PCFG) in the previous year (<span class="math inline">\(S_{t-1}\)</span>) during primarily the northbound migration.nDuring stranding events, it is very rare to be able to determine if a whale is a PCFG whale or not often due to the body position of the whale on the beach and decomposition. Stranding data is routinely collected and will often be available in the years in which PCFG abundance is forecasted.</p>
+<p><span class="math display">\[ \mu = \mu_{ln(\lambda)} + \beta_{strand} * S_{t-1}; \sigma = \sigma_{ln(\lambda)} \]</span></p></li>
+<li><p>PCFG Calves + ENP Strandings: incorporates both strandings and PCFG calf production as covariates informing the estimates of population growth. <span class="citation" data-cites="stewart2023">Stewart et al. (<a href="#ref-stewart2023" role="doc-biblioref">2023</a>)</span> documented that calf production and stranding records were important variables for estimating the abundance of ENP gray whales, particularly for years when no abundance estimates were collected.</p>
+<p><span class="math display">\[ \mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t-1} + \beta_{strand} * S_{t-1}; \sigma = \sigma_{ln(\lambda)} \]</span></p></li>
 </ol>
 <!--#  1. Base: $ln(\lambda_{t}) \sim normal(\mu_{ln(\lambda)}, \sigma_{ln(\lambda)})$  2. AR1v1: $ln(\lambda_{t}) \sim normal(ln(\lambda_{t-1}), \sigma_{ln(\lambda_{t})})$  3. AR2v2: $ln(\lambda_{t}) \sim normal(\mu_{ln(\lambda_{t})} + ln(\lambda_{t-1}) * \beta, \sigma_{ln(\lambda_{t})})$  4. ENP calves: $ln(\lambda_{t}) \sim normal(\mu_{ln(\lambda_{t})} + C_{t} * \beta_{calves}, \sigma_{ln(\lambda_{t})})$  5. (PCFG) Calves only: $ln(\lambda_{t}) \sim normal(\mu_{ln(\lambda_{t})} + C_{t} * \beta_{calves}, \sigma_{ln(\lambda_{t})})$  6. (ENP) Strandings only: $ln(\lambda_{t}) \sim normal(\mu_{ln\lambda} + S_{t} * \beta_{strand}, \sigma_{ln\lambda})$  7. (PCFG) Calves + Strandings: $ln(\lambda_{t}) \sim normal(\mu_{ln(\lambda_{t})} + C_{t} * \beta_{calves} + S_{t} * \beta_{strand}, \sigma_{ln(\lambda_{t})})$  -->
-<p><span class="math inline">\(C_{t}\)</span> corresponds the number of calves in year <em>t</em> (either ENP or PCFG); <span class="math inline">\(S_{t}\)</span> corresponds to the number of ENP strandings in year <em>t</em>.</p>
 <section id="additional-prior-specifications" class="level3">
 <h3 class="anchored" data-anchor-id="additional-prior-specifications">Additional prior specifications</h3>
 <p>Where appropriate, the following weakly informative hyper-priors were implemented for both mean and scale parameters in the <span class="math inline">\(ln(\lambda)\)</span> priors.</p>
@@ -307,8 +312,17 @@ window.Quarto = {
 <div id="ref-cmdstanr" class="csl-entry" role="listitem">
 Gabry, J., R. Češnovar, A. Johnson, and S. Bronder. 2024. <span>“Cmdstanr: R Interface to ’CmdStan’.”</span> <a href="https://mc-stan.org/cmdstanr/">https://mc-stan.org/cmdstanr/</a>.
 </div>
+<div id="ref-calambokidis2017" class="csl-entry" role="listitem">
+Lang, A., T. Eguchi, and D. Weller. 2017. <span>“Sightings and Follow-up of Mothers and Calves in the PCFG and Implications for Internal Recruitment.”</span> <em>Pap. SC/A17/GW/04 Present. To Int. Whal. Comm. Sci. Comm</em>.
+</div>
+<div id="ref-lang2024" class="csl-entry" role="listitem">
+———. 2024. <span>“Eastern North Pacific Gray Whale Calf Production 1994-2024.”</span> <em>NOAA Tech. Memoradum NMFS-SWFSC</em> 707: 1–12. <a href="https://doi.org/10.25923/n5qa-0y54">https://doi.org/10.25923/n5qa-0y54</a>.
+</div>
 <div id="ref-Rcore" class="csl-entry" role="listitem">
 R Core Team. 2024. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+</div>
+<div id="ref-stewart2023" class="csl-entry" role="listitem">
+Stewart, J. D., T. W. Joyce, J. W. Durban, J. Calambokidis, D. Fauquier, H Fearnbach, J. M. Grebmeier, et al. 2023. <span>“<a href="">Boom-Bust Cycles in Gray Whales Associated with Dynamic and Changing Arctic Conditions</a>.”</span> <em>Science</em> 382: 207–11.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

@@ -130,7 +130,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Executive summary</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Overview</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -175,7 +175,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Executive summary</span></a>
+ <span class="menu-text">Overview</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -235,9 +235,12 @@ window.Quarto = {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#executive-summary" id="toc-executive-summary" class="nav-link active" data-scroll-target="#executive-summary"><em>Executive summary</em></a>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary"><em>Summary</em></a>
   <ul class="collapse">
-  <li><a href="#key-results" id="toc-key-results" class="nav-link" data-scroll-target="#key-results">Key results</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a>
+  <ul class="collapse">
+  <li><a href="#modeling-results" id="toc-modeling-results" class="nav-link" data-scroll-target="#modeling-results">Modeling results</a></li>
+  </ul></li>
   <li><a href="#methodology" id="toc-methodology" class="nav-link" data-scroll-target="#methodology">Methodology</a>
   <ul class="collapse">
   <li><a href="#model-development" id="toc-model-development" class="nav-link" data-scroll-target="#model-development">Model development</a></li>
@@ -246,6 +249,7 @@ window.Quarto = {
   <li><a href="#model-averaging" id="toc-model-averaging" class="nav-link" data-scroll-target="#model-averaging">Model averaging</a></li>
   </ul></li>
   <li><a href="#future-updates" id="toc-future-updates" class="nav-link" data-scroll-target="#future-updates">Future Updates</a></li>
+  <li><a href="#code-repository" id="toc-code-repository" class="nav-link" data-scroll-target="#code-repository">Code repository</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><em>References</em></a></li>
   </ul></li>
   </ul>
@@ -273,9 +277,9 @@ window.Quarto = {
 </header>
 
 
-<p>Contributors: <em>Peter J. Mahoney<sup>1*</sup>, John R. Brandon<sup>2</sup>, Jonathon Scordino<sup>3</sup></em></p>
-<section id="noaa-nmfs-alaska-fisheries-science-center-marine-mammal-laboratory-seattle-wa" class="level5">
-<h5 class="anchored" data-anchor-id="noaa-nmfs-alaska-fisheries-science-center-marine-mammal-laboratory-seattle-wa"><sup>1</sup>NOAA, NMFS Alaska Fisheries Science Center, Marine Mammal Laboratory, Seattle, WA</h5>
+<p>Contributors: <em>Peter J. Mahoney<sup>1*</sup>, John R. Brandon<sup>2</sup>, Jonathan J. Scordino<sup>3</sup></em></p>
+<section id="marine-mammal-laboratory-alaska-fisheries-science-center-noaa-national-marine-fisheries-service-seattle-wa" class="level5">
+<h5 class="anchored" data-anchor-id="marine-mammal-laboratory-alaska-fisheries-science-center-noaa-national-marine-fisheries-service-seattle-wa"><sup>1</sup>Marine Mammal Laboratory, Alaska Fisheries Science Center, NOAA National Marine Fisheries Service, Seattle, WA</h5>
 </section>
 <section id="senior-biometrician-icf-international-san-francisco-ca" class="level5">
 <h5 class="anchored" data-anchor-id="senior-biometrician-icf-international-san-francisco-ca"><sup>2</sup>Senior&nbsp;Biometrician,&nbsp;ICF&nbsp;International,&nbsp;San&nbsp;Francisco,&nbsp;CA</h5>
@@ -286,46 +290,45 @@ window.Quarto = {
 <section id="poc-peter.mahoneynoaa.gov" class="level5">
 <h5 class="anchored" data-anchor-id="poc-peter.mahoneynoaa.gov">*POC: peter.mahoney@noaa.gov</h5>
 <p><br>
-<em>Last updated on 2025-03-05.</em></p>
+<em>Last updated on 2025-03-12.</em></p>
 </section>
-<section id="executive-summary" class="level1">
-<h1><em>Executive summary</em></h1>
+<section id="summary" class="level1">
+<h1><em>Summary</em></h1>
 <div>
 
 </div>
-<div class="quarto-layout-panel" data-layout="[ 80, -2, 20 ]">
+<div class="quarto-layout-panel" data-layout="[ 80, -1, 20 ]">
 <div class="quarto-layout-row">
-<section id="purpose" class="level2 quarto-layout-cell" data-layout-valign="top" style="flex-basis: 78.4%;justify-content: flex-start;">
-<h2 class="anchored" data-anchor-id="purpose">Purpose</h2>
-<p>The abundance of gray whales within the Pacific Coast Feeding Group (PCFG) - a subset of the broader Eastern North Pacific (ENP) population - is estimated within a Jolly-Seber modeling framework using data derived from yearly mark-resight surveys <span class="citation" data-cites="harrisPCFG2025">(<a href="#ref-harrisPCFG2025" role="doc-biblioref">Harris et al. In prep</a>)</span>. Due to the time required to match thousands of sightings each year to a growing photographic catalog, the most recent abundance estimates often lag behind the current calendar year by one or more years. However, management decisions are contingent upon abundance estimates for PCFG gray whales through the current calendar year or into the next. To meet this need, we implemented a Bayesian state-space model (SSM) to predict abundance beyond the last year for which PCFG abundance was estimated.</p>
-</section>
-<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 2.0%;justify-content: flex-start;">
+<div class="quarto-layout-cell" data-layout-valign="top" style="flex-basis: 79.2%;justify-content: flex-start;">
+<p>The abundance of gray whales within the Pacific Coast Feeding Group (PCFG) - a subset of the broader Eastern North Pacific (ENP) stock - is estimated using data from yearly surveys. Due to the time required to match thousands of sightings each year to a growing photographic catalog, the most recent abundance estimates often lag behind the current calendar year by one or more years. However, management decisions for whale hunts by the Makah Tribe<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> are contingent upon abundance estimates for PCFG gray whales through the current calendar year or into the next. To meet this need, we implemented a Bayesian state-space model (SSM) to predict abundance beyond the last year for which PCFG abundance was estimated. Here, we use abundance estimates derived from yearly mark-resight surveys conducted from 2002 through 2023 (Harris et al.&nbsp;In prep) to inform a modeled projection of PCFG abundance in 2024 and 2025.</p>
+<p><br>
+</p>
+<p>The predictions in <a href="#tbl-final" class="quarto-xref">Table&nbsp;1</a> are weighted model averages of the four highest-performing models, and based on the best available information at this time, represent our most accurate projections of PCFG population abundance in 2024 and 2025. The model-averaged estimates for PCFG abundance (N) and minimum abundance (N<sub>min</sub>) were above key management thresholds (N &lt; 192; N<sub>min</sub> &lt; 171) in 2024 and 2025 (<a href="#fig-final_proj" class="quarto-xref">Figure&nbsp;1</a>).</p>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 1.0%;justify-content: flex-start;">
 <p>&nbsp;</p>
 </div>
-<div class="quarto-layout-cell" data-layout-valign="bottom" style="flex-basis: 19.6%;justify-content: center;">
+<div class="quarto-layout-cell" data-layout-valign="bottom" style="flex-basis: 19.8%;justify-content: center;">
 <div class="quarto-figure quarto-figure-left">
 <figure class="figure">
-<p><img src="img/Er_aerial_1.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:1.96in" alt="PCFG Gray Whale, E. robustus (NMFS Permit #25563)"></p>
+<p><img src="img/Er_aerial_1.png" class="img-fluid quarto-figure quarto-figure-left figure-img" style="width:2.25in" alt="PCFG Gray Whale, E. robustus (NMFS Permit #25563)"></p>
 </figure>
 </div>
 </div>
 </div>
 </div>
-<section id="key-results" class="level2">
-<h2 class="anchored" data-anchor-id="key-results">Key results</h2>
-<p>The modeled PCFG population abundance projections for 2024 and 2025 are as follows:</p>
 <div class="cell plain">
 <div id="tbl-final" class="cell plain quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-final-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Projected estimates for PCFG abundance through 2025 using a Bayesian model-averaging approach.
+Table&nbsp;1: Projected estimates for PCFG abundance (N) and minimum abundance (N<sub>min</sub>) through 2025 using a Bayesian model-averaging approach.
 </figcaption>
 <div aria-describedby="tbl-final-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display" data-html-table-processing="none">
 <table class=" lightable-classic" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
  <thead>
   <tr>
-   <th style="text-align:left;"> Model </th>
+   <th style="text-align:left;"> Year </th>
    <th style="text-align:center;"> N </th>
    <th style="text-align:center;"> N<sub>min</sub> </th>
   </tr>
@@ -333,13 +336,13 @@ Table&nbsp;1: Projected estimates for PCFG abundance through 2025 using a Bayesi
 <tbody>
   <tr>
    <td style="text-align:left;"> 2024 </td>
-   <td style="text-align:center;"> 211.3 </td>
-   <td style="text-align:center;"> 194.1 </td>
+   <td style="text-align:center;"> 211.7 </td>
+   <td style="text-align:center;"> 194.3 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> 2025 </td>
-   <td style="text-align:center;"> 211.0 </td>
-   <td style="text-align:center;"> 186.3 </td>
+   <td style="text-align:center;"> 211.6 </td>
+   <td style="text-align:center;"> 186.6 </td>
   </tr>
 </tbody>
 </table>
@@ -349,11 +352,71 @@ Table&nbsp;1: Projected estimates for PCFG abundance through 2025 using a Bayesi
 </figure>
 </div>
 </div>
-<p>A suite of six competing models were fitted to estimates of PCFG gray whale abundance derived using mark-resight survey data from 2002 through 2023. Each model reflects hypothetical drivers of population growth within the PCFG and our current understanding of the system as whole (<a href="./methodology.html">Model Description</a>). The most recent estimate of PCFG abundance in 2023 was 213.1 (SE = 15.5, N<sub>min</sub> = 200) non-calf individuals within the PCFG <span class="citation" data-cites="harrisPCFG2025">(<a href="#ref-harrisPCFG2025" role="doc-biblioref">Harris et al. In prep</a>)</span>.&nbsp;</p>
-<p>Of the six models considered, the autoregressive model with a one-year lag (AR1) fit the full time series of abundance data the best (<a href="./results.html#tbl-loo">Table 2</a>). When evaluating the ability of each model to predict a “future” population size using the historical time series as a reference (the so-called <a href="./results.html#retrospective">Retrospective Analysis</a>), the AR1 model continued to perform best when naively projecting one year forward based on models fit to truncated time series and when projecting one or two years forward when using a model fit to the complete time series.&nbsp; However, the uncertainty associated with projected estimates in year two appear to be conservative when using AR1 relative to the other models considered. The base model, or the model where <span class="math inline">\(\lambda\)</span> was based on a posterior prediction for mean annual <span class="math inline">\(\lambda\)</span>s, performed best when naively projecting two years forward with truncated time series.</p>
-<p>Evaluating the naive predictions revealed that the model with ENP strandings substantially underestimated PCFG abundance following an unusual mortality event (UME) in 2019 (see <a href="./results.html#fig-truncRetroFig1">Figure 1</a>). Although model predictions improved when fit to the complete time series, the covariate for ENP strandings was removed from consideration out of an abundance of caution until such time when the impact of another UME on model predictions can be evaluated (the UME in 2019 was the only such event between 2002 and 2023). The removal of ENP strandings reduced the model set from six to four total models.</p>
+<hr>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<section id="modeling-results" class="level3">
+<h3 class="anchored" data-anchor-id="modeling-results">Modeling results</h3>
+<p>Six competing models were evaluated for their ability to capture historical - as well as predict future - PCFG abundance using annual survey data. Each model reflects hypothetical drivers of population growth in the PCFG and our current understanding of the system as whole (<a href="./methodology.html">Model Description</a>). Specifically, models vary in how population growth rates (<span class="math inline">\(\lambda\)</span>) vary from year-to-year, whether represented as an average expectation (e.g., base model) or influenced by one or more population variables (e.g., PCFG calve numbers). Models were fitted to estimates of PCFG gray whale abundance within a Jolly-Seber modeling framework using data derived from mark-resight surveys between 2002 and 2023. The most recent estimate of PCFG abundance in 2023 was 213.1 (SE = 15.5, N<sub>min</sub> = 200) non-calf individuals within the PCFG <span class="citation" data-cites="harrisPCFG2025">(<a href="#ref-harrisPCFG2025" role="doc-biblioref">Harris et al. In prep</a>)</span>.&nbsp;</p>
+<p>Of the six models considered, the autoregressive model with a one-year lag (AR1) fit the full time series of abundance data the best (<a href="./results.html#tbl-loo">Table 2</a>). When evaluating the ability of each model to predict a “future” population size using the historical time series as a reference (the so-called <a href="./results.html#retrospective">Retrospective Analysis</a>), the AR1 model continued to perform best when naively<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> projecting 1) one year forward based on models fit to truncated time series, and 2) one or two years forward when using a model fit to the complete time series.&nbsp; However, the uncertainty associated with projected estimates in year two appear to be conservative when using AR1 relative to the other models considered. The base model, or the model where <span class="math inline">\(\lambda\)</span> was based on an average expectation for annual <span class="math inline">\(\lambda\)</span>s, performed best when naively projecting two years forward with truncated times series.</p>
+<p>Evaluating the naive predictions revealed that the model with ENP strandings substantially underestimated PCFG abundance during an unusual mortality event (UME) from 2019 to 2023<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> <span class="citation" data-cites="raverty2024">(<a href="#ref-raverty2024" role="doc-biblioref">Raverty et al. 2024</a>)</span> (see <a href="./results.html#fig-truncRetroFig1">Figure 1</a>). Although model predictions improved when fit to the complete time series, the covariate for ENP strandings was removed from consideration out of an abundance of caution until such time when the impact of another UME on model predictions can be evaluated. The removal of ENP strandings reduced the model set from six to four total models.</p>
 <p>In addition, both the base and AR1 model could be slow to respond to rapid changes in population growth given neither model accounts for environmental factors signaling a change in population trend. However, the extent of the overshoot is dependent on the degree to which <span class="math inline">\(\lambda\)</span> shifts, but overall the AR1 model recovers the quickest (<a href="./supp_simulation.html">Figure C1-C4</a>). Further, the base model, by virtue of relying on an average expectation for <span class="math inline">\(\lambda\)</span>, exhibits a persistent bias in population estimates during both extended negative and positive population trends (<a href="./supp_simulation.html">Figure C1-C4</a>).</p>
-<p>In light of these behaviors, and the inherent uncertainty associated with model selection, a model averaging approach was used to forecast abundance estimates through 2025. However, due to the poor performance of models with ENP strandings during the 2019 UME, the model averaging was constrained to the remaining four models. The weighted model average predictions in <a href="#tbl-final" class="quarto-xref">Table&nbsp;1</a> above therefore represent our best supported and most accurate projections of PCFG population abundance in 2024 and 2025 The model-averaged estimates for PCFG abundance (N) and minimum abundance (N<sub>min</sub>), including the estimates from the four models individually, were above key management thresholds in 2024 and 2025</p>
+<p>In light of these behaviors, and the inherent uncertainty associated with model selection, a model averaging approach was used to forecast abundance estimates through 2025. However, due to the poor performance of models with ENP strandings during the 2019 UME, the model averaging was constrained to the remaining four models (<a href="#tbl-modelWeights_subset" class="quarto-xref">Table&nbsp;2</a>). The weighted model average predictions in <a href="#tbl-final" class="quarto-xref">Table&nbsp;1</a> above therefore represent our best supported and most accurate projections of PCFG population abundance in 2024 and 2025. Further, the model-averaged estimates for PCFG abundance (N) and minimum abundance (N<sub>min</sub>), including the estimates from the four models individually, were above key management thresholds for N and N<sub>min</sub> in 2024 and 2025 (<a href="#fig-final_proj" class="quarto-xref">Figure&nbsp;1</a>).</p>
+<div class="cell">
+<div id="tbl-modelWeights_subset" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelWeights_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;2: Model weights for all models without ENP strandings. Each was derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+).
+</figcaption>
+<div aria-describedby="tbl-modelWeights_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display" data-html-table-processing="none">
+<table class=" lightable-classic" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;"> Model </th>
+   <th style="text-align:center;"> PseudoBMA+ </th>
+  </tr>
+ </thead>
+<tbody>
+  <tr>
+   <td style="text-align:left;"> Base </td>
+   <td style="text-align:center;"> 0.197 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> AR1 </td>
+   <td style="text-align:center;"> 0.478 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> ENP Calves </td>
+   <td style="text-align:center;"> 0.126 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> PCFG Calves only </td>
+   <td style="text-align:center;"> 0.199 </td>
+  </tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</figure>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-final_proj" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-final_proj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-final_proj-1.png" class="img-fluid figure-img" width="2400">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-final_proj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N<sub>min</sub>, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N and Nmin, respectively.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
 </section>
 <section id="methodology" class="level2">
 <h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
@@ -380,6 +443,10 @@ Table&nbsp;1: Projected estimates for PCFG abundance through 2025 using a Bayesi
 <p>This forecast will be updated as new PCFG abundance estimates become available. With each additional year, we anticipate the model predictions will become more accurate as the time series informing it becomes longer. The exact weighting of models may vary from year to year; new data may reveal changes in model performance, and the relative weighting of models averaged to predict PCFG abundance will be updated to reflect the most recent data available.&nbsp;&nbsp;</p>
 <p>Models containing coefficients dependent on external data (i.e., calf counts) may be dropped if data of suitable quality are not available for a given year. Testing and validation demonstrate the Base and AR1 models perform sufficiently to make reasonable predictions of PCFG abundance in the absence of recent calf counts.</p>
 </section>
+<section id="code-repository" class="level2">
+<h2 class="anchored" data-anchor-id="code-repository">Code repository</h2>
+<p><a href="https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm" class="uri">https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm</a></p>
+</section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references"><em>References</em></h2>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
@@ -391,6 +458,9 @@ Burnham, K. P., D. R. Anderson, and K. P. Huyvaert. 2011. <span>“AIC Model Sel
 </div>
 <div id="ref-harrisPCFG2025" class="csl-entry" role="listitem">
 Harris, J., J. Calambokidis, A. Perez, and P. J. Mahoney. In prep. <span>“<a href="">Recent Trends in the Abundance of Seasonal Gray Whales (Eschrichtius Robustus) in the Pacific Northwest, 1996-2023</a>,”</span> In prep.
+</div>
+<div id="ref-raverty2024" class="csl-entry" role="listitem">
+Raverty, S., P. Duignan, D. Greig, J. L. Huggins, K. B. Huntington, M. Garner, J. Calambokidis, et al. 2024. <span>“<a href="">Gray Whale (Eschrichtius Robustus) Post- Mortem Findings from December 2018 Through 2021 During the Unusual Mortality Event in the Eastern North Pacific</a>.”</span> <em>PLoS One</em> 19.
 </div>
 <div id="ref-vehtari2017practical" class="csl-entry" role="listitem">
 Vehtari, A., A. Gelman, and J. Gabry. 2017. <span>“Practical Bayesian Model Evaluation Using Leave-One-Out Cross-Validation and WAIC.”</span> <em>Statistics and Computing</em> 27: 1413–32.
@@ -412,7 +482,15 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
 </section>
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>For information on the hunt authorization and permitting process see <a href="https://www.fisheries.noaa.gov/west-coast/marine-mammal-protection/makah-tribal-whale-hunt">NOAA.gov</a> and <a href="https://www.federalregister.gov/documents/2024/06/18/2024-12669/regulations-governing-the-taking-of-marine-mammals">FederalRegister.gov</a>.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Naively within this context references models that were fit to shortened or truncated data time series in order to evaluate the model’s ability to predict known data points that were withheld (or not used) in training the model.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>For information on the gray whale UME, see <a href="https://www.fisheries.noaa.gov/national/marine-life-distress/2019-2023-eastern-north-pacific-gray-whale-ume-closed">ENP Gray Whale UME</a>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
