@@ -15,7 +15,6 @@ website:
   sidebar:
     style: "docked"
     search: true
-    #background: dark
     tools:
       - icon: github
         menu:
@@ -24,20 +23,16 @@ website:
           - text: Report a Bug
             href: https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm
     contents:
-      - text: "Executive summary"
+      - text: "Overview"
         href: index.qmd
       - text: "Model description"
         href: methodology.qmd
       - text: "Model results"
         href: results.qmd
-      #- text: "Discussion"
-      #  href: main/discussion.qmd
       - section: "Supplementary"
         contents:
           - text: "Supplementary tables"
             href: supp_tables.qmd
-          #- text: "Supplementary figures"
-          #  href: main/supp_figs.qmd
           - text: "Model diagnostics"
             href: supp_diagnostics.qmd
           - text: "Simulation analysis"

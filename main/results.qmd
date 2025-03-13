@@ -287,7 +287,7 @@ In all cases, projected estimates were then compared to "observed" abundance in 
 
 ### *Model fits derived from truncated time series* {#model-fits-trunc}
 
-The following tables show predictive performance statistics by model specification when predicting one (@tbl-tRetro1summ) or two years forward (@tbl-tRetro2summ) from all data years between 2013 and `r maxYr - 2` using the truncated time series described above.
+The following tables show predictive performance statistics by model specification when predicting one (@tbl-tRetro1summ) or two years forward (@tbl-tRetro2summ) from all data years between 2013 and `r maxYr - 2` using the truncated time series described above. Makah hunt closures will be imposed when N falls below `r threshold_N` or N~min~ falls below `r threshold_Nmin`.
 
 ::: panel-tabset
 ### Projected year 1 (Table 3)
@@ -423,7 +423,7 @@ tidy_plot_retroPred(N_eval_table_trunc, ylims = c(0, 500), truncated_retro = T)
 
 ### *Model fits derived from full time series* {#model-fits-full}
 
-The following tables show predictive performance statistics by model specification when predicting one (@tbl-retro1summ) or two years forward (@tbl-retro2summ) for all data years from 2002 through `r maxYr - 2` using the full time series.
+The following tables show predictive performance statistics by model specification when predicting one (@tbl-retro1summ) or two years forward (@tbl-retro2summ) for all data years from 2002 through `r maxYr - 2` using the full time series. As stated above, Makah hunt closures will be imposed when N falls below `r threshold_N` or N~min~ falls below `r threshold_Nmin`.
 
 ::: panel-tabset
 ### Projected year 1 (Table 5)
@@ -528,7 +528,7 @@ tidy_plot_retroPred(N_eval_table)
 
 ```{r fig-trendFig, echo = F, warning = F, message = F, fig.height = 18, fig.width = 8, dpi = 600}
 #| label: fig-trendFig
-#| fig-cap: "Predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2022), as well as abundance projections for two years beyond (through 2024). The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N and Nmin, respectively."
+#| fig-cap: "Predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2022), as well as abundance projections for two years beyond (through 2024). The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N < 192) and N~min~ (N~min~ < 171), respectively."
 
 # Population trajectories 
 tidy_plot_traj_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold_Nmin, ncols = 1)
@@ -566,8 +566,6 @@ Ndata_input %>%
   NULL
 ```
 
-@tbl-modelWeights_subset captures the estimated model weights, and therefore relative support for each, when averaging estimates into a single, unified prediction using pseudo-Bayesian model averaging with bootstrapping [@yaoStacking2018]. Model weights favored the AR1 model, with the remaining 50% of the divided among base, ENP calves, and PCFG calves models. After accounting for estimated model weights, model-average prediction for the trend in PCFG abundance is depicted in @fig-stackedTrendFig_subset.
-
 ```{r modelWeights_subset, echo = F, warning = F, message = F}
 #| label: tbl-modelWeights_subset
 #| tbl-cap: "Model weights for all models without ENP strandings. Each was derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+)."
@@ -579,14 +577,9 @@ wgts <- loo_model_weights(loo_pcfg[1:4], method = "pseudobma", BB = TRUE)
 
 wgts_tab <- data.frame(Model = model_names[1:4], Stacking = as.numeric(wgts_stacked), PseudoBMA = as.numeric(wgts))
 
-# kable(wgts_tab,
-#   row.names = F,
-#   col.names = c("Model", "Stacking", "PseudoBMA+"),
-#   digits = 3,
-#   align = c("l", rep("c", 2)),
-#   format = "simple",
-#   booktabs = T) %>%
-# kable_classic(full_width = F, html_font = "Cambria")
+sub_wgts <- wgts_tab %>%
+  filter(Model != "AR1") %>% 
+  pull(PseudoBMA) %>% sum()
 
 kable(wgts_tab %>% dplyr::select(-Stacking),
   row.names = F,
@@ -598,9 +591,11 @@ kable(wgts_tab %>% dplyr::select(-Stacking),
 kable_classic(full_width = F, html_font = "Cambria")
 ```
 
+@tbl-modelWeights_subset captures the estimated model weights, and therefore relative support for each, when averaging estimates into a single, unified prediction using pseudo-Bayesian model averaging with bootstrapping [@yaoStacking2018]. Model weights favored the AR1 model, with the remaining `r sprintf("%.1f", sub_wgts * 100)`% of the model weight divided among base, ENP calves, and PCFG calves models. After accounting for estimated model weights, model-average prediction for the trend in PCFG abundance is depicted in @fig-stackedTrendFig_subset.
+
 ```{r fig-stackedTrendFig_subset, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}
 #| label: fig-stackedTrendFig_subset
-#| fig-cap: "Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N~min~, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N and Nmin, respectively."
+#| fig-cap: "Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N~min~, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N < 192) and N~min~ (N~min~ < 171), respectively."
 
 # Model averaged abundance
 ma_abund <- tidy_model_avg(tfit[1:4], wgts[1:4], iters = 1000, Ndata_input, 101)
@@ -672,8 +667,6 @@ kable(postLastYr_mns,
 kable_classic(full_width = F, html_font = "Cambria")
 ```
 
-\
-
 ```{r finalEstimates, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}
 #| label: fig-final-proj
 #| fig-cap: "Model-specific estimated abundance in the second year of projections (2025). Median estimates are represented by vertical boundaries between orange and gray. N~min~ estimates (lower 20% CIs) are represented by the boundaries between red and orange. The solid and dashed black, vertical lines correspond to the management closure thresholds for N and N~min~, respectively."
@@ -744,5 +737,5 @@ mainPred <- ma_abund$summary %>%
   slice((n()-1):n()) %>%
   dplyr::select(year, N = mean, Nmin = percentile_20)
 
-save(mainPred, Ndata_input, file = here("out", "front_page_matter.Rdata"))
+save(mainPred, Ndata_input, wgts_tab, ma_abund, file = here("out", "front_page_matter.Rdata"))
 ```

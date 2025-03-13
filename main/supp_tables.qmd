@@ -32,6 +32,10 @@ N_eval_retro_summ <- N_eval_retro_summ %>%
                                    "PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"),
                         labels = c("Base", "AR1", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
     )
+
+# Specify tresholds ------------------------------------------------------------
+threshold_N = 192    # Threshold on abundance below which a hunt is closed
+threshold_Nmin = 171 # Threshold on minimum abundance below which a hunt is closed
 ```
 
 ## Retrospective analysis
@@ -102,7 +106,7 @@ datatable(N_eval_tab_proj1yr,
   formatRound(13, 2)
 ```
 
-Model predictions when projecting one year forward for truncated time series ending in years 2013 through 2021.
+Model predictions when projecting one year forward for truncated time series ending in years 2013 through 2021. Makah hunt closures will be imposed when N falls below `r threshold_N` or N~min~ falls below `r threshold_Nmin`.
 
 :::
 
@@ -168,7 +172,7 @@ datatable(N_eval_tab_proj2yr,
   formatRound(13, 2)
 ```
 
-Model predictions when projecting two years forward for truncated time series ending in years 2013 through 2021.
+Model predictions when projecting two years forward for truncated time series ending in years 2013 through 2021. Makah hunt closures will be imposed when N falls below `r threshold_N` or N~min~ falls below `r threshold_Nmin`.
 
 :::
 :::::
@@ -237,7 +241,7 @@ datatable(N_eval_tab_proj1yr,
   formatRound(13, 2)
 ```
 
-Model predictions when projecting one year forward for all data years from 2002 through 2021.
+Model predictions when projecting one year forward for all data years from 2002 through 2021. Makah hunt closures will be imposed when N falls below `r threshold_N` or N~min~ falls below `r threshold_Nmin`.
 
 :::
 
@@ -301,60 +305,12 @@ datatable(N_eval_tab_proj2yr,
   formatRound(13, 2)
 ```
 
-Model predictions when projecting two years forward for all data years from 2002 through 2021.
+Model predictions when projecting two years forward for all data years from 2002 through 2021. Makah hunt closures will be imposed when N falls below `r threshold_N` or N~min~ falls below `r threshold_Nmin`.
 
 :::
 :::::
 
 ## Bayesian model averaging
-
-::::: panel-tabset
-### Complete model set
-
-::: {#st-bma1 style="background-color: white; padding: 15px"}
-```{r tbl-bma1, echo = F, warning = F, message = F}
-# Summary stats
-load(here("out", paste0("TruncatedRetroSummary_cBMA_2025", ".dat")))
-N_eval_retro_summ_ma <- N_eval_retro_summ_ma %>%
-  dplyr::select(
-    proj_set, model, year, abundEstN, mean, median, lo_ci, hi_ci, percentile_20,
-    closure_Nmin, closure_N, closure
-  )
-
-# HTML table output
-datatable(N_eval_retro_summ_ma,
-          rownames = F,
-          colnames = c("Projected", "Model", "Year", "Abundance Estimate",
-                "Mean N", "Median N", 
-                "Lower 95% CI (N)", "Upper 95% CI (N)",
-                "Nmin",
-                "Closure (Nmin)", "Closure (N)", "Closure"),
-          options = list(
-              columnDefs = list(list(className = 'dt-center', targets = 0:11))
-              )) %>%
-  formatStyle(
-    columns = c(1:12), #specify columns to format
-    #fontFamily = "Arial",
-    #fontSize = "14px",
-    color = "#242424",
-    #paddingRight = "1em",
-    # borderBottomColor = "#242424",
-    # borderBottomStyle = "solid",
-    # borderBottomWidth = "1px",
-    borderCollapse = "collapse",
-    verticalAlign = "middle",
-    textAlign = "center",
-    wordWrap = "break-word",
-    backgroundColor = 'white'
-  ) %>%
-  formatRound(4:9, 1)
-```
-
-Complete model-averaged predictions when projecting one year forward for all data years from 2017 through 2021.
-
-:::
-
-### Model set w/o ENP strandings
 
 ::: {#st-bma2 style="background-color: white; padding: 15px"}
 ```{r tbl-bma2, echo = F, warning = F, message = F}
@@ -395,8 +351,7 @@ datatable(N_eval_retro_summ_ma,
   formatRound(4:9, 1)
 ```
 
-Model-averaged predictions, without ENP strandings, when projecting one year forward for all data years from 2017 through 2021.
-
+Model-averaged predictions, without ENP strandings, when projecting one year forward for all data years from 2017 through 2021. Makah hunt closures will be imposed when N falls below `r threshold_N` or N~min~ falls below `r threshold_Nmin`.
 :::
-:::::
+
 ::::::::::::

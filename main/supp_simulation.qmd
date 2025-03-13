@@ -65,7 +65,7 @@ ggplot(summ_dec %>% filter(proj_set == "1 yr"), aes(x = year, group = model)) +
   theme_bw()
 ```
 
-Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable ($\lambda$ = 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. $\lambda$ was varied to explore the how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N~min~.
+Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable ($\lambda$ = 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. $\lambda$ was varied to explore how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N (`r threshold_N`) and the red dashed line depicts the hunt closure threshold for N~min~ (`r threshold_Nmin`).
 :::
 
 ::: {#sf-simulatedIncline_proj1yr}
@@ -91,7 +91,7 @@ ggplot(summ_inc %>% filter(proj_set == "1 yr"), aes(x = year, group = model)) +
   theme_bw()
 ```
 
-Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable ($\lambda$ = 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. $\lambda$ was varied to explore the how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N~min~.
+Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable ($\lambda$ = 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. $\lambda$ was varied to explore how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N (`r threshold_N`) and the red dashed line depicts the hunt closure threshold for N~min~ (`r threshold_Nmin`).
 
 :::
 
@@ -113,7 +113,7 @@ ggplot(summ_dec %>% filter(proj_set == "2 yr"), aes(x = year, group = model)) +
   theme_bw()
 ```
 
-Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable ($\lambda$ = 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. $\lambda$ was varied to explore the how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N~min~.
+Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable ($\lambda$ = 1) population was simulated for 15 years prior to experiencing a decline for an additional 10 years. $\lambda$ was varied to explore how responsive each model was to the rate of change in population decline. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N (`r threshold_N`) and the red dashed line depicts the hunt closure threshold for N~min~ (`r threshold_Nmin`).
 
 :::
 
@@ -133,7 +133,7 @@ ggplot(summ_inc %>% filter(proj_set == "2 yr"), aes(x = year, group = model)) +
   theme_bw()
 ```
 
-Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable ($\lambda$ = 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. $\lambda$ was varied to explore the how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N and the red dashed line depicts the hunt closure threshold for N~min~.
+Results from a simulation analysis evaluating the predictive accuracy of the Base and AR1 models when projecting 1 year beyond the last know abundance. Here, a stable ($\lambda$ = 1) population was simulated for 15 years prior to experiencing an increase for an additional 10 years. $\lambda$ was varied to explore how responsive each model was to the rate of change in population increase. Simulated abundances are depicted as black points, the base model trend is represented as red, and the AR1 model predicted trend is represented as black. Ribbons for both models are the 60% credible intervals. The solid horizontal line depicts the hunt closure threshold for N (`r threshold_N`) and the red dashed line depicts the hunt closure threshold for N~min~ (`r threshold_Nmin`).
 
 :::
 :::
