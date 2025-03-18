@@ -247,8 +247,7 @@ window.Quarto = {
   </ul></li>
   <li><a href="#model-predicted-population-trends" id="toc-model-predicted-population-trends" class="nav-link" data-scroll-target="#model-predicted-population-trends"><em>Model-predicted population trends</em></a>
   <ul class="collapse">
-  <li><a href="#model-averaged-population-trend" id="toc-model-averaged-population-trend" class="nav-link" data-scroll-target="#model-averaged-population-trend">Model-averaged population trend</a></li>
-  <li><a href="#model-specific-predictions-for-2025" id="toc-model-specific-predictions-for-2025" class="nav-link" data-scroll-target="#model-specific-predictions-for-2025">Model-specific predictions for 2025</a></li>
+  <li><a href="#model-averaged-population-trend-and-predictions-for-2025" id="toc-model-averaged-population-trend-and-predictions-for-2025" class="nav-link" data-scroll-target="#model-averaged-population-trend-and-predictions-for-2025">Model-averaged population trend and predictions for 2025</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -952,39 +951,55 @@ Figure&nbsp;3: Predicted trends in PCFG gray whale abundance by state-space mode
 </div>
 </div>
 </div>
-<section id="model-averaged-population-trend" class="level2">
-<h2 class="anchored" data-anchor-id="model-averaged-population-trend">Model-averaged population trend</h2>
+<section id="model-averaged-population-trend-and-predictions-for-2025" class="level2">
+<h2 class="anchored" data-anchor-id="model-averaged-population-trend-and-predictions-for-2025">Model-averaged population trend and predictions for 2025</h2>
 <div class="cell">
-<div id="tbl-modelWeights_subset" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<div id="tbl-modelPrediction2yr" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelWeights_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7: Model weights for all models without ENP strandings. Each was derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+).
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelPrediction2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;7: Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundane (N) and minimum abundane (N<sub>min</sub>) for PCFG gray whales in 2025.
 </figcaption>
-<div aria-describedby="tbl-modelWeights_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div aria-describedby="tbl-modelPrediction2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display" data-html-table-processing="none">
 <table class=" lightable-classic" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
  <thead>
   <tr>
    <th style="text-align:left;"> Model </th>
    <th style="text-align:center;"> PseudoBMA+ </th>
+   <th style="text-align:center;"> N </th>
+   <th style="text-align:center;"> N<sub>min</sub> </th>
   </tr>
  </thead>
 <tbody>
   <tr>
    <td style="text-align:left;"> Base </td>
-   <td style="text-align:center;"> 0.198 </td>
+   <td style="text-align:center;"> 0.197 </td>
+   <td style="text-align:center;"> 215.9 </td>
+   <td style="text-align:center;"> 197.9 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 0.478 </td>
+   <td style="text-align:center;"> 0.477 </td>
+   <td style="text-align:center;"> 203.9 </td>
+   <td style="text-align:center;"> 174.4 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 0.126 </td>
+   <td style="text-align:center;"> 0.125 </td>
+   <td style="text-align:center;"> 213.3 </td>
+   <td style="text-align:center;"> 189.3 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves only </td>
-   <td style="text-align:center;"> 0.198 </td>
+   <td style="text-align:center;"> 0.200 </td>
+   <td style="text-align:center;"> 221.0 </td>
+   <td style="text-align:center;"> 200.5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Model-averaged estimate </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> 211.3 </td>
+   <td style="text-align:center;"> 186.3 </td>
   </tr>
 </tbody>
 </table>
@@ -994,7 +1009,7 @@ Table&nbsp;7: Model weights for all models without ENP strandings. Each was deri
 </figure>
 </div>
 </div>
-<p><a href="#tbl-modelWeights_subset" class="quarto-xref">Table&nbsp;7</a> captures the estimated model weights, and therefore relative support for each, when averaging estimates into a single, unified prediction using pseudo-Bayesian model averaging with bootstrapping <span class="citation" data-cites="yaoStacking2018">(<a href="#ref-yaoStacking2018" role="doc-biblioref">Yao et al. 2018</a>)</span>. Model weights favored the AR1 model, with the remaining 52.2% of the model weight divided among base, ENP calves, and PCFG calves models. After accounting for estimated model weights, model-average prediction for the trend in PCFG abundance is depicted in <a href="#fig-stackedTrendFig_subset" class="quarto-xref">Figure&nbsp;4</a>.</p>
+<p><a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;7</a> captures the estimated model weights, and therefore relative support for each, when averaging estimates into a single, unified prediction using pseudo-Bayesian model averaging with bootstrapping <span class="citation" data-cites="yaoStacking2018">(<a href="#ref-yaoStacking2018" role="doc-biblioref">Yao et al. 2018</a>)</span>. Model weights favored the AR1 model, with the remaining 52.3% of the model weight divided among base, ENP calves, and PCFG calves models. After accounting for estimated model weights, model-average prediction for the trend in PCFG abundance is depicted in <a href="#fig-stackedTrendFig_subset" class="quarto-xref">Figure&nbsp;4</a>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-stackedTrendFig_subset" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1009,69 +1024,18 @@ Figure&nbsp;4: Estimated trend in PCFG gray whale abundance derived from model-a
 </div>
 </div>
 </div>
-</section>
-<section id="model-specific-predictions-for-2025" class="level2">
-<h2 class="anchored" data-anchor-id="model-specific-predictions-for-2025">Model-specific predictions for 2025</h2>
-<p><a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;8</a> and <a href="#fig-final-proj" class="quarto-xref">Figure&nbsp;5</a> provide predictions for the near-future state of the PCFG gray whale population. All estimates, including those from individual models, predict the PCFG population is above the management thresholds for both N and N<sub>min</sub> in 2025. <a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;8</a> provides the point estimates for N and N<sub>min</sub>, and <a href="#fig-final-proj" class="quarto-xref">Figure&nbsp;5</a> depicts the posterior predictions by model. For the figure, the portion of the posterior distributions filled in red capture the lower 20% credible interval, the upper threshold of which represents the estimated N<sub>min</sub>. If this threshold drops below the dashed line, it would trigger a management closure.</p>
-<div class="cell">
-<div id="tbl-modelPrediction2yr" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<p><a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;7</a> and <a href="#fig-final-proj" class="quarto-xref">Figure&nbsp;5</a> provide predictions for the near-future state of the PCFG gray whale population. All estimates, including those from individual models, predict the PCFG population is above the management thresholds for both N and N<sub>min</sub> in 2025. <a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;7</a> provides the point estimates for N and N<sub>min</sub>, and <a href="#fig-final-proj" class="quarto-xref">Figure&nbsp;5</a> depicts the posterior predictions by model. For the figure, the portion of the posterior distributions filled in red capture the lower 20% credible interval, the upper threshold of which represents the estimated N<sub>min</sub>. If this threshold drops below the dashed line, it would trigger a management closure.</p>
+<div id="tbl-modelPrediction2yr_v0" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
-<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelPrediction2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelPrediction2yr_v0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 Table&nbsp;8: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based on a two year projection from the last documented abundance estimate (2023).
 </figcaption>
-<div aria-describedby="tbl-modelPrediction2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output-display" data-html-table-processing="none">
-<table class=" lightable-classic" style="font-family: Cambria; width: auto !important; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:left;"> Model </th>
-   <th style="text-align:center;"> N </th>
-   <th style="text-align:center;"> N<sub>min</sub> </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:left;"> Base </td>
-   <td style="text-align:center;"> 215.9 </td>
-   <td style="text-align:center;"> 197.9 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 203.9 </td>
-   <td style="text-align:center;"> 174.4 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 213.3 </td>
-   <td style="text-align:center;"> 189.3 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> PCFG Calves only </td>
-   <td style="text-align:center;"> 221.0 </td>
-   <td style="text-align:center;"> 200.5 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> ENP Strandings only </td>
-   <td style="text-align:center;"> 199.7 </td>
-   <td style="text-align:center;"> 181.2 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> PCFG Calves + ENP Strandings </td>
-   <td style="text-align:center;"> 204.3 </td>
-   <td style="text-align:center;"> 182.1 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Model-averaged estimate </td>
-   <td style="text-align:center;"> 210.9 </td>
-   <td style="text-align:center;"> 186.4 </td>
-  </tr>
-</tbody>
-</table>
+<div aria-describedby="tbl-modelPrediction2yr_v0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
 
 </div>
 </div>
 </figure>
-</div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -1081,7 +1045,7 @@ Table&nbsp;8: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based
 <img src="results_files/figure-html/fig-final-proj-1.png" class="img-fluid figure-img" width="2400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-final-proj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Model-specific estimated abundance in the second year of projections (2025). Median estimates are represented by vertical boundaries between orange and gray. N<sub>min</sub> estimates (lower 20% CIs) are represented by the boundaries between red and orange. The solid and dashed black, vertical lines correspond to the management closure thresholds for N and N<sub>min</sub>, respectively.
+Figure&nbsp;5: Model-specific estimated abundance in the second year of projections (2025). Median estimates are represented by vertical boundaries between dark gray and white. N<sub>min</sub> estimates (lower 20% CIs) are represented by the boundaries between light gray and dark gray. The solid and dashed black, vertical lines correspond to the management closure thresholds for N and N<sub>min</sub>, respectively.
 </figcaption>
 </figure>
 </div>
