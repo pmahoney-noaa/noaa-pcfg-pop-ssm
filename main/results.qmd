@@ -534,7 +534,7 @@ tidy_plot_retroPred(N_eval_table)
 tidy_plot_traj_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold_Nmin, ncols = 1)
 ```
 
-## Model-averaged population trend
+## Model-averaged population trend and predictions for `r maxYr + 2`
 
 ```{r fig-stackedTrendFig, echo = F, warning = F, message = F, eval = F, fig.height = 4, fig.width = 8, dpi = 300}
 #| label: fig-stackedTrendFig
@@ -566,9 +566,9 @@ Ndata_input %>%
   NULL
 ```
 
-```{r modelWeights_subset, echo = F, warning = F, message = F}
-#| label: tbl-modelWeights_subset
-#| tbl-cap: "Model weights for all models without ENP strandings. Each was derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+)."
+```{r tbl-modelPrediction2yr, echo = F, warning = F, message = F}
+#| label: tbl-modelPrediction2yr
+#| tbl-cap: "Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundane (N) and minimum abundane (N~min~) for PCFG gray whales in 2025."
 #| html-table-processing: none
 
 # Model weights
@@ -581,24 +581,51 @@ sub_wgts <- wgts_tab %>%
   filter(Model != "AR1") %>% 
   pull(PseudoBMA) %>% sum()
 
-kable(wgts_tab %>% dplyr::select(-Stacking),
+# Model averaged abundance
+ma_abund <- tidy_model_avg(tfit[1:4], wgts[1:4], iters = 1000, Ndata_input, 101)
+
+# Projected estimated final abundance + 2 years (posterior draws) -----------------
+lastYr <- "logN_proj[2]"
+postLastYr <- purrr::imap(tfit, ~.x[lastYr] %>% add_column(Model = model_names[.y]))
+postLastYr <- do.call(rbind, postLastYr)
+
+maDraws <- ma_abund$draws %>%
+  filter(year == maxYr + 2) %>%
+  mutate(Model = "Model-averaged estimate") %>%
+  dplyr::select(
+    `logN_proj[2]` = logN, Model
+  )
+
+postLastYr <- rbind(postLastYr, maDraws) %>%
+  filter(!grepl("Strandings", Model))
+
+# Summarizing last projected year and appending model-averaged estimate           
+postLastYr_mns <- postLastYr %>%
+  group_by(Model) %>%
+  summarize(
+    Nmean = exp(mean(`logN_proj[2]`)),
+    Nmin = quantile(exp(`logN_proj[2]`), 0.2)
+  )
+
+summTab <- wgts_tab %>% full_join(postLastYr_mns, by = "Model")
+
+options(knitr.kable.NA = '')
+kable(summTab %>% dplyr::select(-Stacking),
   row.names = F,
-  col.names = c("Model", "PseudoBMA+"),
-  digits = 3,
-  align = c("l", "c"),
+  col.names = c("Model", "PseudoBMA+", "N", "N<sub>min</sub>"),
+  digits = c(0, 3, 1, 1),
+  align = c("l", rep("c", 3)),
   format = "html",
-  booktabs = T) %>%
+  booktabs = T,
+  escape = F) %>%
 kable_classic(full_width = F, html_font = "Cambria")
 ```
 
-@tbl-modelWeights_subset captures the estimated model weights, and therefore relative support for each, when averaging estimates into a single, unified prediction using pseudo-Bayesian model averaging with bootstrapping [@yaoStacking2018]. Model weights favored the AR1 model, with the remaining `r sprintf("%.1f", sub_wgts * 100)`% of the model weight divided among base, ENP calves, and PCFG calves models. After accounting for estimated model weights, model-average prediction for the trend in PCFG abundance is depicted in @fig-stackedTrendFig_subset.
+@tbl-modelPrediction2yr captures the estimated model weights, and therefore relative support for each, when averaging estimates into a single, unified prediction using pseudo-Bayesian model averaging with bootstrapping [@yaoStacking2018]. Model weights favored the AR1 model, with the remaining `r sprintf("%.1f", sub_wgts * 100)`% of the model weight divided among base, ENP calves, and PCFG calves models. After accounting for estimated model weights, model-average prediction for the trend in PCFG abundance is depicted in @fig-stackedTrendFig_subset.
 
 ```{r fig-stackedTrendFig_subset, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}
 #| label: fig-stackedTrendFig_subset
 #| fig-cap: "Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N~min~, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N < 192) and N~min~ (N~min~ < 171), respectively."
-
-# Model averaged abundance
-ma_abund <- tidy_model_avg(tfit[1:4], wgts[1:4], iters = 1000, Ndata_input, 101)
 
 # Figure
 Ndata_input %>% 
@@ -625,12 +652,10 @@ Ndata_input %>%
   NULL
 ```
 
-## Model-specific predictions for `r maxYr + 2`
-
 @tbl-modelPrediction2yr and @fig-final-proj provide predictions for the near-future state of the PCFG gray whale population. All estimates, including those from individual models, predict the PCFG population is above the management thresholds for both N and N~min~ in `r maxYr + 2`. @tbl-modelPrediction2yr provides the point estimates for N and N~min~, and @fig-final-proj depicts the posterior predictions by model. For the figure, the portion of the posterior distributions filled in red capture the lower 20% credible interval, the upper threshold of which represents the estimated N~min~. If this threshold drops below the dashed line, it would trigger a management closure.
 
-```{r, echo = F, warning = F, message = F}
-#| label: tbl-modelPrediction2yr
+```{r tbl-modelPrediction2yr_v0, echo = F, warning = F, eval = F, message = F}
+#| label: tbl-modelPrediction2yr_v0
 #| tbl-cap: "Predicted N and N~min~ for PCFG gray whales in 2025 based on a two year projection from the last documented abundance estimate (2023)."
 #| html-table-processing: none
 
@@ -646,7 +671,8 @@ maDraws <- ma_abund$draws %>%
     `logN_proj[2]` = logN, Model
   )
 
-postLastYr <- rbind(postLastYr, maDraws)
+postLastYr <- rbind(postLastYr, maDraws)  %>%
+  filter(!grepl("Strandings", Model))
 
 # Summarizing last projected year and appending model-averaged estimate           
 postLastYr_mns <- postLastYr %>%
@@ -669,7 +695,7 @@ kable_classic(full_width = F, html_font = "Cambria")
 
 ```{r finalEstimates, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}
 #| label: fig-final-proj
-#| fig-cap: "Model-specific estimated abundance in the second year of projections (2025). Median estimates are represented by vertical boundaries between orange and gray. N~min~ estimates (lower 20% CIs) are represented by the boundaries between red and orange. The solid and dashed black, vertical lines correspond to the management closure thresholds for N and N~min~, respectively."
+#| fig-cap: "Model-specific estimated abundance in the second year of projections (2025). Median estimates are represented by vertical boundaries between dark gray and white. N~min~ estimates (lower 20% CIs) are represented by the boundaries between light gray and dark gray. The solid and dashed black, vertical lines correspond to the management closure thresholds for N and N~min~, respectively."
 
 # ggplot(postLastYr, aes(group = Model, fill = Model, color = Model)) +
 #   geom_density_ridges(aes(x = exp(`logN_proj[2]`), y = Model), 
@@ -697,7 +723,7 @@ ggplot(postLastYr, aes(x = exp(`logN_proj[2]`), y = Model, fill = factor(stat(qu
     color = "#A0A0A0A0"
   ) +
   scale_fill_manual(
-    name = "Probability", values = c("#FF0000A0", "#fc8c03A0", "#A0A0A0A0"),
+    name = "Probability", values = c("#999999A0", "#444444A0", "#FFFFFF"),
     labels = c("(0, 0.2]", "(0.2, 0.5]", "(0.5, 1]")
   ) +
   geom_vline(aes(xintercept = threshold_N), color = "black") +
