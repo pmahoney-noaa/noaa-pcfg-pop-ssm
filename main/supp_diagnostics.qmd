@@ -24,7 +24,7 @@ load(here("out", "mfits.RData"))
 
 # Model fitting diagnostics
 
-All modeling was conducted using the R package `cmdstanr` [@cmdstanr]. Posterior sampling was performed using Hamiltonian Monte Carlo with three chains in parallel. The number of warmup (n~i~ = 1000) and sampling iterations (n~i~ = 1000) were kept at their defaults as these were adequate for sampling posterior distributions. @st-diags provides a summary of chain-specific diagnostics by model specification. Chains with few to no divergences (Number Divergent) and that do not hit maximum tree depth (Number Max Treedepth) indicate adequate sampling of posteriors and overall good chain performance. Similarly, an estimated Bayesian fraction of missing information (eBFMI) greater than 0.3 suggests reliable inference can be drawn from posterior estimates.
+All modeling was conducted using the R package `cmdstanr` [@cmdstanr]. Posterior sampling was performed using Hamiltonian Monte Carlo with three chains in parallel. The number of warmup (n = 1000) and sampling iterations (n = 1000) were kept at their defaults as these were adequate for sampling posterior distributions. @st-diags provides a summary of chain-specific diagnostics by model specification. Chains with few to no divergences (Number Divergent) and with zero or a small fraction of sampling iterations reaching maximum tree depth (Number Max Treedepth) indicate adequate sampling of posteriors and overall good chain performance. Similarly, an estimated Bayesian fraction of missing information (eBFMI) greater than 0.3 suggests reliable inference can be drawn from posterior estimates [@betancourt2016].
 
 ::: {#st-diags}
 

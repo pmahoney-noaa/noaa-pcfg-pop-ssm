@@ -9,25 +9,25 @@ The SSM models abundance in log-space with Gaussian errors and can be defined as
 
 *Observation process:*
 
-$$ logN_{est} \sim normal(logN, \sigma_{obs}) $$
+$$ lnN_{est} \sim normal(lnN, \sigma_{obs}) $$
 
 *State process:*
 
-$$ logN_{est_{t+1}} = logN_{est_{t}} + ln(\lambda_{t}) $$
+$$ lnN_{est_{t+1}} = lnN_{est_{t}} + ln(\lambda_{t}) $$
 
 $$ ln(\lambda_{t}) \sim normal(\mu, \sigma) $$
 
-Where $logN$ and $\sigma_{obs}$ are the estimated (log) population abundance and standard error for each year with observation data, respectively. Models vary by the specification of $\lambda$ - or the intrinsic rate of growth in a population from year to year - and the factors hypothesized to be correlated with population growth, at least given current knowledge and available data within this system. At present, six models were considered.
+Where $lnN$ and $\sigma_{obs}$ are the estimated (log) population abundance and standard error for each year with observation data, respectively. Models vary by the specification of $\lambda$ - representing the rate of growth in abundance from year to year - and the factors hypothesized to be correlated with population growth, at least given current knowledge and available data within this system. At present, six models were considered.
 
-1.  Base: assumes future PCFG whale abundance is informed by an average growth rate ($\mu_{ln(\lambda)}$), with an associated measure of variability or uncertainty ($\sigma_{ln(\lambda)}$), for all years since 2002.
+1.  Base: assumes future PCFG whale abundance is informed by the average growth rate ($\mu_{ln(\lambda)}$), with an associated measure of variability or uncertainty ($\sigma_{ln(\lambda)}$), for all years since 2002.
 
     $$ \mu = \mu_{ln(\lambda)}; \sigma = \sigma_{ln(\lambda)} $$
 
-3.  AR1: assumes an autoregressive correlation in population growth ($\lambda$). In this case, population growth in the current year ($\mu$ or $ln(\lambda_{t})$) is dependent upon population growth in the previous year ($ln(\lambda_{t-1})$), permitting more persistent trends in population abundance through time.
+3.  AR1: assumes an autoregressive correlation in population growth ($\lambda$). In this case, population growth in the current year ($\mu$ or $ln(\lambda_{t})$) is dependent upon population growth in the previous year ($ln(\lambda_{t-1})$), permitting more flexibility and short-term trends in population abundance through time.
 
     $$ \mu = ln(\lambda_{t-1}); \sigma = \sigma_{ln(\lambda)} $$
 
-4.  ENP calves: similar to the Base model, the ENP calves model includes a covariate representing the number of Eastern North Pacific (ENP) gray whale calves, permitting our average expectation for population growth to scale ($\beta_{calves}$) with the number of reported calves in the previous year ($C_{t-1}$). The ENP calves model is informed by a long-term dataset from counts of gray whale calves as they migrate with their mothers past Piedras Blancas, California to more northerly feeding grounds in the Bering, Beaufort, and Chukchi seas [@lang2024]. Notably, the numbers of ENP calves correlates with calf numbers observed in the PCFG range, providing the benefit of standardized and rigorous time series than for PCFG calves alone. Further, these data are more consistently available during years in which PCFG abundance estimates, or possibly PCFG calf counts, are available, providing a measure of constraint on our expectations for population growth during projected years.
+4.  ENP calves: similar to the Base model, the ENP calves model includes a covariate representing the number of Eastern North Pacific (ENP) gray whale calves, permitting the average expectation for population growth to scale ($\beta_{calves}$) with the number of reported calves in the previous year ($C_{t-1}$). The ENP calves model is informed by a long-term dataset from counts of gray whale calves as they migrate with their mothers past Piedras Blancas, California to more northerly feeding grounds in the Bering, Beaufort, and Chukchi seas [@lang2024]. Notably, the numbers of ENP calves correlates with calf numbers observed in the PCFG range, providing the benefit of a more standardized and rigorous time series than that is available for PCFG calves alone. Further, these data are more consistently available during years in which PCFG abundance estimates, or possibly PCFG calf counts, are available, providing a measure of constraint on our expectations for population growth during projected years.
 
     $$ \mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t-1}; \sigma = \sigma_{ln(\lambda)} $$
 
@@ -35,7 +35,7 @@ Where $logN$ and $\sigma_{obs}$ are the estimated (log) population abundance and
 
     $$ \mu = \mu_{ln(\lambda)} + \beta_{calves} * C_{t-1}; \sigma = \sigma_{ln(\lambda)} $$
 
-6.  ENP Strandings only: includes a covariate representing the number of gray whale strandings along the coasts of California, Oregon, and Washington, permitting our average expectation for population growth to scale ($\beta_{strand}$) with the number of reported strandings (ENP, including PCFG) in the previous year ($S_{t-1}$) during primarily the northbound migration.nDuring stranding events, it is very rare to be able to determine if a whale is a PCFG whale or not often due to the body position of the whale on the beach and decomposition. Stranding data is routinely collected and will often be available in the years in which PCFG abundance is forecasted. 
+6.  ENP Strandings only: includes a covariate representing the number of gray whale strandings along the coasts of California, Oregon, and Washington, permitting our average expectation for population growth to scale ($\beta_{strand}$) with the number of reported strandings (ENP, including PCFG) in the previous year ($S_{t-1}$) during primarily the northbound migration. During stranding events, it is very rare to be able to determine if a stranded whale is a member of the PCFG due to the body position of the whale on the beach and decomposition, precluding observations of identifiable markings. Stranding data is routinely collected and will often be available in the years in which PCFG abundance is forecasted. 
 
     $$ \mu = \mu_{ln(\lambda)} + \beta_{strand} * S_{t-1}; \sigma = \sigma_{ln(\lambda)} $$
 
@@ -61,4 +61,4 @@ $$ \beta_i \sim normal(0, 1) $$
 
 # *Modeling environment*
 
-All modeling was conducted using the package `cmdstanr` [@cmdstanr] in **R** [@Rcore] . Posterior sampling was performed using Hamiltonian Monte Carlo with three chains in parallel. The number of warmup (n~i~ = 1000) and sampling iterations (n~i~ = 1000) were kept at their defaults as these were adequate for sampling posterior distributions. Refer to the chain diagnostic summary [table](supp_diagnostics.html) or the [R code](https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm) for more details.
+All modeling was conducted using the package `cmdstanr` [@cmdstanr] in **R** [@Rcore] . Posterior sampling was performed using Hamiltonian Monte Carlo with three chains in parallel. The number of warmup (n = 1000) and sampling iterations (n = 1000) were kept at their defaults as these were adequate for sampling posterior distributions. Refer to the chain diagnostic summary [table](supp_diagnostics.html) or the [R code](https://github.com/pmahoney-noaa/noaa-pcfg-pop-ssm) for more details.

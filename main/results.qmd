@@ -294,10 +294,10 @@ The following tables show predictive performance statistics by model specificati
 
 ```{r tbl-tRetro1summ, echo = F, warning = F, message = F}
 #| label: tbl-tRetro1summ
-#| tbl-cap: "Model prediction statistics for one year projections using data years 2013 through 2021 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
+#| tbl-cap: "Model prediction statistics for one year projections using data years 2013 through 2022 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
 #| html-table-processing: none
 N_eval_summary_proj1yr <- N_eval_retro_summ %>%
-  filter(proj_set == "1 yr" & year != 2023) %>%
+  filter(proj_set == "1 yr") %>%
   filter(year > 2013) %>%
   group_by(model) %>%
   summarize(
@@ -340,7 +340,7 @@ kable_classic(full_width = T, html_font = "Cambria")
 #| tbl-cap: "Model prediction statistics for two year projections using data years 2013 through 2021 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
 #| html-table-processing: none
 N_eval_summary_proj2yr <- N_eval_retro_summ %>%
-  filter(proj_set == "2 yr" & year != 2023) %>%
+  filter(proj_set == "2 yr" & year != 2024) %>%
   filter(year > 2013) %>%
   group_by(model) %>%
   summarize(
@@ -381,10 +381,10 @@ kable_classic(full_width = T, html_font = "Cambria")
 
 ```{r truncRetroFig1, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
 #| label: fig-truncRetroFig1
-#| fig-cap: "The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2014 through 2022 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars."
+#| fig-cap: "The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2014 through 2023 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars."
 #| 
 N_eval_table_trunc <- N_eval_retro_summ %>%
-  filter(year > 2013 & year != 2023) #%>%
+  filter(year > 2013& year != 2024) #%>%  
   # mutate(model = factor(model, 
   #                       levels = c("Base", "AR1v1", "AR1v2", "Calves/Strandings", 
   #                                  "Calves only", "Strandings only", "ENP Calves")))
@@ -430,7 +430,7 @@ The following tables show predictive performance statistics by model specificati
 
 ```{r retro1summ, echo = F, warning = F, message = F}
 #| label: tbl-retro1summ
-#| tbl-cap: "Model prediction statistics for one year projections using data years 2002 through 2021 as starting points. Models were fit using the full time series. RSS is the residual sum of squares."
+#| tbl-cap: "Model prediction statistics for one year projections using data years 2002 through 2022 as starting points. Models were fit using the full time series. RSS is the residual sum of squares."
 #| html-table-processing: none
 # Retrospective prediction -----------------------------------------------------
 N_eval_table <- pred_summary_tbl_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold_Nmin)
@@ -517,7 +517,7 @@ kable_classic(full_width = T, html_font = "Cambria")
 
 ```{r fig-retroFig, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
 #| label: fig-retroFig
-#| fig-cap: "The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications using the full time series. Observed abundance estimates for years 2003 through 2022 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars."
+#| fig-cap: "The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications using the full time series. Observed abundance estimates for years 2003 through 2023 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars."
 
 tidy_plot_retroPred(N_eval_table)
 ```
@@ -528,7 +528,7 @@ tidy_plot_retroPred(N_eval_table)
 
 ```{r fig-trendFig, echo = F, warning = F, message = F, fig.height = 18, fig.width = 8, dpi = 600}
 #| label: fig-trendFig
-#| fig-cap: "Predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2022), as well as abundance projections for two years beyond (through 2024). The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N < 192) and N~min~ (N~min~ < 171), respectively."
+#| fig-cap: "Predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2023), as well as abundance projections for two years beyond (through 2025). The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N < 192) and N~min~ (N~min~ < 171), respectively."
 
 # Population trajectories 
 tidy_plot_traj_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold_Nmin, ncols = 1)
@@ -652,7 +652,7 @@ Ndata_input %>%
   NULL
 ```
 
-@tbl-modelPrediction2yr and @fig-final-proj provide predictions for the near-future state of the PCFG gray whale population. All estimates, including those from individual models, predict the PCFG population is above the management thresholds for both N and N~min~ in `r maxYr + 2`. @tbl-modelPrediction2yr provides the point estimates for N and N~min~, and @fig-final-proj depicts the posterior predictions by model. For the figure, the portion of the posterior distributions filled in red capture the lower 20% credible interval, the upper threshold of which represents the estimated N~min~. If this threshold drops below the dashed line, it would trigger a management closure.
+@tbl-modelPrediction2yr and @fig-final-proj provide predictions for the near-future state of the PCFG gray whale population. All estimates, including those from individual models, predict the PCFG population is above the management thresholds for both N and N~min~ in `r maxYr + 2`. @tbl-modelPrediction2yr provides the point estimates for N and N~min~, and @fig-final-proj depicts the posterior predictions by model. For the figure, the portion of the posterior distributions filled in light gray capture the lower 20% credible interval, the upper threshold of which represents the estimated N~min~. If this threshold drops below the dashed line, it would trigger a management closure.
 
 ```{r tbl-modelPrediction2yr_v0, echo = F, warning = F, eval = F, message = F}
 #| label: tbl-modelPrediction2yr_v0
