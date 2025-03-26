@@ -3,15 +3,17 @@ title: "A state-space model for projecting population abundance"
 bibliography: references.bib
 ---
 
-Contributors: *Peter J. Mahoney^1\*^, John R. Brandon^2^, Jonathan J. Scordino^3^, John Calambokidis^4^*
+Contributors: *Peter J. Mahoney^1\*^, John R. Brandon^2^, Jeffrey E. Moore^3^, Jonathan J. Scordino^4^, John Calambokidis^5^*
 
 ##### ^1^Marine Mammal Laboratory, Alaska Fisheries Science Center, NOAA National Marine Fisheries Service, Seattle, WA
 
 ##### ^2^Senior Biometrician, ICF International, San Francisco, CA
 
-##### ^3^Marine Mammal Program, Makah Fisheries Management, Makah Tribe, Neah Bay, WA
+##### ^3^Marine Mammal and Turtle Division, Southwest Fisheries Science Center, NOAA National Marine Fisheries Service, La Jolla, CA
 
-##### ^4^Cascadia Research Collective, Olympia, WA
+##### ^4^Marine Mammal Program, Makah Fisheries Management, Makah Tribe, Neah Bay, WA
+
+##### ^5^Cascadia Research Collective, Olympia, WA
 
 ##### \*POC: peter.mahoney\@noaa.gov
 
