@@ -28,6 +28,6 @@ Oceanographic and Atmospheric Administration](https://www.noaa.gov) \|
 </a></p>
 
 **Website:**
-<p><a href="https://zenodo.org/records/15425994">
-<img src="./doi/zenodo.15425994.githubpages.svg" alt="DOI Main Repository" />
+<p><a href="https://zenodo.org/records/15427326">
+<img src="./doi/zenodo.15427326.githubpages.svg" alt="DOI Main Repository" />
 </a></p>
