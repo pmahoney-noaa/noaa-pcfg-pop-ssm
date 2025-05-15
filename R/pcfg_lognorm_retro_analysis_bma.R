@@ -109,13 +109,13 @@ f_pcfg_base <- here::here('STAN', 'pcfg_lognorm_base.stan')
 f_pcfg_ar1v1 <- here::here('STAN', 'pcfg_lognorm_ar1_v1.stan')
 f_pcfg_enp <- here::here('STAN', 'pcfg_lognorm_enp_calves.stan')
 f_pcfg_covs <- here::here('STAN', 'pcfg_lognorm_covs.stan')
-model_names <- factor(c("Base", "AR1v1", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"),
-                      levels = c("Base", "AR1v1", "ENP Calves", "Calves only", "Strandings only", "Calves/Strandings"),
-                      labels = c("Base", "AR1", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
+model_names <- factor(c("Base", "AR1v1", "ENP Calves", "Calves only"), #, "Strandings only", "Calves/Strandings"),
+                      levels = c("Base", "AR1v1", "ENP Calves", "Calves only"), #, "Strandings only", "Calves/Strandings"),
+                      labels = c("Base", "AR1", "ENP Calves","PCFG Calves only"))#, "ENP Strandings only", "PCFG Calves + ENP Strandings"))
 
 # Model file pointers
 models <- list(f_pcfg_base, f_pcfg_ar1v1, #f_pcfg_ar1v2, 
-               f_pcfg_enp, f_pcfg_covs, f_pcfg_covs, f_pcfg_covs)
+               f_pcfg_enp, f_pcfg_covs) #, f_pcfg_covs, f_pcfg_covs)
 
 
 
@@ -152,7 +152,7 @@ purrr::map(Y_retro, function(y) {
   
   init_data <- list(
     init_pcfg_data, init_pcfg_data, init_pcfg_data, #init_pcfg_data,
-    init_pcfg_data_calves, init_pcfg_data_strandings, init_pcfg_data
+    init_pcfg_data_calves#, init_pcfg_data_strandings, init_pcfg_data
   )
   
   # Compile models (if they haven't been)
@@ -169,7 +169,7 @@ purrr::map(Y_retro, function(y) {
     adapt_delta = 0.99
   ))
   
-  save(mfit, file = here("out", paste0("Harris_2025_retro_y", y, "_cbma.dat")))
+  save(mfit, file = here("out", paste0("Harris_2025_retro_y", y, "_bma.dat")))
 })
 
 
@@ -185,11 +185,13 @@ threshold_Nmin = 171 # Threshold on minimum abundance below which a hunt is clos
 N_eval_retro_ma <- purrr::map(Y_retro, function(y) {
   
   # Input_data subset
-  if (y == max(Y_retro)) {
-    input_data <- Ndata_input %>% filter(year <= (y + 1))
-  } else{
-    input_data <- Ndata_input %>% filter(year <= (y + 2))
-  }
+  # if (y == max(Y_retro)) {
+  #   input_data <- Ndata_input %>% filter(year <= (y + 1))
+  # } else{
+  #   input_data <- Ndata_input %>% filter(year <= (y + 2))
+  # }
+  
+  input_data <- Ndata_input %>% filter(year <= (y + 2))
   
   # Load model results
   load(file = here("out", paste0("Harris_2025_retro_y", y, "_bma.dat")))
@@ -204,17 +206,26 @@ N_eval_retro_ma <- purrr::map(Y_retro, function(y) {
   # Tidy draws
   tfit = purrr::map(mfit, tidy_draws, .progress = T)
   
-  # Model-specific estimates
-  mo <- tidy_traj_multimodel(input_data %>% slice(-((n()-1):n())), tfit, model_names, truncated_retro = F)
+  if (y == max(Y_retro)) { 
+    # Model-specific estimates
+    mo <- tidy_traj_multimodel(input_data %>% slice(-n()), tfit, model_names, truncated_retro = F)
+    
+    # Model averaged estimates
+    ma <- tidy_model_avg(tfit, wgts, iters = 1000, input_data %>% slice(-n()), seed = 101)
+  } else {
+    # Model-specific estimates
+    mo <- tidy_traj_multimodel(input_data %>% slice(-((n()-1):n())), tfit, model_names, truncated_retro = F)
+    
+    # Model averaged estimates
+    ma <- tidy_model_avg(tfit, wgts, iters = 1000, input_data %>% slice(-((n()-1):n())), seed = 101)
+  }
+
   
-  # Model averaged estimates
-  ma <- tidy_model_avg(tfit, wgts, iters = 1000, input_data %>% slice(-((n()-1):n())), seed = 101)
-  
-  ma_sub <- ma %>%
+  ma_sub <- ma$summary %>%
     slice_tail(n = 2) %>%
     add_column(
       proj_set = c("1 yr", "2 yr"),
-      model = "BMA",.before = 1
+      model = "BMA", .before = 1
     ) %>%
     left_join(input_data %>% dplyr::select(year, abundEstN = N), by = "year") %>%
     mutate(
@@ -233,7 +244,7 @@ N_eval_retro_ma <- purrr::map(Y_retro, function(y) {
     
   pl <- input_data %>% 
     ggplot(aes(x = year, y = N)) +  
-    geom_ribbon(data = ma, aes(y = mean, ymin = percentile_20, ymax = percentile_80), fill = "red", alpha = 0.2) +
+    geom_ribbon(data = ma$summary, aes(y = mean, ymin = percentile_20, ymax = percentile_80), fill = "red", alpha = 0.2) +
     #geom_ribbon(data = ma, aes(y = mean, ymin = lo_ci, ymax = hi_ci), fill = "red", alpha = 0.2) +
     
     geom_ribbon(data = mo, aes(y = mean, ymin = percentile_20, ymax = percentile_80), alpha = 0.2) +

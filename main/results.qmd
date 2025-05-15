@@ -568,7 +568,7 @@ Ndata_input %>%
 
 ```{r tbl-modelPrediction2yr, echo = F, warning = F, message = F}
 #| label: tbl-modelPrediction2yr
-#| tbl-cap: "Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundane (N) and minimum abundane (N~min~) for PCFG gray whales in 2025."
+#| tbl-cap: "Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundance (N) and minimum abundance (N~min~) for PCFG gray whales in 2025."
 #| html-table-processing: none
 
 # Model weights
@@ -763,5 +763,5 @@ mainPred <- ma_abund$summary %>%
   slice((n()-1):n()) %>%
   dplyr::select(year, N = mean, Nmin = percentile_20)
 
-save(mainPred, Ndata_input, wgts_tab, ma_abund, file = here("out", "front_page_matter.Rdata"))
+save(mainPred, Ndata_input, summTab, ma_abund, file = here("out", "front_page_matter.Rdata"))
 ```

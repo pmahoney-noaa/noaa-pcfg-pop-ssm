@@ -298,7 +298,7 @@ window.Quarto = {
 <section id="poc-peter.mahoneynoaa.gov" class="level5">
 <h5 class="anchored" data-anchor-id="poc-peter.mahoneynoaa.gov">*POC: peter.mahoney@noaa.gov</h5>
 <p><br>
-<em>Last updated on 2025-03-26.</em></p>
+<em>Last updated on 2025-05-15.</em></p>
 </section>
 <section id="summary" class="level1">
 <h1><em>Summary</em></h1>
@@ -345,12 +345,12 @@ Table&nbsp;1: Projected estimates for PCFG abundance (N) and minimum abundance (
   <tr>
    <td style="text-align:left;"> 2024 </td>
    <td style="text-align:center;"> 211.1 </td>
-   <td style="text-align:center;"> 193.9 </td>
+   <td style="text-align:center;"> 194.0 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> 2025 </td>
    <td style="text-align:center;"> 211.0 </td>
-   <td style="text-align:center;"> 186.2 </td>
+   <td style="text-align:center;"> 186.3 </td>
   </tr>
 </tbody>
 </table>
@@ -365,7 +365,7 @@ Table&nbsp;1: Projected estimates for PCFG abundance (N) and minimum abundance (
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <section id="modeling-results" class="level3">
 <h3 class="anchored" data-anchor-id="modeling-results">Modeling results</h3>
-<p>Six competing models were evaluated for their ability to capture historical - as well as predict future - PCFG abundance using annual survey data. Each model reflects hypothetical drivers of population growth in the PCFG and our current understanding of the system as whole (<a href="./methodology.html">Model Description</a>). Specifically, models vary in how population growth rates (<span class="math inline">\(\lambda\)</span>) vary from year-to-year, whether represented as an average expectation (e.g., base model) or influenced by one or more population variables (e.g., PCFG calve numbers). Models were fitted to estimates of PCFG gray whale abundance, which are based on data from photo-identification surveys between 2002 and 2023 and analyzed within a Jolly-Seber modeling framework. The most recent estimate of PCFG abundance in 2023 was 213.1 (SE = 15.5, N<sub>min</sub> = 200) non-calf individuals within the PCFG <span class="citation" data-cites="harrisPCFG2025">(<a href="#ref-harrisPCFG2025" role="doc-biblioref">Harris et al. In prep</a>)</span>.&nbsp;</p>
+<p>Six competing models were evaluated for their ability to capture historical - as well as predict future - PCFG abundance using annual survey data. Each model reflects hypothetical drivers of population growth in the PCFG and our current understanding of the system as whole (<a href="./methodology.html">Model Description</a>). Specifically, models vary in how population growth rates (<span class="math inline">\(\lambda\)</span>) vary from year-to-year, whether represented as an average expectation (e.g., base model) or influenced by one or more population variables (e.g., PCFG calve numbers). Models were fitted to estimates of PCFG gray whale abundance, which are based on data from photo-identification surveys between 2002 and 2023 and analyzed within a Jolly-Seber modeling framework. The most recent estimate of PCFG abundance in 2023 was 213.1 (SE = 15.5, N<sub>min</sub> = 200) non-calf individuals within the PCFG <span class="citation" data-cites="harrisPCFG2025">(<a href="#ref-harrisPCFG2025" role="doc-biblioref">Harris et al. 2025</a>)</span>.&nbsp;</p>
 <p>Of the six models considered, the autoregressive model with a one-year lag (AR1) fit the full time series of abundance data the best (<a href="./results.html#tbl-loo">Table 2</a>). When evaluating the ability of each model to predict a “future” population size using the historical time series as a reference (the so-called <a href="./results.html#retrospective">Retrospective Analysis</a>), the AR1 model continued to perform best when naively<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> projecting 1) one year forward based on models fit to truncated time series, and 2) one or two years forward when using a model fit to the complete time series.&nbsp; However, there appears to be more uncertainty in AR1 estimates in year two of projections relative to the other models considered. The base model, or the model where <span class="math inline">\(\lambda\)</span> was based on an average annual <span class="math inline">\(\lambda\)</span> estimated from the long-term trend in abundance since 2002, performed best when naively projecting two years forward with truncated times series.</p>
 <p>Evaluating the naive predictions revealed that the model with ENP strandings substantially underestimated PCFG abundance during an unusual mortality event (UME) from 2019 to 2023<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> <span class="citation" data-cites="raverty2024">(<a href="#ref-raverty2024" role="doc-biblioref">Raverty et al. 2024</a>)</span> (see <a href="./results.html#fig-truncRetroFig1">Figure 1 in “Model Results”</a>). Although model predictions improved when fit to the complete time series, the covariate for ENP strandings was removed from consideration out of an abundance of caution until such time when the impact of another UME on model predictions can be evaluated. The removal of ENP strandings reduced the model set from six to four total models.</p>
 <p>In addition, both the base and AR1 model could be slow to respond to rapid changes in population growth given neither model accounts for environmental factors signaling a change in population trend. However, the extent of the overshoot is dependent on the degree to which <span class="math inline">\(\lambda\)</span> shifts, but overall the AR1 model recovers the quickest (<a href="./supp_simulation.html">Figure C1-C4</a>). Further, the base model, by virtue of relying on an average expectation for <span class="math inline">\(\lambda\)</span>, exhibits a persistent bias in population estimates during both extended negative and positive population trends (<a href="./supp_simulation.html">Figure C1-C4</a>).</p>
@@ -374,7 +374,7 @@ Table&nbsp;1: Projected estimates for PCFG abundance (N) and minimum abundance (
 <div id="tbl-modelWeights_subset" class="cell quarto-float anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelWeights_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: Model weights for all models without ENP strandings. Each was derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+).
+Table&nbsp;2: Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundance (N) and minimum abundance (N<sub>min</sub>) for PCFG gray whales in 2025.
 </figcaption>
 <div aria-describedby="tbl-modelWeights_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display" data-html-table-processing="none">
@@ -383,24 +383,40 @@ Table&nbsp;2: Model weights for all models without ENP strandings. Each was deri
   <tr>
    <th style="text-align:left;"> Model </th>
    <th style="text-align:center;"> PseudoBMA+ </th>
+   <th style="text-align:center;"> N </th>
+   <th style="text-align:center;"> N<sub>min</sub> </th>
   </tr>
  </thead>
 <tbody>
   <tr>
    <td style="text-align:left;"> Base </td>
    <td style="text-align:center;"> 0.199 </td>
+   <td style="text-align:center;"> 215.9 </td>
+   <td style="text-align:center;"> 197.9 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 0.475 </td>
+   <td style="text-align:center;"> 0.476 </td>
+   <td style="text-align:center;"> 203.9 </td>
+   <td style="text-align:center;"> 174.4 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 0.126 </td>
+   <td style="text-align:center;"> 0.127 </td>
+   <td style="text-align:center;"> 213.3 </td>
+   <td style="text-align:center;"> 189.3 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves only </td>
    <td style="text-align:center;"> 0.199 </td>
+   <td style="text-align:center;"> 221.0 </td>
+   <td style="text-align:center;"> 200.5 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Model-averaged estimate </td>
+   <td style="text-align:center;">  </td>
+   <td style="text-align:center;"> 211.0 </td>
+   <td style="text-align:center;"> 186.3 </td>
   </tr>
 </tbody>
 </table>
@@ -434,11 +450,11 @@ Figure&nbsp;1: Estimated trend in PCFG gray whale abundance derived from model-a
 </section>
 <section id="model-selection" class="level3">
 <h3 class="anchored" data-anchor-id="model-selection">Model selection</h3>
-<p>Model fit was evaluated using leave-one-out cross validation (LOOCV) using the complete mark-resight time series from Harris et al. <span class="citation" data-cites="harrisPCFG2025">(<a href="#ref-harrisPCFG2025" role="doc-biblioref">In prep</a>)</span>. LOOCV is a method whereby models are fit to the full dataset, but the quality of the fit is evaluated by iteratively removing and predicting a single record from the data time series (in this case, an annual abundance estimate). Models were in turn ranked using the leave-one-out information criterion <span class="citation" data-cites="vehtari2017practical">(LOOIC, <a href="#ref-vehtari2017practical" role="doc-biblioref">Vehtari, Gelman, and Gabry 2017</a>)</span>, a criterion based on LOOCV wherein smaller values equate to better fitting models (see “<a href="./results.html#leave-one-out">Leave-one-out Cross Validation</a>”).&nbsp;</p>
+<p>Model fit was evaluated using leave-one-out cross validation (LOOCV) using the complete mark-resight time series from Harris et al. <span class="citation" data-cites="harrisPCFG2025">(<a href="#ref-harrisPCFG2025" role="doc-biblioref">2025</a>)</span>. LOOCV is a method whereby models are fit to the full dataset, but the quality of the fit is evaluated by iteratively removing and predicting a single record from the data time series (in this case, an annual abundance estimate). Models were in turn ranked using the leave-one-out information criterion <span class="citation" data-cites="vehtari2017practical">(LOOIC, <a href="#ref-vehtari2017practical" role="doc-biblioref">Vehtari, Gelman, and Gabry 2017</a>)</span>, a criterion based on LOOCV wherein smaller values equate to better fitting models (see “<a href="./results.html#leave-one-out">Leave-one-out Cross Validation</a>”).&nbsp;</p>
 </section>
 <section id="model-evaluation-and-performance" class="level3">
 <h3 class="anchored" data-anchor-id="model-evaluation-and-performance">Model evaluation and performance</h3>
-<p>Model performance was evaluated by assessing the ability of each model to retrospectively predict a “future” known population abundance from the mark-resight time series <span class="citation" data-cites="harrisPCFG2025">(see <a href="#ref-harrisPCFG2025" role="doc-biblioref">Harris et al. In prep</a>)</span>. Specifically, predictive accuracy of each model was evaluated by fitting to 1) a truncated time series where the model was fitted with data only up to the prediction year being evaluated to make the same predictions, and 2) the full time series, less the number of years being predicted (e.g., 2002 - 2021). Scenario (1) reflects the naivety of the current model to future population states when projecting estimates, but constrains knowledge of the system and associated dynamics by truncating the data time series, providing a pessimistic assessment of models that are more sensitive to sample size. Scenario (2) provides the most comprehensive understanding of factors influencing <span class="math inline">\(\lambda\)</span>, but can impose undue influence on projections from past years, providing a slightly optimistic assessment of predictive performance. Details from these assessments can be found in sections “<a href="./results.html#model-fits-trunc">Model fits derived from truncated time series</a>” and “<a href="./results.html#model-fits-full">Model fits derived from full time series</a>”.</p>
+<p>Model performance was evaluated by assessing the ability of each model to retrospectively predict a “future” known population abundance from the mark-resight time series <span class="citation" data-cites="harrisPCFG2025">(see <a href="#ref-harrisPCFG2025" role="doc-biblioref">Harris et al. 2025</a>)</span>. Specifically, predictive accuracy of each model was evaluated by fitting to 1) a truncated time series where the model was fitted with data only up to the prediction year being evaluated to make the same predictions, and 2) the full time series, less the number of years being predicted (e.g., 2002 - 2021). Scenario (1) reflects the naivety of the current model to future population states when projecting estimates, but constrains knowledge of the system and associated dynamics by truncating the data time series, providing a pessimistic assessment of models that are more sensitive to sample size. Scenario (2) provides the most comprehensive understanding of factors influencing <span class="math inline">\(\lambda\)</span>, but can impose undue influence on projections from past years, providing a slightly optimistic assessment of predictive performance. Details from these assessments can be found in sections “<a href="./results.html#model-fits-trunc">Model fits derived from truncated time series</a>” and “<a href="./results.html#model-fits-full">Model fits derived from full time series</a>”.</p>
 <p>Simulation analyses were also conducted to look at model behavior for the models most likely to over- or under-predict the true abundance following a trend in <span class="math inline">\(\lambda\)</span>. Two hypothetical scenarios were tested; 1) a stable population of 250 individuals (<span class="math inline">\(\lambda\)</span> = 1 for 15 yrs)&nbsp; that went into successive years of decline, and 2) a stable population of 125 individuals (<span class="math inline">\(\lambda\)</span> = 1 for 15 yrs) that experienced successive years of growth (see “<a href="./supp_simulation.html#simulation">Simulation analysis</a>”).&nbsp;</p>
 </section>
 <section id="model-averaging" class="level3">
@@ -465,7 +481,7 @@ Anderson, D. R. 2007. <em>Model Based Inference in the Life Sciences: A Primer o
 Burnham, K. P., D. R. Anderson, and K. P. Huyvaert. 2011. <span>“AIC Model Selection and Multimodel Inference in Behavioral Ecology: Some Background, Observations, and Comparisons.”</span> <em>Behavioral Ecology and Sociobiology</em> 65: 23–35.
 </div>
 <div id="ref-harrisPCFG2025" class="csl-entry" role="listitem">
-Harris, J., J. Calambokidis, A. Perez, and P. J. Mahoney. In prep. <span>“<a href="">Recent Trends in the Abundance of Seasonal Gray Whales (Eschrichtius Robustus) in the Pacific Northwest, 1996-2023</a>,”</span> In prep.
+Harris, J., J. Calambokidis, A. Perez, and P. J. Mahoney. 2025. <span>“<a href="">Recent Trends in the Abundance of Seasonal Gray Whales (Eschrichtius Robustus) in the Pacific Northwest, 1996-2023</a>.”</span> <em>NOAA AFSC Processed Rep.</em> 2025-06: 1–19.
 </div>
 <div id="ref-raverty2024" class="csl-entry" role="listitem">
 Raverty, S., P. Duignan, D. Greig, J. L. Huggins, K. B. Huntington, M. Garner, J. Calambokidis, et al. 2024. <span>“<a href="">Gray Whale (Eschrichtius Robustus) Post- Mortem Findings from December 2018 Through 2021 During the Unusual Mortality Event in the Eastern North Pacific</a>.”</span> <em>PLoS One</em> 19.

@@ -126,16 +126,18 @@ In light of these behaviors, and the inherent uncertainty associated with model 
 
 ```{r modelWeights_subset, echo = F, warning = F, message = F}
 #| label: tbl-modelWeights_subset
-#| tbl-cap: "Model weights for all models without ENP strandings. Each was derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+)."
+#| tbl-cap: "Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundance (N) and minimum abundance (N~min~) for PCFG gray whales in 2025."
 #| html-table-processing: none
 
-kable(wgts_tab %>% dplyr::select(-Stacking),
+options(knitr.kable.NA = '')
+kable(summTab %>% dplyr::select(-Stacking),
   row.names = F,
-  col.names = c("Model", "PseudoBMA+"),
-  digits = 3,
-  align = c("l", "c"),
+  col.names = c("Model", "PseudoBMA+", "N", "N<sub>min</sub>"),
+  digits = c(0, 3, 1, 1),
+  align = c("l", rep("c", 3)),
   format = "html",
-  booktabs = T) %>%
+  booktabs = T,
+  escape = F) %>%
 kable_classic(full_width = F, html_font = "Cambria")
 ```
 
