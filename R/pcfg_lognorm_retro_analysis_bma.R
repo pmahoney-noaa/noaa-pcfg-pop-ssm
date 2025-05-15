@@ -296,8 +296,8 @@ save(N_eval_retro_summ_ma, file = here("out", paste0("TruncatedRetroSummary_BMA_
   filter(proj_set == "2 yr" & year != 2023) %>%
   group_by(model) %>%
   summarize(
-    mnRSS = mean(rss),
-    mdRSS = median(rss),
+    mnRSS = mean(rss, na.rm = T),
+    mdRSS = median(rss, na.rm = T),
     # mnPercentile_abundEstN = mean(percentile_abundEstN),
     # mdPercentile_abundEstN = median(percentile_abundEstN),
     # mnProp_below_threshold = mean(prop_below_threshold),
