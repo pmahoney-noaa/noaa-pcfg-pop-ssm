@@ -1,3 +1,6 @@
+Main Repository:
+<img src="./docs/doi/zenodo.15425883.main.svg alt="DOI Main Repository" />
+
 # Projecting PCFG Gray Whale Abundance
 
 
