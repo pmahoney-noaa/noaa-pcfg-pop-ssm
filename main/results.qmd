@@ -38,15 +38,11 @@ Cdata_2020 <- Cdata_input %>%             # Impute mean of shoulder years for mi
 
 Cdata_input <- Cdata_input %>%
   add_row(Cdata_2020) %>%
-  arrange(year) %>%
-
-  # adding filler row for ENP calf data base on last year's
-  # should be adjusted to some modeled estimate
-  add_row(Cdata_input %>% filter(year == max(year)))
+  arrange(year)
 
 # !! TEMPORARY DATA FILL TO FACILITATE PRELIM MODEL FITTING !!
 Cdata_input <- Cdata_input %>%
-  add_row(Cdata_input %>% filter(year == max(year)))
+  add_row(Cdata_input %>% filter(year == max(year))) # Has no impact on model outcomes, needed for STAN
 
 N_pcfg_calves <- N_pcfg_calves %>%
   add_row(year = 2025, N = 8) %>%
@@ -71,21 +67,6 @@ x_lambda[,1] = scale(x_lambda[,1])
 N_harvest = c(0,0)
 
 # Input data -------------------------------------------------------------------
-init_pcfg_data_3yr = list(
-  n_dat_yrs = nrow(Ndata_input),  
-  n_proj_yrs = 2,                      # number of years to project into the future
-  n_betas = ncol(x_lambda),            # number of coefficients on lambda
-  mu_logN_hat = Ndata_input$mean_log,  # estimated pop abundance, log space
-  sigma_logN_hat = Ndata_input$sd_log,
-  mu_logC_hat = Cdata_input %>% slice(1:nrow(Ndata_input)) %>% pull(mean_log),       # estimated ENP calf abundance, log space
-  sigma_logC_hat = Cdata_input %>% slice(1:nrow(Ndata_input)) %>% pull(sd_log),
-  mu_logC_proj = Cdata_input %>% slice(-c(1:nrow(Ndata_input))) %>% pull(mean_log),  # estimated contemporary ENP calf abundance, log space
-  sigma_logC_proj = Cdata_input %>% slice(-c(1:nrow(Ndata_input))) %>% pull(sd_log),
-  x_lambda_dat = as.matrix(x_lambda %>% slice(1:nrow(Ndata_input))),
-  x_lambda_proj = as.matrix(x_lambda %>% slice(-c(1:nrow(Ndata_input)))),
-  N_harvest = N_harvest
-)
-
 init_pcfg_data_2yr = list(
   n_dat_yrs = nrow(Ndata_input),  
   n_proj_yrs = 2,                      # number of years to project into the future
