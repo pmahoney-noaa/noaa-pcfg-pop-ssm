@@ -17,6 +17,7 @@ p_load(cmdstanr, tidyverse, here, tidybayes, brms, bayesplot, knitr, kableExtra,
 # Data import
 source(here("R", "read_abun_retro.R"))     #; Ndata; tail(Ndata)  # Check
 source(here("R", "read_calf_enp_retro.R")) #; Cdata; tail(Cdata)  # Check
+source(here("R", "read_calf_pcfg_retro.R")) #; N_pcfg_calves; tail(N_pcfg_calves)  # Check
 source(here("R", "read_strand_retro.R"))   #; Sdata; tail(Sdata)  # Check
 
 # Abundance Estimates
@@ -43,12 +44,26 @@ Cdata_input <- Cdata_input %>%
   # should be adjusted to some modeled estimate
   add_row(Cdata_input %>% filter(year == max(year)))
 
+# !! TEMPORARY DATA FILL TO FACILITATE PRELIM MODEL FITTING !!
+Cdata_input <- Cdata_input %>%
+  add_row(Cdata_input %>% filter(year == max(year)))
+
+N_pcfg_calves <- N_pcfg_calves %>%
+  add_row(year = 2025, N = 8) %>%
+  add_row(year = 2026, N = 0)       # Has no impact on model outcomes, needed for STAN
+
+Sdata <- Sdata %>%
+  add_row(species = "Whale, gray", state = "All", year = 2024, N_strand = 60) %>%
+  add_row(species = "Whale, gray", state = "All", year = 2025, N_strand = 85) %>%
+  add_row(species = "Whale, gray", state = "All", year = 2026, N_strand = 15)
+
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 # Covariate data (point estimates only) on lambda; at present, 
 # not the precise time series and should be viewed as a filler for model development
 x_lambda = data.frame(
-  N_pcfg_calves = c(9,4,5,3,0,3,2,1,4,6,12,14,17,12,7,4,4,2,4,5,2,11, # abundance data years
-                   13,10), # projected years, real values exist.
-  N_strandings = Sdata %>% filter(state == "All" & year >= 2002) %>% pull(N_strand) %>% c(., 40, 40) # This last value is not real!
+  N_pcfg_calves = N_pcfg_calves %>% pull(N),
+  N_strandings = Sdata %>% filter(state == "All" & year >= 2002) %>% pull(N_strand)
 )
 x_lambda[,1] = scale(x_lambda[,1])
 
