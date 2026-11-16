@@ -16,10 +16,14 @@ bibliography: references.bib
 
 library(pacman)
 p_load(cmdstanr, tidyverse, here, tidybayes, brms, bayesplot, gt)
+here::i_am("main/supp_diagnostics.qmd")  # anchor here() at the repo root, not main/ (where _quarto.yml lives)
 #set_cmdstan_path("~/cmdstan")  # your `cmdstan` path may be different
 
+# Analysis year
+analysisYear <- 2026
+
 # Load model fits & model names
-load(here("out", "mfits.RData"))
+load(here(paste("out", analysisYear, sep="/"), "mfits.RData"))
 ```
 
 # Model fitting diagnostics

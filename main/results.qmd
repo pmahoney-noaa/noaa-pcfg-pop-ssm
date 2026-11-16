@@ -10,9 +10,13 @@ bibliography: references.bib
 library(pacman)
 p_load(cmdstanr, tidyverse, here, tidybayes, brms, bayesplot, knitr, kableExtra,
        paletteer, ggridges)
+here::i_am("main/results.qmd")  # anchor here() at the repo root, not main/ (where _quarto.yml lives)
 #set_cmdstan_path("~/cmdstan")  # your `cmdstan` path may be different
 
 # Initialize -------------------------------------------------------------------
+
+# Analysis year
+analysisYear <- 2026
 
 # Data import
 source(here("R", "read_abun_retro.R"))     #; Ndata; tail(Ndata)  # Check
@@ -40,7 +44,6 @@ Cdata_input <- Cdata_input %>%
   add_row(Cdata_2020) %>%
   arrange(year)
 
-# !! TEMPORARY DATA FILL TO FACILITATE PRELIM MODEL FITTING !!
 Cdata_input <- Cdata_input %>%
   add_row(Cdata_input %>% filter(year == max(year))) # Has no impact on model outcomes, needed for STAN
 
@@ -49,9 +52,7 @@ N_pcfg_calves <- N_pcfg_calves %>%
   add_row(year = 2026, N = 0)       # Has no impact on model outcomes, needed for STAN
 
 Sdata <- Sdata %>%
-  add_row(species = "Whale, gray", state = "All", year = 2024, N_strand = 60) %>%
-  add_row(species = "Whale, gray", state = "All", year = 2025, N_strand = 85) %>%
-  add_row(species = "Whale, gray", state = "All", year = 2026, N_strand = 15)
+  add_row(species = "Whale, gray", state = "All", year = 2026, N_strand = 50)
 
 # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -150,7 +151,7 @@ cmodels <- purrr::map(models, cmdstanr::cmdstan_model, .progress = T)
 # MCMC -------------------------------------------------------------------------
 mfit <- purrr::map2(cmodels, init_data, \(x, i) x$sample(
   data = i,
-  output_dir = here("out"),
+  output_dir = here(paste0("out", "/", analysisYear, "/")),
   seed = 42,
   chains = 3,
   parallel_chains = 3,
@@ -159,7 +160,7 @@ mfit <- purrr::map2(cmodels, init_data, \(x, i) x$sample(
   show_messages = FALSE,
   show_exceptions = FALSE
 ))
-save(mfit, model_names, file = here("out", "mfits.RData"))
+save(mfit, model_names, file = here(paste0("out", "/", analysisYear, "/"), "mfits.RData"))
 
 # Prepping data for output -----------------------------------------------------
 # Tidy draws
@@ -172,7 +173,7 @@ threshold_Nmin = 171 # Threshold on minimum abundance below which a hunt is clos
 
 # Load truncated retrospective results
 # See pcfg_lognorm_retro_analysis.R for details
-load(here("out", "TruncatedRetroSummary_2025.dat"))
+load(here(paste0("out", "/", analysisYear, "/"), "TruncatedRetroSummary.dat"))
 
 N_eval_retro_summ <- N_eval_retro_summ %>%
   filter(model != "AR1v2") %>%
@@ -182,12 +183,6 @@ N_eval_retro_summ <- N_eval_retro_summ %>%
                                    "Calves only", "Strandings only", "Calves/Strandings"),
                         labels = c("Base", "AR1", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
     )
-  # mutate(
-  #   model = factor(model, 
-  #                       levels = c("Base", "AR1v1", "AR1v2", "ENP Calves", 
-  #                                  "PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"),
-  #                       labels = c("Base", "AR1v1", "AR1v2", "ENP Calves","PCFG Calves only", "ENP Strandings only", "PCFG Calves + ENP Strandings"))
-  #   )
 ```
 
 # *Model results*
@@ -275,7 +270,7 @@ kable_classic(full_width = T, html_font = "Cambria")
 
 ## Predictive accuracy with retrospection {#retrospective}
 
-Given that prediction was the primary objective of this exercise, we evaluated the ability of each model to retrospectively predict a "future", known population abundance using the PCFG abundance time series from [@harrisPCFG2025]. Predicting future states, or "forecasting", is notoriously challenging particularly as we project further into the future. However, within this system, data gaps of one or two years represent the most plausible scenarios managers are likely to encounter, providing the basis for our evaluation. In addition, we anticipated relative performance within model sets was likely to vary as we projected further into the future. Thus, in order to document a potential shift in model support in relation to projection length, we evaluated predictive performance when projecting one and two years separately. Finally, we evaluated predictive performance using models fitted to both truncated and complete abundance time series. The latter provides the best available knowledge of the system for model fitting, but might bias retrospective evaluations of predictive performance due to information "spillover" from future observed population states. The former can become data limited and select for overly simplistic models as time series shorten.
+Given that prediction was the primary objective of this exercise, we evaluated the ability of each model to retrospectively predict a "future", known population abundance using the PCFG abundance time series from [@mahoneyPCFG2026]. Predicting future states, or "forecasting", is notoriously challenging particularly as we project further into the future. However, within this system, data gaps of one or two years represent the most plausible scenarios managers are likely to encounter, providing the basis for our evaluation. In addition, we anticipated relative performance within model sets was likely to vary as we projected further into the future. Thus, in order to document a potential shift in model support in relation to projection length, we evaluated predictive performance when projecting one and two years separately. Finally, we evaluated predictive performance using models fitted to both truncated and complete abundance time series. The latter provides the best available knowledge of the system for model fitting, but might bias retrospective evaluations of predictive performance due to information "spillover" from future observed population states. The former can become data limited and select for overly simplistic models as time series shorten.
 
 All time series used in model fitting started with estimates from `r minYr`, but varied in their end point. In the case of truncated times series, we fit each of the six specified models to multiple time series with varying end points from 2013 through `r maxYr - 2`, providing projected abundance estimates for years 2014 through `r maxYr`. Notably, we evaluated endpoints between 2006 and 2012, but these shorter time series were inadequate for model convergence. In the case of the complete time series, we fit all six models to a single time series representing abundance data from 2002 through `r maxYr`. Model parameters were then used to retrospectively project abundance forward one or two years from 2002 through `r maxYr - 2`, providing projected abundance estimates for years 2003 through `r maxYr`.
 
@@ -290,7 +285,7 @@ The following tables show predictive performance statistics by model specificati
 
 ```{r tbl-tRetro1summ, echo = F, warning = F, message = F}
 #| label: tbl-tRetro1summ
-#| tbl-cap: "Model prediction statistics for one year projections using data years 2013 through 2022 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
+#| tbl-cap: "Model prediction statistics for one year projections using data years 2013 through 2023 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
 #| html-table-processing: none
 N_eval_summary_proj1yr <- N_eval_retro_summ %>%
   filter(proj_set == "1 yr") %>%
@@ -333,10 +328,10 @@ kable_classic(full_width = T, html_font = "Cambria")
 
 ```{r tbl-tRetro2summ, echo = F, warning = F, message = F}
 #| label: tbl-tRetro2summ
-#| tbl-cap: "Model prediction statistics for two year projections using data years 2013 through 2021 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
+#| tbl-cap: "Model prediction statistics for two year projections using data years 2013 through 2022 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares."
 #| html-table-processing: none
 N_eval_summary_proj2yr <- N_eval_retro_summ %>%
-  filter(proj_set == "2 yr" & year != 2024) %>%
+  filter(proj_set == "2 yr" & year != 2025) %>%
   filter(year > 2013) %>%
   group_by(model) %>%
   summarize(
@@ -377,44 +372,15 @@ kable_classic(full_width = T, html_font = "Cambria")
 
 ```{r truncRetroFig1, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
 #| label: fig-truncRetroFig1
-#| fig-cap: "The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2014 through 2023 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars."
+#| fig-cap: "The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2014 through 2024 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars."
 #| 
 N_eval_table_trunc <- N_eval_retro_summ %>%
-  filter(year > 2013& year != 2024) #%>%  
+  filter(year > 2013 & year != 2025) #%>%  
   # mutate(model = factor(model, 
   #                       levels = c("Base", "AR1v1", "AR1v2", "Calves/Strandings", 
   #                                  "Calves only", "Strandings only", "ENP Calves")))
 
 tidy_plot_retroPred(N_eval_table_trunc, ylims = c(0, 500), truncated_retro = T)
-
-# N_eval_table <- N_eval_table_trunc %>%
-#   mutate(
-#     proj_set = factor(proj_set, levels = c("1 yr", "2 yr"), 
-#                       labels = rep(paste("Projected year", 1:2)))
-#   )
-# 
-# width <- 0.5
-# 
-# N_eval_table %>% 
-#   filter(proj_set == "Projected year 1") %>%
-#   ggplot(aes(x = year, y = abundEst, group = model, color = model)) +
-#   #facet_wrap(~ proj_set, ncol = 1) + 
-#   geom_errorbar(aes(ymin = loN_ci, ymax = hiN_ci), linetype = 2, width = width, 
-#                 position = position_dodge(width = width)) + 
-#   geom_errorbar(aes(ymin = percentile_20, ymax = percentile_80), width = width, 
-#                 position = position_dodge(width = width)) +
-#   #geom_point(aes(x = year, y = meanN), position = position_dodge(width = width)) +
-#   geom_point(aes(x = year, y = medianN), position = position_dodge(width = width)) +
-#   geom_point(size = 2, color = "black", fill = "black", shape = 23) +
-#   scale_color_paletteer_d("Manu::Kotare") +
-#   coord_cartesian(ylim = c(0, 350)) +
-#   #scale_y_continuous(limits = ylims, oob = scales::squish) +
-#   labs(x = "Year", y = "PCFG Abundance") +
-#   scale_x_continuous(limits = c(min(N_eval_table$year) - 1.5, max(N_eval_table$year)) + 1, 
-#                      breaks = seq(min(N_eval_table$year), max(N_eval_table$year), 1),
-#                      expand = c(0,0)) +
-#   guides(color = guide_legend(title = NULL, position = "top", direction = "horizontal", nrow = 1)) +
-#   theme_bw()
 ```
 
 ### *Model fits derived from full time series* {#model-fits-full}
@@ -426,11 +392,11 @@ The following tables show predictive performance statistics by model specificati
 
 ```{r retro1summ, echo = F, warning = F, message = F}
 #| label: tbl-retro1summ
-#| tbl-cap: "Model prediction statistics for one year projections using data years 2002 through 2022 as starting points. Models were fit using the full time series. RSS is the residual sum of squares."
+#| tbl-cap: "Model prediction statistics for one year projections using data years 2002 through 2023 as starting points. Models were fit using the full time series. RSS is the residual sum of squares."
 #| html-table-processing: none
 # Retrospective prediction -----------------------------------------------------
 N_eval_table <- pred_summary_tbl_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold_Nmin)
-save(N_eval_table, file = here("out", "RetroSummary.dat"))
+save(N_eval_table, file = here(paste0("out", "/", analysisYear, "/"), "RetroSummary.dat"))
 
 N_eval_summary_proj1yr <- N_eval_table %>%
   filter(proj_set == "pyear1") %>%
@@ -471,7 +437,7 @@ kable_classic(full_width = T, html_font = "Cambria")
 
 ```{r retro2summ, echo = F, warning = F, message = F}
 #| label: tbl-retro2summ
-#| tbl-cap: "Model prediction statistics for two year projections using data years 2002 through 2021 as starting points. Models were fit using the full time series. RSS is the residual sum of squares."
+#| tbl-cap: "Model prediction statistics for two year projections using data years 2002 through 2022 as starting points. Models were fit using the full time series. RSS is the residual sum of squares."
 #| html-table-processing: none
 N_eval_summary_proj2yr <- N_eval_table %>%
   filter(proj_set == "pyear2") %>%
@@ -513,7 +479,7 @@ kable_classic(full_width = T, html_font = "Cambria")
 
 ```{r fig-retroFig, echo = F, warning = F, message = F, fig.height = 8, fig.width = 10, dpi = 300}
 #| label: fig-retroFig
-#| fig-cap: "The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications using the full time series. Observed abundance estimates for years 2003 through 2023 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars."
+#| fig-cap: "The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications using the full time series. Observed abundance estimates for years 2003 through 2024 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars."
 
 tidy_plot_retroPred(N_eval_table)
 ```
@@ -524,7 +490,7 @@ tidy_plot_retroPred(N_eval_table)
 
 ```{r fig-trendFig, echo = F, warning = F, message = F, fig.height = 18, fig.width = 8, dpi = 600}
 #| label: fig-trendFig
-#| fig-cap: "Predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2023), as well as abundance projections for two years beyond (through 2025). The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N < 192) and N~min~ (N~min~ < 171), respectively."
+#| fig-cap: "Predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2024), as well as abundance projections for two years beyond (through 2026). The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N < 192) and N~min~ (N~min~ < 171), respectively."
 
 # Population trajectories 
 tidy_plot_traj_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold_Nmin, ncols = 1)
@@ -534,7 +500,7 @@ tidy_plot_traj_multimodel(Ndata_input, tfit, model_names, threshold_N, threshold
 
 ```{r fig-stackedTrendFig, echo = F, warning = F, message = F, eval = F, fig.height = 4, fig.width = 8, dpi = 300}
 #| label: fig-stackedTrendFig
-#| fig-cap: "Estimated trend in PCFG gray whale abundance derived from model-averaged estimates using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N~min~, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~."
+#| fig-cap: "Estimated trend in PCFG gray whale abundance derived from model-averaged estimates using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2024) and a two-year projection through 2026. The black points and red diamonds correspond to the mean PCFG abundance and N~min~, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~."
 
 # Model averaged abundance
 ma_abund <- tidy_model_avg(tfit, wgts, iters = 1000, Ndata_input, 101)
@@ -564,7 +530,7 @@ Ndata_input %>%
 
 ```{r tbl-modelPrediction2yr, echo = F, warning = F, message = F}
 #| label: tbl-modelPrediction2yr
-#| tbl-cap: "Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundance (N) and minimum abundance (N~min~) for PCFG gray whales in 2025."
+#| tbl-cap: "Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundance (N) and minimum abundance (N~min~) for PCFG gray whales in 2026."
 #| html-table-processing: none
 
 # Model weights
@@ -621,7 +587,7 @@ kable_classic(full_width = F, html_font = "Cambria")
 
 ```{r fig-stackedTrendFig_subset, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}
 #| label: fig-stackedTrendFig_subset
-#| fig-cap: "Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N~min~, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N < 192) and N~min~ (N~min~ < 171), respectively."
+#| fig-cap: "Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2024) and a two-year projection through 2026. The black points and red diamonds correspond to the mean PCFG abundance and N~min~, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N~min~. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N < 192) and N~min~ (N~min~ < 171), respectively."
 
 # Figure
 Ndata_input %>% 
@@ -652,7 +618,7 @@ Ndata_input %>%
 
 ```{r tbl-modelPrediction2yr_v0, echo = F, warning = F, eval = F, message = F}
 #| label: tbl-modelPrediction2yr_v0
-#| tbl-cap: "Predicted N and N~min~ for PCFG gray whales in 2025 based on a two year projection from the last documented abundance estimate (2023)."
+#| tbl-cap: "Predicted N and N~min~ for PCFG gray whales in 2026 based on a two year projection from the last documented abundance estimate (2024)."
 #| html-table-processing: none
 
 # Projected estimated final abundance + 2 years (posterior draws) -----------------
@@ -691,7 +657,7 @@ kable_classic(full_width = F, html_font = "Cambria")
 
 ```{r finalEstimates, echo = F, warning = F, message = F, fig.height = 4, fig.width = 8, dpi = 300}
 #| label: fig-final-proj
-#| fig-cap: "Model-specific estimated abundance in the second year of projections (2025). Median estimates are represented by vertical boundaries between dark gray and white. N~min~ estimates (lower 20% CIs) are represented by the boundaries between light gray and dark gray. The solid and dashed black, vertical lines correspond to the management closure thresholds for N and N~min~, respectively."
+#| fig-cap: "Model-specific estimated abundance in the second year of projections (2026). Median estimates are represented by vertical boundaries between dark gray and white. N~min~ estimates (lower 20% CIs) are represented by the boundaries between light gray and dark gray. The solid and dashed black, vertical lines correspond to the management closure thresholds for N and N~min~, respectively."
 
 # ggplot(postLastYr, aes(group = Model, fill = Model, color = Model)) +
 #   geom_density_ridges(aes(x = exp(`logN_proj[2]`), y = Model), 
@@ -726,7 +692,7 @@ ggplot(postLastYr, aes(x = exp(`logN_proj[2]`), y = Model, fill = factor(stat(qu
   geom_vline(aes(xintercept = threshold_Nmin), linetype = 2, color = "black") +
   scale_x_continuous(limits = c(0, 400)) +
     scale_y_discrete(limits=rev) +
-  labs(x = "Projected N (Year 2025)", y = NULL) +
+  labs(x = "Projected N (Year 2026)", y = NULL) +
   guides(fill = "none") +
   theme_minimal() +
   #theme_ridges(grid = FALSE) #+
@@ -759,5 +725,5 @@ mainPred <- ma_abund$summary %>%
   slice((n()-1):n()) %>%
   dplyr::select(year, N = mean, Nmin = percentile_20)
 
-save(mainPred, Ndata_input, summTab, ma_abund, file = here("out", "front_page_matter.Rdata"))
+save(mainPred, Ndata_input, summTab, ma_abund, file = here(paste0("out", "/", analysisYear, "/"), "front_page_matter.Rdata"))
 ```

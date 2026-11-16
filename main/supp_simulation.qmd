@@ -18,6 +18,7 @@ crossref:
 
 library(pacman)
 p_load(cmdstanr, tidyverse, here, tidybayes, brms, bayesplot, furrr)
+here::i_am("main/supp_simulation.qmd")  # anchor here() at the repo root, not main/ (where _quarto.yml lives)
 plan(multisession, workers = 4)
 
 # Closure thresholds
@@ -27,10 +28,10 @@ threshold_Nmin = 171 # Threshold on minimum abundance below which a hunt is clos
 #
 ## Load simulation results
 #
-load(here("out", "SimulatedDecline_projections.dat"))
+load(here("out/2025", "SimulatedDecline_projections.dat"))
 summ_dec <- summ_proj
 
-load(here("out", "SimulatedIncline_projections.dat"))
+load(here("out/2025", "SimulatedIncline_projections.dat"))
 summ_inc <- summ_proj
 ```
 
@@ -60,7 +61,7 @@ ggplot(summ_dec %>% filter(proj_set == "1 yr"), aes(x = year, group = model)) +
   scale_fill_manual(values = c("red", "black")) +
   scale_color_manual(values = c("red", "black")) +
   facet_wrap(~ lambda, nrow = 4, labeller = label_parsed) +
-  labs(x = "Year", "Abundance (N)") +
+  labs(x = "Year", y = "Abundance (N)") +
   scale_x_continuous(limits = c(16, 25), breaks = 16:25) +
   theme_bw()
 ```
@@ -86,7 +87,7 @@ ggplot(summ_inc %>% filter(proj_set == "1 yr"), aes(x = year, group = model)) +
   scale_fill_manual(values = c("red", "black")) +
   scale_color_manual(values = c("red", "black")) +
   facet_wrap(~ lambda, nrow = 4, labeller = label_parsed) +
-  labs(x = "Year", "Abundance (N)") +
+  labs(x = "Year", y = "Abundance (N)") +
   scale_x_continuous(limits = c(16, 25), breaks = 16:25) +
   theme_bw()
 ```
@@ -108,7 +109,7 @@ ggplot(summ_dec %>% filter(proj_set == "2 yr"), aes(x = year, group = model)) +
   scale_fill_manual(values = c("red", "black")) +
   scale_color_manual(values = c("red", "black")) +
   facet_wrap(~ lambda, nrow = 4, labeller = label_parsed) +
-  labs(x = "Year", "Abundance (N)") +
+  labs(x = "Year", y = "Abundance (N)") +
   scale_x_continuous(limits = c(16, 25), breaks = 16:25) +
   theme_bw()
 ```
@@ -128,7 +129,7 @@ ggplot(summ_inc %>% filter(proj_set == "2 yr"), aes(x = year, group = model)) +
   scale_fill_manual(values = c("red", "black")) +
   scale_color_manual(values = c("red", "black")) +
   facet_wrap(~ lambda, nrow = 4, labeller = label_parsed) +
-  labs(x = "Year", "Abundance (N)") +
+  labs(x = "Year", y = "Abundance (N)") +
   scale_x_continuous(limits = c(16, 25), breaks = 16:25) +
   theme_bw()
 ```
