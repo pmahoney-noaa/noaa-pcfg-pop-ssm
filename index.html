@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.11.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>A state-space model for projecting population abundance – PCFG Gray Whales</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -24,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -52,14 +57,15 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-788a07efb0374ad45df698b80b79d285.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-0363c6fbbcf247bbbae12cd65cfbf9fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -91,7 +97,7 @@ div.csl-indent {
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -104,7 +110,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -122,17 +128,17 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
+  <nav class="quarto-secondary-nav" aria-label="Toolbar">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Overview</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Overview</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -143,7 +149,7 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Site">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">PCFG Gray Whales</a> 
@@ -193,13 +199,10 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Supplementary</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Supplementary</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./supp_tables.html" class="sidebar-item-text sidebar-link">
@@ -232,7 +235,7 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -257,7 +260,7 @@ window.Quarto = {
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content" tabindex="-1">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -297,17 +300,17 @@ window.Quarto = {
 <section id="poc-peter.mahoneynoaa.gov" class="level5">
 <h5 class="anchored" data-anchor-id="poc-peter.mahoneynoaa.gov">*POC: peter.mahoney@noaa.gov</h5>
 <p><br>
-<em>Last updated on 2025-05-15.</em></p>
+<em>Last updated on 2026-11-15.</em></p>
 </section>
 <section id="summary" class="level1">
 <h1><em>Summary</em></h1>
 <div class="quarto-layout-panel" data-layout="[ 80, -1, 20 ]">
 <div class="quarto-layout-row">
 <div class="quarto-layout-cell" data-layout-valign="top" style="flex-basis: 79.2%;justify-content: flex-start;">
-<p>The abundance of gray whales within the Pacific Coast Feeding Group (PCFG) - a subset of the broader Eastern North Pacific (ENP) stock - is estimated using data from annual photo-identification survey effort. Due to the time required to match thousands of sightings each year, given the extensive (and growing) photographic catalog, the most recent mark-recapture abundance estimates often lag behind the current calendar year by one or more years. However, management decisions for whale hunts by the Makah Tribe<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> are contingent upon abundance estimates for PCFG gray whales through the current calendar year or into the next. To meet this need, we implemented a Bayesian state-space model (SSM) to predict abundance beyond the last year for which PCFG abundance was estimated. Here, we use abundance estimates derived from yearly mark-resight surveys conducted from 2002 through 2023 (Harris et al.&nbsp;In prep) to inform a modeled projection of PCFG abundance in 2024 and 2025.</p>
+<p>The abundance of gray whales within the Pacific Coast Feeding Group (PCFG) - a subset of the broader Eastern North Pacific (ENP) stock - is estimated using data from annual photo-identification survey effort. Due to the time required to match thousands of sightings each year, given the extensive (and growing) photographic catalog, the most recent mark-recapture abundance estimates often lag behind the current calendar year by one or more years. However, management decisions for whale hunts by the Makah Tribe<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> are contingent upon abundance estimates for PCFG gray whales through the current calendar year or into the next. To meet this need, we implemented a Bayesian state-space model (SSM) to predict abundance beyond the last year for which PCFG abundance was estimated. Here, we use abundance estimates derived from yearly mark-resight surveys conducted from 2002 through 2024 (Harris et al.&nbsp;In prep) to inform a modeled projection of PCFG abundance in 2025 and 2026.</p>
 <p><br>
 </p>
-<p>Multiple models were fit to the abundance time-series data. The predictions in <a href="#tbl-final" class="quarto-xref">Table&nbsp;1</a> are weighted model averages of the four highest-performing models, and based on the best available information at this time, represent our most accurate projections of PCFG population abundance in 2024 and 2025. The model-averaged estimates for PCFG abundance (N) and minimum abundance (N<sub>min</sub>) were above key management thresholds (N &lt; 192; N<sub>min</sub> &lt; 171) in 2024 and 2025 (<a href="#fig-final_proj" class="quarto-xref">Figure&nbsp;1</a>).</p>
+<p>Multiple models were fit to the abundance time-series data. The predictions in <a href="#tbl-final" class="quarto-xref">Table&nbsp;1</a> are weighted model averages of the four highest-performing models, and based on the best available information at this time, represent our most accurate projections of PCFG population abundance in 2025 and 2026. The model-averaged estimates for PCFG abundance (N) and minimum abundance (N<sub>min</sub>) were above key management thresholds (N &lt; 192; N<sub>min</sub> &lt; 171) in 2025 and 2026 (<a href="#fig-final_proj" class="quarto-xref">Figure&nbsp;1</a>).</p>
 </div>
 <div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 1.0%;justify-content: flex-start;">
 <p>&nbsp;</p>
@@ -325,7 +328,7 @@ window.Quarto = {
 <div id="tbl-final" class="cell plain quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-final-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Projected estimates for PCFG abundance (N) and minimum abundance (N<sub>min</sub>) through 2025 using a Bayesian model-averaging approach.
+Table&nbsp;1: Projected estimates for PCFG abundance (N) and minimum abundance (N<sub>min</sub>) through 2026 using a Bayesian model-averaging approach.
 </figcaption>
 <div aria-describedby="tbl-final-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display" data-html-table-processing="none">
@@ -339,14 +342,14 @@ Table&nbsp;1: Projected estimates for PCFG abundance (N) and minimum abundance (
  </thead>
 <tbody>
   <tr>
-   <td style="text-align:left;"> 2024 </td>
-   <td style="text-align:center;"> 211.1 </td>
-   <td style="text-align:center;"> 194.0 </td>
+   <td style="text-align:left;"> 2025 </td>
+   <td style="text-align:center;"> 217.7 </td>
+   <td style="text-align:center;"> 199.4 </td>
   </tr>
   <tr>
-   <td style="text-align:left;"> 2025 </td>
-   <td style="text-align:center;"> 211.0 </td>
-   <td style="text-align:center;"> 186.3 </td>
+   <td style="text-align:left;"> 2026 </td>
+   <td style="text-align:center;"> 218.1 </td>
+   <td style="text-align:center;"> 192.3 </td>
   </tr>
 </tbody>
 </table>
@@ -361,16 +364,16 @@ Table&nbsp;1: Projected estimates for PCFG abundance (N) and minimum abundance (
 <h2 class="anchored" data-anchor-id="overview">Overview</h2>
 <section id="modeling-results" class="level3">
 <h3 class="anchored" data-anchor-id="modeling-results">Modeling results</h3>
-<p>Six competing models were evaluated for their ability to capture historical - as well as predict future - PCFG abundance using annual survey data. Each model reflects hypothetical drivers of population growth in the PCFG and our current understanding of the system as whole (<a href="./methodology.html">Model Description</a>). Specifically, models vary in how population growth rates (<span class="math inline">\(\lambda\)</span>) vary from year-to-year, whether represented as an average expectation (e.g., base model) or influenced by one or more population variables (e.g., PCFG calve numbers). Models were fitted to estimates of PCFG gray whale abundance, which are based on data from photo-identification surveys between 2002 and 2023 and analyzed within a Jolly-Seber modeling framework. The most recent estimate of PCFG abundance in 2023 was 213.1 (SE = 15.5, N<sub>min</sub> = 200) non-calf individuals within the PCFG <span class="citation" data-cites="harrisPCFG2025">(<a href="#ref-harrisPCFG2025" role="doc-biblioref">Harris et al. 2025</a>)</span>.&nbsp;</p>
+<p>Six competing models were evaluated for their ability to capture historical - as well as predict future - PCFG abundance using annual survey data. Each model reflects hypothetical drivers of population growth in the PCFG and our current understanding of the system as whole (<a href="./methodology.html">Model Description</a>). Specifically, models vary in how population growth rates (<span class="math inline">\(\lambda\)</span>) vary from year-to-year, whether represented as an average expectation (e.g., base model) or influenced by one or more population variables (e.g., PCFG calve numbers). Models were fitted to estimates of PCFG gray whale abundance, which are based on data from photo-identification surveys between 2002 and 2024 and analyzed within a Jolly-Seber modeling framework. The most recent estimate of PCFG abundance in 2024 was 217.8 (SE = 17.7, N<sub>min</sub> = 203) non-calf individuals within the PCFG <span class="citation" data-cites="mahoneyPCFG2026">(<a href="#ref-mahoneyPCFG2026" role="doc-biblioref">Mahoney et al. 2026</a>)</span>.&nbsp;</p>
 <p>Of the six models considered, the autoregressive model with a one-year lag (AR1) fit the full time series of abundance data the best (<a href="./results.html#tbl-loo">Table 2</a>). When evaluating the ability of each model to predict a “future” population size using the historical time series as a reference (the so-called <a href="./results.html#retrospective">Retrospective Analysis</a>), the AR1 model continued to perform best when naively<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> projecting 1) one year forward based on models fit to truncated time series, and 2) one or two years forward when using a model fit to the complete time series.&nbsp; However, there appears to be more uncertainty in AR1 estimates in year two of projections relative to the other models considered. The base model, or the model where <span class="math inline">\(\lambda\)</span> was based on an average annual <span class="math inline">\(\lambda\)</span> estimated from the long-term trend in abundance since 2002, performed best when naively projecting two years forward with truncated times series.</p>
 <p>Evaluating the naive predictions revealed that the model with ENP strandings substantially underestimated PCFG abundance during an unusual mortality event (UME) from 2019 to 2023<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> <span class="citation" data-cites="raverty2024">(<a href="#ref-raverty2024" role="doc-biblioref">Raverty et al. 2024</a>)</span> (see <a href="./results.html#fig-truncRetroFig1">Figure 1 in “Model Results”</a>). Although model predictions improved when fit to the complete time series, the covariate for ENP strandings was removed from consideration out of an abundance of caution until such time when the impact of another UME on model predictions can be evaluated. The removal of ENP strandings reduced the model set from six to four total models.</p>
 <p>In addition, both the base and AR1 model could be slow to respond to rapid changes in population growth given neither model accounts for environmental factors signaling a change in population trend. However, the extent of the overshoot is dependent on the degree to which <span class="math inline">\(\lambda\)</span> shifts, but overall the AR1 model recovers the quickest (<a href="./supp_simulation.html">Figure C1-C4</a>). Further, the base model, by virtue of relying on an average expectation for <span class="math inline">\(\lambda\)</span>, exhibits a persistent bias in population estimates during both extended negative and positive population trends (<a href="./supp_simulation.html">Figure C1-C4</a>).</p>
-<p>In light of these behaviors, and the inherent uncertainty associated with model selection, a model averaging approach was used to forecast abundance estimates through 2025. However, due to the poor performance of models with ENP strandings during the 2019 UME, the model averaging was constrained to the remaining four models (<a href="#tbl-modelWeights_subset" class="quarto-xref">Table&nbsp;2</a>). The weighted model average predictions in <a href="#tbl-final" class="quarto-xref">Table&nbsp;1</a> above therefore represent our best supported and most accurate projections of PCFG population abundance in 2024 and 2025. Further, the model-averaged estimates for PCFG abundance (N) and minimum abundance (N<sub>min</sub>), including the estimates from the four models individually, were above key management thresholds for N and N<sub>min</sub> in 2024 and 2025 (<a href="#fig-final_proj" class="quarto-xref">Figure&nbsp;1</a>).</p>
+<p>In light of these behaviors, and the inherent uncertainty associated with model selection, a model averaging approach was used to forecast abundance estimates through 2026. However, due to the poor performance of models with ENP strandings during the 2019 UME, the model averaging was constrained to the remaining four models (<a href="#tbl-modelWeights_subset" class="quarto-xref">Table&nbsp;2</a>). The weighted model average predictions in <a href="#tbl-final" class="quarto-xref">Table&nbsp;1</a> above therefore represent our best supported and most accurate projections of PCFG population abundance in 2025 and 2026. Further, the model-averaged estimates for PCFG abundance (N) and minimum abundance (N<sub>min</sub>), including the estimates from the four models individually, were above key management thresholds for N and N<sub>min</sub> in 2025 and 2026 (<a href="#fig-final_proj" class="quarto-xref">Figure&nbsp;1</a>).</p>
 <div class="cell">
 <div id="tbl-modelWeights_subset" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelWeights_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;2: Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundance (N) and minimum abundance (N<sub>min</sub>) for PCFG gray whales in 2025.
+Table&nbsp;2: Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundance (N) and minimum abundance (N<sub>min</sub>) for PCFG gray whales in 2026.
 </figcaption>
 <div aria-describedby="tbl-modelWeights_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display" data-html-table-processing="none">
@@ -386,33 +389,33 @@ Table&nbsp;2: Model weights derived using pseudo-Bayesian model averaging with b
 <tbody>
   <tr>
    <td style="text-align:left;"> Base </td>
-   <td style="text-align:center;"> 0.199 </td>
-   <td style="text-align:center;"> 215.9 </td>
-   <td style="text-align:center;"> 197.9 </td>
+   <td style="text-align:center;"> 0.222 </td>
+   <td style="text-align:center;"> 221.6 </td>
+   <td style="text-align:center;"> 202.9 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 0.476 </td>
-   <td style="text-align:center;"> 203.9 </td>
-   <td style="text-align:center;"> 174.4 </td>
+   <td style="text-align:center;"> 0.526 </td>
+   <td style="text-align:center;"> 214.4 </td>
+   <td style="text-align:center;"> 182.3 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 0.127 </td>
-   <td style="text-align:center;"> 213.3 </td>
-   <td style="text-align:center;"> 189.3 </td>
+   <td style="text-align:center;"> 0.114 </td>
+   <td style="text-align:center;"> 217.6 </td>
+   <td style="text-align:center;"> 191.0 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves only </td>
-   <td style="text-align:center;"> 0.199 </td>
-   <td style="text-align:center;"> 221.0 </td>
-   <td style="text-align:center;"> 200.5 </td>
+   <td style="text-align:center;"> 0.138 </td>
+   <td style="text-align:center;"> 221.4 </td>
+   <td style="text-align:center;"> 201.7 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Model-averaged estimate </td>
    <td style="text-align:center;">  </td>
-   <td style="text-align:center;"> 211.0 </td>
-   <td style="text-align:center;"> 186.3 </td>
+   <td style="text-align:center;"> 218.1 </td>
+   <td style="text-align:center;"> 192.3 </td>
   </tr>
 </tbody>
 </table>
@@ -430,7 +433,7 @@ Table&nbsp;2: Model weights derived using pseudo-Bayesian model averaging with b
 <img src="index_files/figure-html/fig-final_proj-1.png" class="img-fluid figure-img" width="2400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-final_proj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N<sub>min</sub>, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N and Nmin, respectively.
+Figure&nbsp;1: Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2024) and a two-year projection through 2026. The black points and red diamonds correspond to the mean PCFG abundance and N<sub>min</sub>, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N and Nmin, respectively.
 </figcaption>
 </figure>
 </div>
@@ -442,20 +445,20 @@ Figure&nbsp;1: Estimated trend in PCFG gray whale abundance derived from model-a
 <h2 class="anchored" data-anchor-id="methodology">Methodology</h2>
 <section id="model-development" class="level3">
 <h3 class="anchored" data-anchor-id="model-development">Model development</h3>
-<p>Several models were developed and evaluated to forecast the population size of PCFG gray whales in future years. To do so, a model-estimated annual growth rate (i.e., <span class="math inline">\(\lambda\)</span>) was iteratively applied to future years using the most recent estimate of population size as a starting point (2023). The models developed for population forecasting varied based on assumptions made about the PCFG growth rate (e.g., assuming <span class="math inline">\(\lambda\)</span> in a given year is or is not correlated with <span class="math inline">\(\lambda\)</span> in the previous year), and factors hypothesized to be correlated with population growth (such as how many calves had been sighted or how many ENP gray whales had washed ashore dead or stranded in the previous year). Details about the parameters included in each of the six models can be found on the <a href="./methodology.html">Model Description</a> page.</p>
+<p>Several models were developed and evaluated to forecast the population size of PCFG gray whales in future years. To do so, a model-estimated annual growth rate (i.e., <span class="math inline">\(\lambda\)</span>) was iteratively applied to future years using the most recent estimate of population size as a starting point (2024). The models developed for population forecasting varied based on assumptions made about the PCFG growth rate (e.g., assuming <span class="math inline">\(\lambda\)</span> in a given year is or is not correlated with <span class="math inline">\(\lambda\)</span> in the previous year), and factors hypothesized to be correlated with population growth (such as how many calves had been sighted or how many ENP gray whales had washed ashore dead or stranded in the previous year). Details about the parameters included in each of the six models can be found on the <a href="./methodology.html">Model Description</a> page.</p>
 </section>
 <section id="model-selection" class="level3">
 <h3 class="anchored" data-anchor-id="model-selection">Model selection</h3>
-<p>Model fit was evaluated using leave-one-out cross validation (LOOCV) using the complete mark-resight time series from Harris et al. <span class="citation" data-cites="harrisPCFG2025">(<a href="#ref-harrisPCFG2025" role="doc-biblioref">2025</a>)</span>. LOOCV is a method whereby models are fit to the full dataset, but the quality of the fit is evaluated by iteratively removing and predicting a single record from the data time series (in this case, an annual abundance estimate). Models were in turn ranked using the leave-one-out information criterion <span class="citation" data-cites="vehtari2017practical">(LOOIC, <a href="#ref-vehtari2017practical" role="doc-biblioref">Vehtari, Gelman, and Gabry 2017</a>)</span>, a criterion based on LOOCV wherein smaller values equate to better fitting models (see “<a href="./results.html#leave-one-out">Leave-one-out Cross Validation</a>”).&nbsp;</p>
+<p>Model fit was evaluated using leave-one-out cross validation (LOOCV) using the complete mark-resight time series from Mahoney et al. <span class="citation" data-cites="mahoneyPCFG2026">(<a href="#ref-mahoneyPCFG2026" role="doc-biblioref">2026</a>)</span>. LOOCV is a method whereby models are fit to the full dataset, but the quality of the fit is evaluated by iteratively removing and predicting a single record from the data time series (in this case, an annual abundance estimate). Models were in turn ranked using the leave-one-out information criterion <span class="citation" data-cites="vehtari2017practical">(LOOIC, <a href="#ref-vehtari2017practical" role="doc-biblioref">Vehtari et al. 2017</a>)</span>, a criterion based on LOOCV wherein smaller values equate to better fitting models (see “<a href="./results.html#leave-one-out">Leave-one-out Cross Validation</a>”).&nbsp;</p>
 </section>
 <section id="model-evaluation-and-performance" class="level3">
 <h3 class="anchored" data-anchor-id="model-evaluation-and-performance">Model evaluation and performance</h3>
-<p>Model performance was evaluated by assessing the ability of each model to retrospectively predict a “future” known population abundance from the mark-resight time series <span class="citation" data-cites="harrisPCFG2025">(see <a href="#ref-harrisPCFG2025" role="doc-biblioref">Harris et al. 2025</a>)</span>. Specifically, predictive accuracy of each model was evaluated by fitting to 1) a truncated time series where the model was fitted with data only up to the prediction year being evaluated to make the same predictions, and 2) the full time series, less the number of years being predicted (e.g., 2002 - 2021). Scenario (1) reflects the naivety of the current model to future population states when projecting estimates, but constrains knowledge of the system and associated dynamics by truncating the data time series, providing a pessimistic assessment of models that are more sensitive to sample size. Scenario (2) provides the most comprehensive understanding of factors influencing <span class="math inline">\(\lambda\)</span>, but can impose undue influence on projections from past years, providing a slightly optimistic assessment of predictive performance. Details from these assessments can be found in sections “<a href="./results.html#model-fits-trunc">Model fits derived from truncated time series</a>” and “<a href="./results.html#model-fits-full">Model fits derived from full time series</a>”.</p>
+<p>Model performance was evaluated by assessing the ability of each model to retrospectively predict a “future” known population abundance from the mark-resight time series <span class="citation" data-cites="mahoneyPCFG2026">(see <a href="#ref-mahoneyPCFG2026" role="doc-biblioref">Mahoney et al. 2026</a>)</span>. Specifically, predictive accuracy of each model was evaluated by fitting to 1) a truncated time series where the model was fitted with data only up to the prediction year being evaluated to make the same predictions, and 2) the full time series, less the number of years being predicted (e.g., 2002 - 2022). Scenario (1) reflects the naivety of the current model to future population states when projecting estimates, but constrains knowledge of the system and associated dynamics by truncating the data time series, providing a pessimistic assessment of models that are more sensitive to sample size. Scenario (2) provides the most comprehensive understanding of factors influencing <span class="math inline">\(\lambda\)</span>, but can impose undue influence on projections from past years, providing a slightly optimistic assessment of predictive performance. Details from these assessments can be found in sections “<a href="./results.html#model-fits-trunc">Model fits derived from truncated time series</a>” and “<a href="./results.html#model-fits-full">Model fits derived from full time series</a>”.</p>
 <p>Simulation analyses were also conducted to look at model behavior for the models most likely to over- or under-predict the true abundance following a trend in <span class="math inline">\(\lambda\)</span>. Two hypothetical scenarios were tested; 1) a stable population of 250 individuals (<span class="math inline">\(\lambda\)</span> = 1 for 15 yrs)&nbsp; that went into successive years of decline, and 2) a stable population of 125 individuals (<span class="math inline">\(\lambda\)</span> = 1 for 15 yrs) that experienced successive years of growth (see “<a href="./supp_simulation.html#simulation">Simulation analysis</a>”).&nbsp;</p>
 </section>
 <section id="model-averaging" class="level3">
 <h3 class="anchored" data-anchor-id="model-averaging">Model averaging</h3>
-<p>In cases where the accuracy of predictions is paramount, model averaging is recommended as a means of dealing with uncertainty in model selection and model behavior <span class="citation" data-cites="burnham2011aic anderson2007model">(<a href="#ref-burnham2011aic" role="doc-biblioref">Burnham, Anderson, and Huyvaert 2011</a>; <a href="#ref-anderson2007model" role="doc-biblioref">Anderson 2007</a>)</span>. Model averaging is a statistical approach by which multiple models are combined in order to derive a single best estimate. The models are combined by first estimating the strength of support for each model (via metrics such as LOOIC), which in turn is used to derive model-specific weights reflecting how much influence each model will have on the final estimates. Here, model weights were derived using a pseudo-Bayesian model averaging approach with bootstrapping <span class="citation" data-cites="yaoStacking2018">(<a href="#ref-yaoStacking2018" role="doc-biblioref">Yao et al. 2018</a>)</span>. These weights were then applied to the abundance estimates from 2002 through 2023 as well the forecasted estimates through 2025.</p>
+<p>In cases where the accuracy of predictions is paramount, model averaging is recommended as a means of dealing with uncertainty in model selection and model behavior <span class="citation" data-cites="burnham2011aic anderson2007model">(<a href="#ref-burnham2011aic" role="doc-biblioref">Burnham et al. 2011</a>; <a href="#ref-anderson2007model" role="doc-biblioref">Anderson 2007</a>)</span>. Model averaging is a statistical approach by which multiple models are combined in order to derive a single best estimate. The models are combined by first estimating the strength of support for each model (via metrics such as LOOIC), which in turn is used to derive model-specific weights reflecting how much influence each model will have on the final estimates. Here, model weights were derived using a pseudo-Bayesian model averaging approach with bootstrapping <span class="citation" data-cites="yaoStacking2018">(<a href="#ref-yaoStacking2018" role="doc-biblioref">Yao et al. 2018</a>)</span>. These weights were then applied to the abundance estimates from 2002 through 2024 as well the forecasted estimates through 2026.</p>
 </section>
 </section>
 <section id="future-updates" class="level2">
@@ -469,18 +472,18 @@ Figure&nbsp;1: Estimated trend in PCFG gray whale abundance derived from model-a
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references"><em>References</em></h2>
-<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-anderson2007model" class="csl-entry" role="listitem">
 Anderson, D. R. 2007. <em>Model Based Inference in the Life Sciences: A Primer on Evidence</em>. Springer Science &amp; Business Media.
 </div>
 <div id="ref-burnham2011aic" class="csl-entry" role="listitem">
 Burnham, K. P., D. R. Anderson, and K. P. Huyvaert. 2011. <span>“AIC Model Selection and Multimodel Inference in Behavioral Ecology: Some Background, Observations, and Comparisons.”</span> <em>Behavioral Ecology and Sociobiology</em> 65: 23–35.
 </div>
-<div id="ref-harrisPCFG2025" class="csl-entry" role="listitem">
-Harris, J., J. Calambokidis, A. Perez, and P. J. Mahoney. 2025. <span>“<a href="">Recent Trends in the Abundance of Seasonal Gray Whales (Eschrichtius Robustus) in the Pacific Northwest, 1996-2023</a>.”</span> <em>NOAA AFSC Processed Rep.</em> 2025-06: 1–19.
+<div id="ref-mahoneyPCFG2026" class="csl-entry" role="listitem">
+Mahoney, P. J., J. Harris, J. Calambokidis, and A. Perez. 2026. <span>“<a href="">Recent Trends in the Abundance of Seasonal Gray Whales (Eschrichtius Robustus) in the Pacific Northwest, 1996-2024</a>.”</span> <em>NOAA AFSC Processed Rep.</em> 2026-08: 1–18.
 </div>
 <div id="ref-raverty2024" class="csl-entry" role="listitem">
-Raverty, S., P. Duignan, D. Greig, J. L. Huggins, K. B. Huntington, M. Garner, J. Calambokidis, et al. 2024. <span>“<a href="">Gray Whale (Eschrichtius Robustus) Post- Mortem Findings from December 2018 Through 2021 During the Unusual Mortality Event in the Eastern North Pacific</a>.”</span> <em>PLoS One</em> 19.
+Raverty, S., P. Duignan, D. Greig, et al. 2024. <span>“<a href="">Gray Whale (Eschrichtius Robustus) Post- Mortem Findings from December 2018 Through 2021 During the Unusual Mortality Event in the Eastern North Pacific</a>.”</span> <em>PLoS One</em> 19.
 </div>
 <div id="ref-vehtari2017practical" class="csl-entry" role="listitem">
 Vehtari, A., A. Gelman, and J. Gabry. 2017. <span>“Practical Bayesian Model Evaluation Using Leave-One-Out Cross-Validation and WAIC.”</span> <em>Statistics and Computing</em> 27: 1413–32.
@@ -562,13 +565,14 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -588,7 +592,8 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -597,8 +602,69 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -612,6 +678,7 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -774,44 +841,54 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -909,6 +986,9 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
       }
     }
   });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
 <footer class="footer">

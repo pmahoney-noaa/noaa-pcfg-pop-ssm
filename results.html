@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.7.31">
+<meta name="generator" content="quarto-1.11.9">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>A state-space model for projecting population abundance – PCFG Gray Whales</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -24,7 +30,6 @@ ul.task-list li input[type="checkbox"] {
 div.csl-bib-body { }
 div.csl-entry {
   clear: both;
-  margin-bottom: 0em;
 }
 .hanging-indent div.csl-entry {
   margin-left:2em;
@@ -52,14 +57,15 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/scrollable-regions/scrollable-regions.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-e1a5c8363afafaef2c763b6775fbf3ca.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-63b5708e65d6cd79cd7618c58d0c21e7.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-788a07efb0374ad45df698b80b79d285.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-0363c6fbbcf247bbbae12cd65cfbf9fc.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -91,7 +97,7 @@ div.csl-indent {
 <link href="site_libs/lightable-0.0.1/lightable.css" rel="stylesheet">
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
 
 <script type="text/javascript">
 const typesetMath = (el) => {
@@ -104,7 +110,7 @@ const typesetMath = (el) => {
     var macros = [];
     for (var i = 0; i < mathElements.length; i++) {
       var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
         window.katex.render(texText.data, mathElements[i], {
           displayMode: mathElements[i].classList.contains('display'),
           throwOnError: false,
@@ -122,17 +128,17 @@ window.Quarto = {
 
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked quarto-light"><a id="quarto-skip-link" class="visually-hidden-focusable" href="#quarto-document-content">Skip to main content</a>
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
+  <nav class="quarto-secondary-nav" aria-label="Toolbar">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./results.html">Model results</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <nav class="quarto-page-breadcrumbs" aria-label="Breadcrumbs"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./results.html">Model results</a></li></ol></nav>
+        <a class="flex-grow-1" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -143,7 +149,7 @@ window.Quarto = {
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto" aria-label="Site">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">PCFG Gray Whales</a> 
@@ -193,13 +199,10 @@ window.Quarto = {
 </li>
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
- <span class="menu-text">Supplementary</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
+            <button type="button" class="sidebar-item-text sidebar-item-toggle sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-controls="quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text" id="quarto-sidebar-section-1-label">Supplementary</span><i class="bi bi-chevron-right" aria-hidden="true"></i></button>
       </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-1" aria-labelledby="quarto-sidebar-section-1-label" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./supp_tables.html" class="sidebar-item-text sidebar-link">
@@ -232,7 +235,7 @@ window.Quarto = {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
+        <nav id="TOC" role="doc-toc" aria-labelledby="toc-title" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -248,13 +251,13 @@ window.Quarto = {
   </ul></li>
   <li><a href="#model-predicted-population-trends" id="toc-model-predicted-population-trends" class="nav-link" data-scroll-target="#model-predicted-population-trends"><em>Model-predicted population trends</em></a>
   <ul class="collapse">
-  <li><a href="#model-averaged-population-trend-and-predictions-for-2025" id="toc-model-averaged-population-trend-and-predictions-for-2025" class="nav-link" data-scroll-target="#model-averaged-population-trend-and-predictions-for-2025">Model-averaged population trend and predictions for 2025</a></li>
+  <li><a href="#model-averaged-population-trend-and-predictions-for-2026" id="toc-model-averaged-population-trend-and-predictions-for-2026" class="nav-link" data-scroll-target="#model-averaged-population-trend-and-predictions-for-2026">Model-averaged population trend and predictions for 2026</a></li>
   </ul></li>
   </ul>
 </nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content" id="quarto-document-content" tabindex="-1">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -306,44 +309,44 @@ Table&nbsp;1: Coefficient estimates for models with coefficients on log <span cl
 <td style="text-align: center;"><span class="math inline">\(\beta_{Calves}\)</span></td>
 <td style="text-align: center;">0.004</td>
 <td style="text-align: center;">0.004</td>
-<td style="text-align: center;">0.031</td>
-<td style="text-align: center;">-0.046</td>
-<td style="text-align: center;">0.054</td>
-<td style="text-align: center;">1.001</td>
-<td style="text-align: center;">1759.5</td>
+<td style="text-align: center;">0.028</td>
+<td style="text-align: center;">-0.044</td>
+<td style="text-align: center;">0.049</td>
+<td style="text-align: center;">1.000</td>
+<td style="text-align: center;">1819.5</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PCFG Calves only</td>
 <td style="text-align: center;"><span class="math inline">\(\beta_{Calves}\)</span></td>
-<td style="text-align: center;">0.012</td>
-<td style="text-align: center;">0.011</td>
-<td style="text-align: center;">0.019</td>
-<td style="text-align: center;">-0.017</td>
-<td style="text-align: center;">0.042</td>
-<td style="text-align: center;">1.000</td>
-<td style="text-align: center;">3007.2</td>
+<td style="text-align: center;">0.010</td>
+<td style="text-align: center;">0.010</td>
+<td style="text-align: center;">0.017</td>
+<td style="text-align: center;">-0.018</td>
+<td style="text-align: center;">0.037</td>
+<td style="text-align: center;">1.004</td>
+<td style="text-align: center;">3383.9</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">ENP Strandings only</td>
 <td style="text-align: center;"><span class="math inline">\(\beta_{Strandings}\)</span></td>
 <td style="text-align: center;">-0.001</td>
-<td style="text-align: center;">-0.002</td>
+<td style="text-align: center;">-0.001</td>
 <td style="text-align: center;">0.001</td>
 <td style="text-align: center;">-0.003</td>
 <td style="text-align: center;">0.001</td>
-<td style="text-align: center;">1.007</td>
-<td style="text-align: center;">2317.8</td>
+<td style="text-align: center;">1.002</td>
+<td style="text-align: center;">2183.2</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PCFG Calves + ENP Strandings</td>
 <td style="text-align: center;"><span class="math inline">\(\beta_{Calves}\)</span></td>
-<td style="text-align: center;">0.007</td>
-<td style="text-align: center;">0.007</td>
-<td style="text-align: center;">0.019</td>
-<td style="text-align: center;">-0.023</td>
-<td style="text-align: center;">0.040</td>
-<td style="text-align: center;">1.001</td>
-<td style="text-align: center;">2474.9</td>
+<td style="text-align: center;">0.005</td>
+<td style="text-align: center;">0.005</td>
+<td style="text-align: center;">0.018</td>
+<td style="text-align: center;">-0.022</td>
+<td style="text-align: center;">0.035</td>
+<td style="text-align: center;">1.003</td>
+<td style="text-align: center;">2569.8</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">PCFG Calves + ENP Strandings</td>
@@ -351,10 +354,10 @@ Table&nbsp;1: Coefficient estimates for models with coefficients on log <span cl
 <td style="text-align: center;">-0.001</td>
 <td style="text-align: center;">-0.001</td>
 <td style="text-align: center;">0.001</td>
-<td style="text-align: center;">-0.004</td>
+<td style="text-align: center;">-0.003</td>
 <td style="text-align: center;">0.001</td>
-<td style="text-align: center;">1.002</td>
-<td style="text-align: center;">1467.0</td>
+<td style="text-align: center;">1.003</td>
+<td style="text-align: center;">2349.0</td>
 </tr>
 </tbody>
 </table>
@@ -364,7 +367,7 @@ Table&nbsp;1: Coefficient estimates for models with coefficients on log <span cl
 </section>
 <section id="leave-one-out" class="level2">
 <h2 class="anchored" data-anchor-id="leave-one-out">Leave-one-out Cross Validation (LOO)</h2>
-<p><a href="#tbl-loo" class="quarto-xref">Table&nbsp;2</a> provides estimates of model fit using an information criterion (leave-one-out information criterion; <em>looic</em>) based on leave-one-out cross validation <span class="citation" data-cites="vehtari2017practical">(<a href="#ref-vehtari2017practical" role="doc-biblioref">Vehtari, Gelman, and Gabry 2017</a>)</span>. Models with the lowest <span class="math inline">\(looic\)</span> value are considered the best fitting model given the time series of abundance data used to fit the model. <span class="math inline">\(\Delta looic\)</span> represents the difference in <span class="math inline">\(looic\)</span> relative to the model with the lowest <span class="math inline">\(looic\)</span>.</p>
+<p><a href="#tbl-loo" class="quarto-xref">Table&nbsp;2</a> provides estimates of model fit using an information criterion (leave-one-out information criterion; <em>looic</em>) based on leave-one-out cross validation <span class="citation" data-cites="vehtari2017practical">(<a href="#ref-vehtari2017practical" role="doc-biblioref">Vehtari et al. 2017</a>)</span>. Models with the lowest <span class="math inline">\(looic\)</span> value are considered the best fitting model given the time series of abundance data used to fit the model. <span class="math inline">\(\Delta looic\)</span> represents the difference in <span class="math inline">\(looic\)</span> relative to the model with the lowest <span class="math inline">\(looic\)</span>.</p>
 <div class="cell">
 <div id="tbl-loo" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
@@ -389,63 +392,63 @@ Table&nbsp;2: Derived estimates of model fit using an information criterion base
 <tbody>
   <tr>
    <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 26.93 </td>
-   <td style="text-align:center;"> 0.79 </td>
-   <td style="text-align:center;"> 2.38 </td>
-   <td style="text-align:center;"> 0.67 </td>
-   <td style="text-align:center;"> -53.86 </td>
-   <td style="text-align:center;"> 1.59 </td>
+   <td style="text-align:center;"> 28.26 </td>
+   <td style="text-align:center;"> 0.82 </td>
+   <td style="text-align:center;"> 2.14 </td>
+   <td style="text-align:center;"> 0.50 </td>
+   <td style="text-align:center;"> -56.52 </td>
+   <td style="text-align:center;"> 1.64 </td>
    <td style="text-align:center;"> 0.00 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Strandings only </td>
-   <td style="text-align:center;"> 26.25 </td>
-   <td style="text-align:center;"> 0.74 </td>
-   <td style="text-align:center;"> 2.66 </td>
-   <td style="text-align:center;"> 0.46 </td>
-   <td style="text-align:center;"> -52.50 </td>
-   <td style="text-align:center;"> 1.48 </td>
-   <td style="text-align:center;"> 1.36 </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Base </td>
-   <td style="text-align:center;"> 26.06 </td>
-   <td style="text-align:center;"> 0.73 </td>
-   <td style="text-align:center;"> 2.80 </td>
-   <td style="text-align:center;"> 0.57 </td>
-   <td style="text-align:center;"> -52.12 </td>
-   <td style="text-align:center;"> 1.46 </td>
+   <td style="text-align:center;"> 27.39 </td>
+   <td style="text-align:center;"> 0.83 </td>
+   <td style="text-align:center;"> 2.57 </td>
+   <td style="text-align:center;"> 0.40 </td>
+   <td style="text-align:center;"> -54.78 </td>
+   <td style="text-align:center;"> 1.67 </td>
    <td style="text-align:center;"> 1.74 </td>
   </tr>
   <tr>
+   <td style="text-align:left;"> Base </td>
+   <td style="text-align:center;"> 27.38 </td>
+   <td style="text-align:center;"> 0.78 </td>
+   <td style="text-align:center;"> 2.57 </td>
+   <td style="text-align:center;"> 0.39 </td>
+   <td style="text-align:center;"> -54.77 </td>
+   <td style="text-align:center;"> 1.57 </td>
+   <td style="text-align:center;"> 1.75 </td>
+  </tr>
+  <tr>
    <td style="text-align:left;"> PCFG Calves only </td>
-   <td style="text-align:center;"> 26.05 </td>
-   <td style="text-align:center;"> 0.66 </td>
-   <td style="text-align:center;"> 2.91 </td>
-   <td style="text-align:center;"> 0.53 </td>
-   <td style="text-align:center;"> -52.09 </td>
-   <td style="text-align:center;"> 1.32 </td>
-   <td style="text-align:center;"> 1.77 </td>
+   <td style="text-align:center;"> 26.91 </td>
+   <td style="text-align:center;"> 0.68 </td>
+   <td style="text-align:center;"> 2.97 </td>
+   <td style="text-align:center;"> 0.50 </td>
+   <td style="text-align:center;"> -53.82 </td>
+   <td style="text-align:center;"> 1.36 </td>
+   <td style="text-align:center;"> 2.70 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves + ENP Strandings </td>
-   <td style="text-align:center;"> 25.76 </td>
-   <td style="text-align:center;"> 0.71 </td>
-   <td style="text-align:center;"> 3.02 </td>
-   <td style="text-align:center;"> 0.42 </td>
-   <td style="text-align:center;"> -51.52 </td>
-   <td style="text-align:center;"> 1.42 </td>
-   <td style="text-align:center;"> 2.34 </td>
+   <td style="text-align:center;"> 26.87 </td>
+   <td style="text-align:center;"> 0.76 </td>
+   <td style="text-align:center;"> 2.92 </td>
+   <td style="text-align:center;"> 0.43 </td>
+   <td style="text-align:center;"> -53.75 </td>
+   <td style="text-align:center;"> 1.53 </td>
+   <td style="text-align:center;"> 2.77 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 25.60 </td>
-   <td style="text-align:center;"> 0.70 </td>
-   <td style="text-align:center;"> 3.11 </td>
-   <td style="text-align:center;"> 0.51 </td>
-   <td style="text-align:center;"> -51.21 </td>
-   <td style="text-align:center;"> 1.41 </td>
-   <td style="text-align:center;"> 2.66 </td>
+   <td style="text-align:center;"> 26.73 </td>
+   <td style="text-align:center;"> 0.75 </td>
+   <td style="text-align:center;"> 3.06 </td>
+   <td style="text-align:center;"> 0.58 </td>
+   <td style="text-align:center;"> -53.45 </td>
+   <td style="text-align:center;"> 1.50 </td>
+   <td style="text-align:center;"> 3.07 </td>
   </tr>
 </tbody>
 </table>
@@ -458,21 +461,21 @@ Table&nbsp;2: Derived estimates of model fit using an information criterion base
 </section>
 <section id="retrospective" class="level2">
 <h2 class="anchored" data-anchor-id="retrospective">Predictive accuracy with retrospection</h2>
-<p>Given that prediction was the primary objective of this exercise, we evaluated the ability of each model to retrospectively predict a “future”, known population abundance using the PCFG abundance time series from <span class="citation" data-cites="harrisPCFG2025">(<a href="#ref-harrisPCFG2025" role="doc-biblioref">Harris et al. 2025</a>)</span>. Predicting future states, or “forecasting”, is notoriously challenging particularly as we project further into the future. However, within this system, data gaps of one or two years represent the most plausible scenarios managers are likely to encounter, providing the basis for our evaluation. In addition, we anticipated relative performance within model sets was likely to vary as we projected further into the future. Thus, in order to document a potential shift in model support in relation to projection length, we evaluated predictive performance when projecting one and two years separately. Finally, we evaluated predictive performance using models fitted to both truncated and complete abundance time series. The latter provides the best available knowledge of the system for model fitting, but might bias retrospective evaluations of predictive performance due to information “spillover” from future observed population states. The former can become data limited and select for overly simplistic models as time series shorten.</p>
-<p>All time series used in model fitting started with estimates from 2002, but varied in their end point. In the case of truncated times series, we fit each of the six specified models to multiple time series with varying end points from 2013 through 2021, providing projected abundance estimates for years 2014 through 2023. Notably, we evaluated endpoints between 2006 and 2012, but these shorter time series were inadequate for model convergence. In the case of the complete time series, we fit all six models to a single time series representing abundance data from 2002 through 2023. Model parameters were then used to retrospectively project abundance forward one or two years from 2002 through 2021, providing projected abundance estimates for years 2003 through 2023.</p>
+<p>Given that prediction was the primary objective of this exercise, we evaluated the ability of each model to retrospectively predict a “future”, known population abundance using the PCFG abundance time series from <span class="citation" data-cites="mahoneyPCFG2026">(<a href="#ref-mahoneyPCFG2026" role="doc-biblioref">Mahoney et al. 2026</a>)</span>. Predicting future states, or “forecasting”, is notoriously challenging particularly as we project further into the future. However, within this system, data gaps of one or two years represent the most plausible scenarios managers are likely to encounter, providing the basis for our evaluation. In addition, we anticipated relative performance within model sets was likely to vary as we projected further into the future. Thus, in order to document a potential shift in model support in relation to projection length, we evaluated predictive performance when projecting one and two years separately. Finally, we evaluated predictive performance using models fitted to both truncated and complete abundance time series. The latter provides the best available knowledge of the system for model fitting, but might bias retrospective evaluations of predictive performance due to information “spillover” from future observed population states. The former can become data limited and select for overly simplistic models as time series shorten.</p>
+<p>All time series used in model fitting started with estimates from 2002, but varied in their end point. In the case of truncated times series, we fit each of the six specified models to multiple time series with varying end points from 2013 through 2022, providing projected abundance estimates for years 2014 through 2024. Notably, we evaluated endpoints between 2006 and 2012, but these shorter time series were inadequate for model convergence. In the case of the complete time series, we fit all six models to a single time series representing abundance data from 2002 through 2024. Model parameters were then used to retrospectively project abundance forward one or two years from 2002 through 2022, providing projected abundance estimates for years 2003 through 2024.</p>
 <p>In all cases, projected estimates were then compared to “observed” abundance in the same year using residual sum of squares (RSS), the quantile for observed abundance, 60% and 95% credible intervals, and whether an estimate dropped below threshold resulting in a presumed hunt closure. Predictive fits were summarized by one or two year projection lengths.</p>
 <section id="model-fits-trunc" class="level3">
 <h3 class="anchored" data-anchor-id="model-fits-trunc"><em>Model fits derived from truncated time series</em></h3>
-<p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-tRetro1summ" class="quarto-xref">Table&nbsp;3</a>) or two years forward (<a href="#tbl-tRetro2summ" class="quarto-xref">Table&nbsp;4</a>) from all data years between 2013 and 2021 using the truncated time series described above. Makah hunt closures will be imposed when N falls below 192 or N<sub>min</sub> falls below 171.</p>
+<p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-tRetro1summ" class="quarto-xref">Table&nbsp;3</a>) or two years forward (<a href="#tbl-tRetro2summ" class="quarto-xref">Table&nbsp;4</a>) from all data years between 2013 and 2022 using the truncated time series described above. Makah hunt closures will be imposed when N falls below 192 or N<sub>min</sub> falls below 171.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" aria-current="page">Projected year 1 (Table 3)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Projected year 2 (Table 4)</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true" href="" aria-current="page">Projected year 1 (Table 3)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false" href="">Projected year 2 (Table 4)</a></li></ul>
 <div class="tab-content">
 <div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
 <div class="cell">
 <div id="tbl-tRetro1summ" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tRetro1summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;3: Model prediction statistics for one year projections using data years 2013 through 2022 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares.
+Table&nbsp;3: Model prediction statistics for one year projections using data years 2013 through 2023 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares.
 </figcaption>
 <div aria-describedby="tbl-tRetro1summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display" data-html-table-processing="none">
@@ -494,11 +497,11 @@ Table&nbsp;3: Model prediction statistics for one year projections using data ye
 <tbody>
   <tr>
    <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 264.0 </td>
-   <td style="text-align:center;"> 0.459 </td>
-   <td style="text-align:center;"> 0.489 </td>
-   <td style="text-align:center;"> 0.154 </td>
-   <td style="text-align:center;"> 0.139 </td>
+   <td style="text-align:center;"> 259.9 </td>
+   <td style="text-align:center;"> 0.464 </td>
+   <td style="text-align:center;"> 0.487 </td>
+   <td style="text-align:center;"> 0.133 </td>
+   <td style="text-align:center;"> 0.157 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -506,11 +509,11 @@ Table&nbsp;3: Model prediction statistics for one year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> Base </td>
-   <td style="text-align:center;"> 284.7 </td>
-   <td style="text-align:center;"> 0.348 </td>
-   <td style="text-align:center;"> 0.291 </td>
-   <td style="text-align:center;"> 0.034 </td>
-   <td style="text-align:center;"> 0.021 </td>
+   <td style="text-align:center;"> 276.4 </td>
+   <td style="text-align:center;"> 0.366 </td>
+   <td style="text-align:center;"> 0.337 </td>
+   <td style="text-align:center;"> 0.030 </td>
+   <td style="text-align:center;"> 0.020 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -518,11 +521,11 @@ Table&nbsp;3: Model prediction statistics for one year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 305.7 </td>
-   <td style="text-align:center;"> 0.358 </td>
-   <td style="text-align:center;"> 0.309 </td>
-   <td style="text-align:center;"> 0.051 </td>
-   <td style="text-align:center;"> 0.033 </td>
+   <td style="text-align:center;"> 303.5 </td>
+   <td style="text-align:center;"> 0.361 </td>
+   <td style="text-align:center;"> 0.335 </td>
+   <td style="text-align:center;"> 0.044 </td>
+   <td style="text-align:center;"> 0.028 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -530,11 +533,11 @@ Table&nbsp;3: Model prediction statistics for one year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves only </td>
-   <td style="text-align:center;"> 491.2 </td>
-   <td style="text-align:center;"> 0.290 </td>
-   <td style="text-align:center;"> 0.269 </td>
-   <td style="text-align:center;"> 0.051 </td>
-   <td style="text-align:center;"> 0.027 </td>
+   <td style="text-align:center;"> 475.9 </td>
+   <td style="text-align:center;"> 0.313 </td>
+   <td style="text-align:center;"> 0.307 </td>
+   <td style="text-align:center;"> 0.043 </td>
+   <td style="text-align:center;"> 0.028 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -542,11 +545,11 @@ Table&nbsp;3: Model prediction statistics for one year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Strandings only </td>
-   <td style="text-align:center;"> 578.4 </td>
-   <td style="text-align:center;"> 0.585 </td>
-   <td style="text-align:center;"> 0.597 </td>
-   <td style="text-align:center;"> 0.200 </td>
-   <td style="text-align:center;"> 0.098 </td>
+   <td style="text-align:center;"> 536.0 </td>
+   <td style="text-align:center;"> 0.596 </td>
+   <td style="text-align:center;"> 0.634 </td>
+   <td style="text-align:center;"> 0.178 </td>
+   <td style="text-align:center;"> 0.138 </td>
    <td style="text-align:center;"> 1 </td>
    <td style="text-align:center;"> 1 </td>
    <td style="text-align:center;"> 1 </td>
@@ -554,11 +557,11 @@ Table&nbsp;3: Model prediction statistics for one year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves + ENP Strandings </td>
-   <td style="text-align:center;"> 649.8 </td>
-   <td style="text-align:center;"> 0.507 </td>
-   <td style="text-align:center;"> 0.533 </td>
-   <td style="text-align:center;"> 0.200 </td>
-   <td style="text-align:center;"> 0.111 </td>
+   <td style="text-align:center;"> 564.1 </td>
+   <td style="text-align:center;"> 0.519 </td>
+   <td style="text-align:center;"> 0.538 </td>
+   <td style="text-align:center;"> 0.180 </td>
+   <td style="text-align:center;"> 0.138 </td>
    <td style="text-align:center;"> 1 </td>
    <td style="text-align:center;"> 1 </td>
    <td style="text-align:center;"> 1 </td>
@@ -578,7 +581,7 @@ Table&nbsp;3: Model prediction statistics for one year projections using data ye
 <div id="tbl-tRetro2summ" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-tRetro2summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;4: Model prediction statistics for two year projections using data years 2013 through 2021 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares.
+Table&nbsp;4: Model prediction statistics for two year projections using data years 2013 through 2022 as starting points. Models were fitted using truncated time series, including data up to projected year - 1. mnRSS is the mean residual sum of squares.
 </figcaption>
 <div aria-describedby="tbl-tRetro2summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display" data-html-table-processing="none">
@@ -600,10 +603,10 @@ Table&nbsp;4: Model prediction statistics for two year projections using data ye
 <tbody>
   <tr>
    <td style="text-align:left;"> Base </td>
-   <td style="text-align:center;"> 667.7 </td>
-   <td style="text-align:center;"> 0.283 </td>
-   <td style="text-align:center;"> 0.203 </td>
-   <td style="text-align:center;"> 0.044 </td>
+   <td style="text-align:center;"> 620.0 </td>
+   <td style="text-align:center;"> 0.309 </td>
+   <td style="text-align:center;"> 0.244 </td>
+   <td style="text-align:center;"> 0.047 </td>
    <td style="text-align:center;"> 0.039 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -612,11 +615,11 @@ Table&nbsp;4: Model prediction statistics for two year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 829.7 </td>
-   <td style="text-align:center;"> 0.284 </td>
-   <td style="text-align:center;"> 0.239 </td>
-   <td style="text-align:center;"> 0.066 </td>
-   <td style="text-align:center;"> 0.055 </td>
+   <td style="text-align:center;"> 794.7 </td>
+   <td style="text-align:center;"> 0.306 </td>
+   <td style="text-align:center;"> 0.246 </td>
+   <td style="text-align:center;"> 0.069 </td>
+   <td style="text-align:center;"> 0.052 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -624,23 +627,23 @@ Table&nbsp;4: Model prediction statistics for two year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 1117.7 </td>
-   <td style="text-align:center;"> 0.432 </td>
-   <td style="text-align:center;"> 0.412 </td>
-   <td style="text-align:center;"> 0.230 </td>
-   <td style="text-align:center;"> 0.195 </td>
-   <td style="text-align:center;"> 3 </td>
+   <td style="text-align:center;"> 1069.8 </td>
+   <td style="text-align:center;"> 0.450 </td>
+   <td style="text-align:center;"> 0.471 </td>
+   <td style="text-align:center;"> 0.227 </td>
+   <td style="text-align:center;"> 0.232 </td>
+   <td style="text-align:center;"> 2 </td>
    <td style="text-align:center;"> 0 </td>
-   <td style="text-align:center;"> 3 </td>
-   <td style="text-align:left;"> 2021,2022,2023 </td>
+   <td style="text-align:center;"> 2 </td>
+   <td style="text-align:left;"> 2022,2024 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Strandings only </td>
-   <td style="text-align:center;"> 1431.2 </td>
-   <td style="text-align:center;"> 0.592 </td>
-   <td style="text-align:center;"> 0.622 </td>
-   <td style="text-align:center;"> 0.306 </td>
-   <td style="text-align:center;"> 0.165 </td>
+   <td style="text-align:center;"> 1323.1 </td>
+   <td style="text-align:center;"> 0.606 </td>
+   <td style="text-align:center;"> 0.655 </td>
+   <td style="text-align:center;"> 0.298 </td>
+   <td style="text-align:center;"> 0.235 </td>
    <td style="text-align:center;"> 2 </td>
    <td style="text-align:center;"> 2 </td>
    <td style="text-align:center;"> 2 </td>
@@ -648,11 +651,11 @@ Table&nbsp;4: Model prediction statistics for two year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves only </td>
-   <td style="text-align:center;"> 1698.0 </td>
-   <td style="text-align:center;"> 0.227 </td>
-   <td style="text-align:center;"> 0.223 </td>
-   <td style="text-align:center;"> 0.063 </td>
-   <td style="text-align:center;"> 0.045 </td>
+   <td style="text-align:center;"> 1561.7 </td>
+   <td style="text-align:center;"> 0.265 </td>
+   <td style="text-align:center;"> 0.246 </td>
+   <td style="text-align:center;"> 0.068 </td>
+   <td style="text-align:center;"> 0.057 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -660,11 +663,11 @@ Table&nbsp;4: Model prediction statistics for two year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves + ENP Strandings </td>
-   <td style="text-align:center;"> 1911.9 </td>
-   <td style="text-align:center;"> 0.497 </td>
-   <td style="text-align:center;"> 0.426 </td>
-   <td style="text-align:center;"> 0.306 </td>
-   <td style="text-align:center;"> 0.167 </td>
+   <td style="text-align:center;"> 1626.3 </td>
+   <td style="text-align:center;"> 0.522 </td>
+   <td style="text-align:center;"> 0.527 </td>
+   <td style="text-align:center;"> 0.298 </td>
+   <td style="text-align:center;"> 0.234 </td>
    <td style="text-align:center;"> 2 </td>
    <td style="text-align:center;"> 2 </td>
    <td style="text-align:center;"> 2 </td>
@@ -681,7 +684,7 @@ Table&nbsp;4: Model prediction statistics for two year projections using data ye
 </div>
 </div>
 </div>
-<p><a href="#fig-truncRetroFig1" class="quarto-xref">Figure&nbsp;1</a> depicts the predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2014 through 2023 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars.</p>
+<p><a href="#fig-truncRetroFig1" class="quarto-xref">Figure&nbsp;1</a> depicts the predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2014 through 2024 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-truncRetroFig1" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -690,7 +693,7 @@ Table&nbsp;4: Model prediction statistics for two year projections using data ye
 <img src="results_files/figure-html/fig-truncRetroFig1-1.png" class="img-fluid figure-img" width="3000">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-truncRetroFig1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2014 through 2023 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars.
+Figure&nbsp;1: The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications in a truncated time series context. Observed abundance estimates for years 2014 through 2024 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars.
 </figcaption>
 </figure>
 </div>
@@ -699,16 +702,16 @@ Figure&nbsp;1: The predictive fits when abundance was projected forward one (top
 </section>
 <section id="model-fits-full" class="level3">
 <h3 class="anchored" data-anchor-id="model-fits-full"><em>Model fits derived from full time series</em></h3>
-<p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-retro1summ" class="quarto-xref">Table&nbsp;5</a>) or two years forward (<a href="#tbl-retro2summ" class="quarto-xref">Table&nbsp;6</a>) for all data years from 2002 through 2021 using the full time series. As stated above, Makah hunt closures will be imposed when N falls below 192 or N<sub>min</sub> falls below 171.</p>
+<p>The following tables show predictive performance statistics by model specification when predicting one (<a href="#tbl-retro1summ" class="quarto-xref">Table&nbsp;5</a>) or two years forward (<a href="#tbl-retro2summ" class="quarto-xref">Table&nbsp;6</a>) for all data years from 2002 through 2022 using the full time series. As stated above, Makah hunt closures will be imposed when N falls below 192 or N<sub>min</sub> falls below 171.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Projected year 1 (Table 5)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">Projected year 2 (Table 6)</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true" href="">Projected year 1 (Table 5)</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false" href="">Projected year 2 (Table 6)</a></li></ul>
 <div class="tab-content">
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
 <div id="tbl-retro1summ" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-retro1summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;5: Model prediction statistics for one year projections using data years 2002 through 2022 as starting points. Models were fit using the full time series. RSS is the residual sum of squares.
+Table&nbsp;5: Model prediction statistics for one year projections using data years 2002 through 2023 as starting points. Models were fit using the full time series. RSS is the residual sum of squares.
 </figcaption>
 <div aria-describedby="tbl-retro1summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display" data-html-table-processing="none">
@@ -730,11 +733,11 @@ Table&nbsp;5: Model prediction statistics for one year projections using data ye
 <tbody>
   <tr>
    <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 48.2 </td>
-   <td style="text-align:center;"> 0.517 </td>
-   <td style="text-align:center;"> 0.569 </td>
-   <td style="text-align:center;"> 0.086 </td>
-   <td style="text-align:center;"> 0.088 </td>
+   <td style="text-align:center;"> 47.8 </td>
+   <td style="text-align:center;"> 0.518 </td>
+   <td style="text-align:center;"> 0.549 </td>
+   <td style="text-align:center;"> 0.074 </td>
+   <td style="text-align:center;"> 0.057 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -742,11 +745,11 @@ Table&nbsp;5: Model prediction statistics for one year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves only </td>
-   <td style="text-align:center;"> 75.9 </td>
-   <td style="text-align:center;"> 0.513 </td>
-   <td style="text-align:center;"> 0.497 </td>
-   <td style="text-align:center;"> 0.096 </td>
-   <td style="text-align:center;"> 0.083 </td>
+   <td style="text-align:center;"> 77.8 </td>
+   <td style="text-align:center;"> 0.516 </td>
+   <td style="text-align:center;"> 0.500 </td>
+   <td style="text-align:center;"> 0.082 </td>
+   <td style="text-align:center;"> 0.062 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -754,11 +757,11 @@ Table&nbsp;5: Model prediction statistics for one year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves + ENP Strandings </td>
-   <td style="text-align:center;"> 76.4 </td>
+   <td style="text-align:center;"> 78.2 </td>
    <td style="text-align:center;"> 0.518 </td>
-   <td style="text-align:center;"> 0.583 </td>
-   <td style="text-align:center;"> 0.101 </td>
-   <td style="text-align:center;"> 0.118 </td>
+   <td style="text-align:center;"> 0.587 </td>
+   <td style="text-align:center;"> 0.080 </td>
+   <td style="text-align:center;"> 0.084 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -766,11 +769,11 @@ Table&nbsp;5: Model prediction statistics for one year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Strandings only </td>
-   <td style="text-align:center;"> 85.1 </td>
+   <td style="text-align:center;"> 86.4 </td>
    <td style="text-align:center;"> 0.513 </td>
-   <td style="text-align:center;"> 0.549 </td>
-   <td style="text-align:center;"> 0.080 </td>
-   <td style="text-align:center;"> 0.086 </td>
+   <td style="text-align:center;"> 0.566 </td>
+   <td style="text-align:center;"> 0.059 </td>
+   <td style="text-align:center;"> 0.059 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -778,11 +781,11 @@ Table&nbsp;5: Model prediction statistics for one year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 86.0 </td>
-   <td style="text-align:center;"> 0.515 </td>
-   <td style="text-align:center;"> 0.474 </td>
-   <td style="text-align:center;"> 0.094 </td>
-   <td style="text-align:center;"> 0.088 </td>
+   <td style="text-align:center;"> 90.4 </td>
+   <td style="text-align:center;"> 0.520 </td>
+   <td style="text-align:center;"> 0.490 </td>
+   <td style="text-align:center;"> 0.074 </td>
+   <td style="text-align:center;"> 0.057 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -790,11 +793,11 @@ Table&nbsp;5: Model prediction statistics for one year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> Base </td>
-   <td style="text-align:center;"> 91.0 </td>
-   <td style="text-align:center;"> 0.519 </td>
-   <td style="text-align:center;"> 0.462 </td>
-   <td style="text-align:center;"> 0.083 </td>
+   <td style="text-align:center;"> 90.7 </td>
+   <td style="text-align:center;"> 0.522 </td>
+   <td style="text-align:center;"> 0.466 </td>
    <td style="text-align:center;"> 0.070 </td>
+   <td style="text-align:center;"> 0.046 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -814,7 +817,7 @@ Table&nbsp;5: Model prediction statistics for one year projections using data ye
 <div id="tbl-retro2summ" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-retro2summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;6: Model prediction statistics for two year projections using data years 2002 through 2021 as starting points. Models were fit using the full time series. RSS is the residual sum of squares.
+Table&nbsp;6: Model prediction statistics for two year projections using data years 2002 through 2022 as starting points. Models were fit using the full time series. RSS is the residual sum of squares.
 </figcaption>
 <div aria-describedby="tbl-retro2summ-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display" data-html-table-processing="none">
@@ -836,11 +839,11 @@ Table&nbsp;6: Model prediction statistics for two year projections using data ye
 <tbody>
   <tr>
    <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 40.5 </td>
+   <td style="text-align:center;"> 44.2 </td>
    <td style="text-align:center;"> 0.505 </td>
-   <td style="text-align:center;"> 0.518 </td>
-   <td style="text-align:center;"> 0.162 </td>
-   <td style="text-align:center;"> 0.188 </td>
+   <td style="text-align:center;"> 0.524 </td>
+   <td style="text-align:center;"> 0.149 </td>
+   <td style="text-align:center;"> 0.166 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -848,11 +851,11 @@ Table&nbsp;6: Model prediction statistics for two year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Strandings only </td>
-   <td style="text-align:center;"> 144.2 </td>
-   <td style="text-align:center;"> 0.498 </td>
-   <td style="text-align:center;"> 0.499 </td>
-   <td style="text-align:center;"> 0.106 </td>
-   <td style="text-align:center;"> 0.114 </td>
+   <td style="text-align:center;"> 143.0 </td>
+   <td style="text-align:center;"> 0.504 </td>
+   <td style="text-align:center;"> 0.550 </td>
+   <td style="text-align:center;"> 0.085 </td>
+   <td style="text-align:center;"> 0.089 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -860,11 +863,11 @@ Table&nbsp;6: Model prediction statistics for two year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves + ENP Strandings </td>
-   <td style="text-align:center;"> 147.6 </td>
-   <td style="text-align:center;"> 0.504 </td>
-   <td style="text-align:center;"> 0.569 </td>
-   <td style="text-align:center;"> 0.139 </td>
-   <td style="text-align:center;"> 0.163 </td>
+   <td style="text-align:center;"> 144.5 </td>
+   <td style="text-align:center;"> 0.509 </td>
+   <td style="text-align:center;"> 0.583 </td>
+   <td style="text-align:center;"> 0.116 </td>
+   <td style="text-align:center;"> 0.146 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -872,23 +875,11 @@ Table&nbsp;6: Model prediction statistics for two year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves only </td>
-   <td style="text-align:center;"> 168.5 </td>
-   <td style="text-align:center;"> 0.502 </td>
-   <td style="text-align:center;"> 0.498 </td>
-   <td style="text-align:center;"> 0.138 </td>
-   <td style="text-align:center;"> 0.124 </td>
-   <td style="text-align:center;"> 0 </td>
-   <td style="text-align:center;"> 0 </td>
-   <td style="text-align:center;"> 0 </td>
-   <td style="text-align:left;">  </td>
-  </tr>
-  <tr>
-   <td style="text-align:left;"> Base </td>
-   <td style="text-align:center;"> 187.8 </td>
-   <td style="text-align:center;"> 0.503 </td>
-   <td style="text-align:center;"> 0.409 </td>
-   <td style="text-align:center;"> 0.113 </td>
-   <td style="text-align:center;"> 0.102 </td>
+   <td style="text-align:center;"> 162.7 </td>
+   <td style="text-align:center;"> 0.506 </td>
+   <td style="text-align:center;"> 0.480 </td>
+   <td style="text-align:center;"> 0.122 </td>
+   <td style="text-align:center;"> 0.107 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -896,11 +887,23 @@ Table&nbsp;6: Model prediction statistics for two year projections using data ye
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 192.9 </td>
-   <td style="text-align:center;"> 0.503 </td>
-   <td style="text-align:center;"> 0.461 </td>
-   <td style="text-align:center;"> 0.131 </td>
-   <td style="text-align:center;"> 0.144 </td>
+   <td style="text-align:center;"> 180.9 </td>
+   <td style="text-align:center;"> 0.505 </td>
+   <td style="text-align:center;"> 0.456 </td>
+   <td style="text-align:center;"> 0.107 </td>
+   <td style="text-align:center;"> 0.107 </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:center;"> 0 </td>
+   <td style="text-align:left;">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;"> Base </td>
+   <td style="text-align:center;"> 182.2 </td>
+   <td style="text-align:center;"> 0.507 </td>
+   <td style="text-align:center;"> 0.432 </td>
+   <td style="text-align:center;"> 0.100 </td>
+   <td style="text-align:center;"> 0.081 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
    <td style="text-align:center;"> 0 </td>
@@ -917,7 +920,7 @@ Table&nbsp;6: Model prediction statistics for two year projections using data ye
 </div>
 </div>
 </div>
-<p><a href="#fig-retroFig" class="quarto-xref">Figure&nbsp;2</a> depicts the predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications. Observed abundance estimates for years 2003 through 2023 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars .</p>
+<p><a href="#fig-retroFig" class="quarto-xref">Figure&nbsp;2</a> depicts the predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications. Observed abundance estimates for years 2003 through 2024 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars .</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-retroFig" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -926,7 +929,7 @@ Table&nbsp;6: Model prediction statistics for two year projections using data ye
 <img src="results_files/figure-html/fig-retroFig-1.png" class="img-fluid figure-img" width="3000">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-retroFig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;2: The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications using the full time series. Observed abundance estimates for years 2003 through 2023 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars.
+Figure&nbsp;2: The predictive fits when abundance was projected forward one (top panel) or two years (bottom panel) for all model specifications using the full time series. Observed abundance estimates for years 2003 through 2024 are represented as back diamonds, median model predictions are represented by points, 60% credible intervals are depicted as solid error bars, and the 95% credible intervals are depicted as dashed error bars.
 </figcaption>
 </figure>
 </div>
@@ -937,7 +940,7 @@ Figure&nbsp;2: The predictive fits when abundance was projected forward one (top
 </section>
 <section id="model-predicted-population-trends" class="level1">
 <h1><em>Model-predicted population trends</em></h1>
-<p><a href="#fig-trendFig" class="quarto-xref">Figure&nbsp;3</a> depicts the predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2023), as well as abundance projections for two years beyond (through 2025). The black points and red diamonds correspond to the mean PCFG abundance and N<sub>min</sub>, respectively, and were derived from a mark-resight population model published in <span class="citation" data-cites="harrisPCFG2022">(<a href="#ref-harrisPCFG2022" role="doc-biblioref">Harris et al. 2022</a>)</span>. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N and N<sub>min</sub>, respectively.</p>
+<p><a href="#fig-trendFig" class="quarto-xref">Figure&nbsp;3</a> depicts the predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2024), as well as abundance projections for two years beyond (through 2026). The black points and red diamonds correspond to the mean PCFG abundance and N<sub>min</sub>, respectively, and were derived from a mark-resight population model published in <span class="citation" data-cites="harrisPCFG2022">(<a href="#ref-harrisPCFG2022" role="doc-biblioref">Harris et al. 2022</a>)</span>. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N and N<sub>min</sub>, respectively.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-trendFig" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -946,19 +949,19 @@ Figure&nbsp;2: The predictive fits when abundance was projected forward one (top
 <img src="results_files/figure-html/fig-trendFig-1.png" class="img-fluid figure-img" width="4800">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-trendFig-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;3: Predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2023), as well as abundance projections for two years beyond (through 2025). The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N &lt; 192) and N<sub>min</sub> (N<sub>min</sub> &lt; 171), respectively.
+Figure&nbsp;3: Predicted trends in PCFG gray whale abundance by state-space model specification during data years (2002 - 2024), as well as abundance projections for two years beyond (through 2026). The black points and red diamonds correspond to the mean PCFG abundance and Nmin, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N &lt; 192) and N<sub>min</sub> (N<sub>min</sub> &lt; 171), respectively.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<section id="model-averaged-population-trend-and-predictions-for-2025" class="level2">
-<h2 class="anchored" data-anchor-id="model-averaged-population-trend-and-predictions-for-2025">Model-averaged population trend and predictions for 2025</h2>
+<section id="model-averaged-population-trend-and-predictions-for-2026" class="level2">
+<h2 class="anchored" data-anchor-id="model-averaged-population-trend-and-predictions-for-2026">Model-averaged population trend and predictions for 2026</h2>
 <div class="cell">
 <div id="tbl-modelPrediction2yr" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelPrediction2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;7: Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundance (N) and minimum abundance (N<sub>min</sub>) for PCFG gray whales in 2025.
+Table&nbsp;7: Model weights derived using pseudo-Bayesian model averaging with bootstrapping (pseudoBMA+) for all models without ENP strandings. Model predicted abundance (N) and minimum abundance (N<sub>min</sub>) for PCFG gray whales in 2026.
 </figcaption>
 <div aria-describedby="tbl-modelPrediction2yr-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display" data-html-table-processing="none">
@@ -974,33 +977,33 @@ Table&nbsp;7: Model weights derived using pseudo-Bayesian model averaging with b
 <tbody>
   <tr>
    <td style="text-align:left;"> Base </td>
-   <td style="text-align:center;"> 0.200 </td>
-   <td style="text-align:center;"> 215.9 </td>
-   <td style="text-align:center;"> 197.9 </td>
+   <td style="text-align:center;"> 0.222 </td>
+   <td style="text-align:center;"> 221.6 </td>
+   <td style="text-align:center;"> 202.9 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> AR1 </td>
-   <td style="text-align:center;"> 0.475 </td>
-   <td style="text-align:center;"> 203.9 </td>
-   <td style="text-align:center;"> 174.4 </td>
+   <td style="text-align:center;"> 0.529 </td>
+   <td style="text-align:center;"> 214.4 </td>
+   <td style="text-align:center;"> 182.3 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> ENP Calves </td>
-   <td style="text-align:center;"> 0.126 </td>
-   <td style="text-align:center;"> 213.3 </td>
-   <td style="text-align:center;"> 189.3 </td>
+   <td style="text-align:center;"> 0.113 </td>
+   <td style="text-align:center;"> 217.6 </td>
+   <td style="text-align:center;"> 191.0 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> PCFG Calves only </td>
-   <td style="text-align:center;"> 0.200 </td>
-   <td style="text-align:center;"> 221.0 </td>
-   <td style="text-align:center;"> 200.5 </td>
+   <td style="text-align:center;"> 0.136 </td>
+   <td style="text-align:center;"> 221.4 </td>
+   <td style="text-align:center;"> 201.7 </td>
   </tr>
   <tr>
    <td style="text-align:left;"> Model-averaged estimate </td>
    <td style="text-align:center;">  </td>
-   <td style="text-align:center;"> 211.5 </td>
-   <td style="text-align:center;"> 186.8 </td>
+   <td style="text-align:center;"> 218.0 </td>
+   <td style="text-align:center;"> 192.2 </td>
   </tr>
 </tbody>
 </table>
@@ -1010,7 +1013,7 @@ Table&nbsp;7: Model weights derived using pseudo-Bayesian model averaging with b
 </figure>
 </div>
 </div>
-<p><a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;7</a> captures the estimated model weights, and therefore relative support for each, when averaging estimates into a single, unified prediction using pseudo-Bayesian model averaging with bootstrapping <span class="citation" data-cites="yaoStacking2018">(<a href="#ref-yaoStacking2018" role="doc-biblioref">Yao et al. 2018</a>)</span>. Model weights favored the AR1 model, with the remaining 52.5% of the model weight divided among base, ENP calves, and PCFG calves models. After accounting for estimated model weights, model-average prediction for the trend in PCFG abundance is depicted in <a href="#fig-stackedTrendFig_subset" class="quarto-xref">Figure&nbsp;4</a>.</p>
+<p><a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;7</a> captures the estimated model weights, and therefore relative support for each, when averaging estimates into a single, unified prediction using pseudo-Bayesian model averaging with bootstrapping <span class="citation" data-cites="yaoStacking2018">(<a href="#ref-yaoStacking2018" role="doc-biblioref">Yao et al. 2018</a>)</span>. Model weights favored the AR1 model, with the remaining 47.1% of the model weight divided among base, ENP calves, and PCFG calves models. After accounting for estimated model weights, model-average prediction for the trend in PCFG abundance is depicted in <a href="#fig-stackedTrendFig_subset" class="quarto-xref">Figure&nbsp;4</a>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-stackedTrendFig_subset" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -1019,17 +1022,17 @@ Table&nbsp;7: Model weights derived using pseudo-Bayesian model averaging with b
 <img src="results_files/figure-html/fig-stackedTrendFig_subset-1.png" class="img-fluid figure-img" width="2400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-stackedTrendFig_subset-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;4: Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2023) and a two-year projection through 2025. The black points and red diamonds correspond to the mean PCFG abundance and N<sub>min</sub>, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N &lt; 192) and N<sub>min</sub> (N<sub>min</sub> &lt; 171), respectively.
+Figure&nbsp;4: Estimated trend in PCFG gray whale abundance derived from model-averaged estimates (without ENP strandings) using weights based on pseudo-BMA weights with bootstrapping. Abundance trends capture data years (2002 - 2024) and a two-year projection through 2026. The black points and red diamonds correspond to the mean PCFG abundance and N<sub>min</sub>, respectively, and were derived from a mark-resight population model. The solid error bars represent the 95% confidence intervals on mean estimates form the mark-resight model. The solid black trend line represents the state-space model predicted mean abundance. The lighter gray ribbon represents the 95% credible interval with the darker ribbon reflecting the 60% credible interval, with the lower bounds capturing estimated N<sub>min</sub>. The solid and dashed horizontal gray lines correspond to the management closure thresholds for N (N &lt; 192) and N<sub>min</sub> (N<sub>min</sub> &lt; 171), respectively.
 </figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p><a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;7</a> and <a href="#fig-final-proj" class="quarto-xref">Figure&nbsp;5</a> provide predictions for the near-future state of the PCFG gray whale population. All estimates, including those from individual models, predict the PCFG population is above the management thresholds for both N and N<sub>min</sub> in 2025. <a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;7</a> provides the point estimates for N and N<sub>min</sub>, and <a href="#fig-final-proj" class="quarto-xref">Figure&nbsp;5</a> depicts the posterior predictions by model. For the figure, the portion of the posterior distributions filled in light gray capture the lower 20% credible interval, the upper threshold of which represents the estimated N<sub>min</sub>. If this threshold drops below the dashed line, it would trigger a management closure.</p>
+<p><a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;7</a> and <a href="#fig-final-proj" class="quarto-xref">Figure&nbsp;5</a> provide predictions for the near-future state of the PCFG gray whale population. All estimates, including those from individual models, predict the PCFG population is above the management thresholds for both N and N<sub>min</sub> in 2026. <a href="#tbl-modelPrediction2yr" class="quarto-xref">Table&nbsp;7</a> provides the point estimates for N and N<sub>min</sub>, and <a href="#fig-final-proj" class="quarto-xref">Figure&nbsp;5</a> depicts the posterior predictions by model. For the figure, the portion of the posterior distributions filled in light gray capture the lower 20% credible interval, the upper threshold of which represents the estimated N<sub>min</sub>. If this threshold drops below the dashed line, it would trigger a management closure.</p>
 <div id="tbl-modelPrediction2yr_v0" class="cell quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-modelPrediction2yr_v0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;8: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based on a two year projection from the last documented abundance estimate (2023).
+Table&nbsp;8: Predicted N and N<sub>min</sub> for PCFG gray whales in 2026 based on a two year projection from the last documented abundance estimate (2024).
 </figcaption>
 <div aria-describedby="tbl-modelPrediction2yr_v0-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div>
@@ -1046,7 +1049,7 @@ Table&nbsp;8: Predicted N and N<sub>min</sub> for PCFG gray whales in 2025 based
 <img src="results_files/figure-html/fig-final-proj-1.png" class="img-fluid figure-img" width="2400">
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-final-proj-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;5: Model-specific estimated abundance in the second year of projections (2025). Median estimates are represented by vertical boundaries between dark gray and white. N<sub>min</sub> estimates (lower 20% CIs) are represented by the boundaries between light gray and dark gray. The solid and dashed black, vertical lines correspond to the management closure thresholds for N and N<sub>min</sub>, respectively.
+Figure&nbsp;5: Model-specific estimated abundance in the second year of projections (2026). Median estimates are represented by vertical boundaries between dark gray and white. N<sub>min</sub> estimates (lower 20% CIs) are represented by the boundaries between light gray and dark gray. The solid and dashed black, vertical lines correspond to the management closure thresholds for N and N<sub>min</sub>, respectively.
 </figcaption>
 </figure>
 </div>
@@ -1058,12 +1061,12 @@ Figure&nbsp;5: Model-specific estimated abundance in the second year of projecti
 </section>
 </section>
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
 <div id="ref-harrisPCFG2022" class="csl-entry" role="listitem">
-Harris, J., J. Calambokidis, A. Perez, and P. J. Mahoney. 2022. <span>“Recent Trends in the Abundance of Seasonal Gray Whales (Eschrichtius Robustus) in the Pacific Northwest, 1996-2020.”</span> <a href="https://media.fisheries.noaa.gov/2022-09/harris-et-al-2022.pdf">https://media.fisheries.noaa.gov/2022-09/harris-et-al-2022.pdf</a>.
+Harris, J., J. Calambokidis, A. Perez, and P. J. Mahoney. 2022. <em>Recent Trends in the Abundance of Seasonal Gray Whales (Eschrichtius Robustus) in the Pacific Northwest, 1996-2020</em>. <a href="https://media.fisheries.noaa.gov/2022-09/harris-et-al-2022.pdf">https://media.fisheries.noaa.gov/2022-09/harris-et-al-2022.pdf</a>.
 </div>
-<div id="ref-harrisPCFG2025" class="csl-entry" role="listitem">
-———. 2025. <span>“<a href="">Recent Trends in the Abundance of Seasonal Gray Whales (Eschrichtius Robustus) in the Pacific Northwest, 1996-2023</a>.”</span> <em>NOAA AFSC Processed Rep.</em> 2025-06: 1–19.
+<div id="ref-mahoneyPCFG2026" class="csl-entry" role="listitem">
+Mahoney, P. J., J. Harris, J. Calambokidis, and A. Perez. 2026. <span>“<a href="">Recent Trends in the Abundance of Seasonal Gray Whales (Eschrichtius Robustus) in the Pacific Northwest, 1996-2024</a>.”</span> <em>NOAA AFSC Processed Rep.</em> 2026-08: 1–18.
 </div>
 <div id="ref-vehtari2017practical" class="csl-entry" role="listitem">
 Vehtari, A., A. Gelman, and J. Gabry. 2017. <span>“Practical Bayesian Model Evaluation Using Leave-One-Out Cross-Validation and WAIC.”</span> <em>Statistics and Computing</em> 27: 1413–32.
@@ -1123,13 +1126,14 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
       e.clearSelection();
     }
     const getTextToCopy = function(trigger) {
-        const codeEl = trigger.previousElementSibling.cloneNode(true);
-        for (const childEl of codeEl.children) {
-          if (isCodeAnnotation(childEl)) {
-            childEl.remove();
-          }
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
         }
-        return codeEl.innerText;
+      }
+      return codeEl.innerText;
     }
     const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
       text: getTextToCopy
@@ -1149,7 +1153,8 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
       // Inspect non-navigation links and adorn them if external
-     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      window.quartoDecorateExternalLinks = function (root) {
+     var links = (root || window.document).querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
       for (var i=0; i<links.length; i++) {
         const link = links[i];
         if (!isInternal(link.href)) {
@@ -1158,8 +1163,69 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
           if (link.dataset.originalHref !== undefined) {
             link.href = link.dataset.originalHref;
           }
+          if (!link.classList.contains('no-external-icon')) {
+          }
         }
       }
+      };
+      window.quartoDecorateExternalLinks(window.document);
+    // Esc closes the popup (WCAG 1.4.13) and focus leaving both trigger and
+    // popup closes it (WCAG 2.4.11); tippy handles neither for interactive popups.
+    const hideOnEscAndFocusOut = {
+      name: 'hideOnEscAndFocusOut',
+      defaultValue: true,
+      fn(instance) {
+        const dismiss = () => {
+          // A show scheduled by the trigger delay would otherwise reopen it
+          instance.clearDelayTimeouts();
+          instance.hide();
+        };
+        const onKeyDown = (event) => {
+          if (event.key !== 'Escape') {
+            return;
+          }
+          // Keep Esc from also reaching page handlers (e.g. reveal.js overview),
+          // except an open reveal.js slide menu, which Esc should close too.
+          // The menu handles keys only when its keyboard option is on.
+          const menuHandlesEsc = window.Reveal?.getPlugin?.('menu')?.isOpen() &&
+            window.Reveal.getConfig().menu?.keyboard !== false;
+          if (!menuHandlesEsc) {
+            event.stopPropagation();
+          }
+          if (instance.popper.contains(window.document.activeElement)) {
+            // Disabled while refocusing so the focus trigger does not reopen it
+            instance.disable();
+            instance.reference.focus();
+            instance.enable();
+          }
+          dismiss();
+        };
+        const onFocusOut = (event) => {
+          const target = event.relatedTarget;
+          if (target && !instance.reference.contains(target) &&
+              !instance.popper.contains(target)) {
+            dismiss();
+          }
+        };
+        // On the trigger too: a click trigger (code-annotations: select) has no
+        // blur handling. Attached for the instance's lifetime so leaving the
+        // trigger also cancels a show still pending on the trigger delay.
+        instance.reference.addEventListener('focusout', onFocusOut);
+        return {
+          onShow() {
+            window.document.addEventListener('keydown', onKeyDown, true);
+            instance.popper.addEventListener('focusout', onFocusOut);
+          },
+          onHide() {
+            window.document.removeEventListener('keydown', onKeyDown, true);
+            instance.popper.removeEventListener('focusout', onFocusOut);
+          },
+          onDestroy() {
+            instance.reference.removeEventListener('focusout', onFocusOut);
+          },
+        };
+      },
+    };
     function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
       const config = {
         allowHTML: true,
@@ -1173,6 +1239,7 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
         interactiveBorder: 10,
         theme: 'quarto',
         placement: 'bottom-start',
+        plugins: [hideOnEscAndFocusOut],
       };
       if (contentFn) {
         config.content = contentFn;
@@ -1335,44 +1402,54 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
           const lineIds = lines.map((line) => {
             return targetCell + "-" + line;
           })
-          let top = null;
-          let height = null;
-          let parent = null;
+          // Each band is positioned against its own containing block, which is
+          // not the offsetParent of the lines, so place it from client rects.
+          const placeBand = (band, firstEl, lastEl, codeBlock) => {
+            const container = band.offsetParent;
+            if (container === null) {
+              return;
+            }
+            const containerRect = container.getBoundingClientRect();
+            // Reveal.js scales slides with a transform, so convert client
+            // pixels back to the CSS pixels of the container.
+            const scale = containerRect.height / container.offsetHeight || 1;
+            const firstRect = firstEl.getBoundingClientRect();
+            const lastRect = lastEl.getBoundingClientRect();
+            const top = (firstRect.top - containerRect.top) / scale - container.clientTop + container.scrollTop;
+            const height = (lastRect.bottom - firstRect.top) / scale;
+            band.style.top = top - 2 + "px";
+            band.style.height = height + 4 + "px";
+            if (codeBlock) {
+              // Without the copy button wrapper, the containing block is wider
+              // than the code block, so span the code block explicitly.
+              const blockRect = codeBlock.getBoundingClientRect();
+              band.style.left = (blockRect.left - containerRect.left) / scale - container.clientLeft + container.scrollLeft + "px";
+              band.style.width = blockRect.width / scale + "px";
+            }
+          };
           if (lineIds.length > 0) {
-              //compute the position of the single el (top and bottom and make a div)
-              const el = window.document.getElementById(lineIds[0]);
-              top = el.offsetTop;
-              height = el.offsetHeight;
-              parent = el.parentElement.parentElement;
-            if (lineIds.length > 1) {
-              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
-              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
-              height = bottom - top;
+            const el = window.document.getElementById(lineIds[0]);
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const parent = el.parentElement.parentElement;
+            // cook up a div (if necessary) and position it
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
             }
-            if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
-              let div = window.document.getElementById("code-annotation-line-highlight");
-              if (div === null) {
-                div = window.document.createElement("div");
-                div.setAttribute("id", "code-annotation-line-highlight");
-                div.style.position = 'absolute';
-                parent.appendChild(div);
-              }
-              div.style.top = top - 2 + "px";
-              div.style.height = height + 4 + "px";
-              div.style.left = 0;
-              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
-              if (gutterDiv === null) {
-                gutterDiv = window.document.createElement("div");
-                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
-                gutterDiv.style.position = 'absolute';
-                const codeCell = window.document.getElementById(targetCell);
-                const gutter = codeCell.querySelector('.code-annotation-gutter');
-                gutter.appendChild(gutterDiv);
-              }
-              gutterDiv.style.top = top - 2 + "px";
-              gutterDiv.style.height = height + 4 + "px";
+            placeBand(div, el, lastEl, parent.closest("div.sourceCode") || parent);
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
             }
+            placeBand(gutterDiv, el, lastEl);
             selectedAnnoteEl = annoteEl;
           }
         };
@@ -1470,6 +1547,9 @@ Yao, U., A. Vehtari, D. Simpson, and A. Gelman. 2018. <span>“Using Stacking to
       }
     }
   });
+  </script>
+  <script type="application/javascript">
+  window.quartoScrollableRegionsLabels = {"code":"Scrollable code","output":"Scrollable output"};
   </script>
 </div> <!-- /content -->
 <footer class="footer">
